@@ -1,0 +1,1140 @@
+{% extends "backend/layout.html.twig" %}
+
+{% block title %}{{user.firstname}} {{user.lastname}}{% endblock %}
+{% block description %}{% endblock %}
+
+{% block stylesheets %}
+<!--begin::Page Vendor Stylesheets(used by this page)-->
+<link href="{{asset('assets/plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet" type="text/css" />
+<!--end::Page Vendor Stylesheets-->
+
+<style type="text/css">
+</style>
+{% endblock %}
+
+{% block pageTitle %}
+<div class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-2 pb-lg-0" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
+    <!--begin::Heading-->
+    <h1 class="text-dark fw-bolder my-1 fs-2">{{user.firstname}} {{user.lastname}} 
+    <small class="text-muted fs-6 fw-normal ms-1"></small></h1>
+    <!--end::Heading-->
+    <!--begin::Breadcrumb-->
+    <ul class="breadcrumb fw-bold fs-base my-1">
+        <li class="breadcrumb-item text-muted">
+            <a href="{{path('dash')}}" class="text-muted">Dashboards</a>
+        </li>
+        <li class="breadcrumb-item text-muted">Utilisateurs</li>
+        <li class="breadcrumb-item text-muted">
+            <a href="{{path('users.list')}}" class="text-muted">Liste des Utilisateurs</a>
+        </li>
+        <li class="breadcrumb-item text-dark">{{user.firstname}} {{user.lastname}}</li>
+    </ul>
+    <!--end::Breadcrumb-->
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Container-->
+    <div class="container-xxl" id="kt_content_container">
+        <!--begin::Layout-->
+        <div class="d-flex flex-column flex-lg-row">
+            <!--begin::Sidebar-->
+            <div class="flex-column flex-lg-row-auto w-lg-250px w-xl-350px mb-10">
+                <!--begin::Card-->
+                <div class="card mb-5 mb-xl-8">
+                    <!--begin::Card body-->
+                    <div class="card-body">
+                        <!--begin::Summary-->
+                        <!--begin::User Info-->
+                        <div class="d-flex flex-center flex-column py-5">
+                            <!--begin::Avatar-->
+                            <div class="symbol symbol-100px symbol-circle mb-7">
+                                <img src="{{asset('uploads/images/'~ user.avatar.tempFile|default('blank.png'))}}" alt="{{user.firstname}} {{user.lastname}}">
+                            </div>
+                            <!--end::Avatar-->
+                            <!--begin::Name-->
+                            <a href="#" class="fs-3 text-gray-800 text-hover-primary fw-bolder mb-3">{{user.firstname}} {{user.lastname}}</a>
+                            <!--end::Name-->
+                            <!--begin::Position-->
+                            <div class="mb-9">
+                                <!--begin::Badge-->
+                                <div class="badge badge-lg badge-light-primary d-inline">{{user.points}} Mxg</div>
+                                <!--begin::Badge-->
+                            </div>
+                            <!--end::Position-->
+                            <!--begin::Info-->
+                            <!--begin::Info heading-->
+                            <div class="fw-bolder mb-3">Info Profil 
+                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true" data-bs-content="Il s'agit du nombre d'Enquêtes, validées et pas encore validées." data-bs-original-title="" title=""></i></div>
+                            <!--end::Info heading-->
+                            <div class="d-flex flex-wrap flex-center">
+                                <!--begin::Stats-->
+                                <div class="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
+                                    <div class="fs-4 fw-bolder text-gray-700">
+                                        <span class="w-75px">243</span>
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
+                                        <span class="svg-icon svg-icon-3 svg-icon-success">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="currentColor"></rect>
+                                                <path d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z" fill="currentColor"></path>
+                                            </svg>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </div>
+                                    <div class="fw-bold text-muted">Total</div>
+                                </div>
+                                <!--end::Stats-->
+                                <!--begin::Stats-->
+                                <div class="border border-gray-300 border-dashed rounded py-3 px-3 mx-4 mb-3">
+                                    <div class="fs-4 fw-bolder text-gray-700">
+                                        <span class="w-50px">{{user.infoProfil|length}}</span>
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr065.svg-->
+                                        <span class="svg-icon svg-icon-3 svg-icon-danger">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <rect opacity="0.5" x="11" y="18" width="13" height="2" rx="1" transform="rotate(-90 11 18)" fill="currentColor"></rect>
+                                                <path d="M11.4343 15.4343L7.25 11.25C6.83579 10.8358 6.16421 10.8358 5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75L11.2929 18.2929C11.6834 18.6834 12.3166 18.6834 12.7071 18.2929L18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25C17.8358 10.8358 17.1642 10.8358 16.75 11.25L12.5657 15.4343C12.2533 15.7467 11.7467 15.7467 11.4343 15.4343Z" fill="currentColor"></path>
+                                            </svg>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </div>
+                                    <div class="fw-bold text-muted">En attente</div>
+                                </div>
+                                <!--end::Stats-->
+                                <!--begin::Stats-->
+                                <div class="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
+                                    <div class="fs-4 fw-bolder text-gray-700">
+                                        <span class="w-50px">{{user.infoProfil|length}}</span>
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
+                                        <span class="svg-icon svg-icon-3 svg-icon-success">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="currentColor"></rect>
+                                                <path d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z" fill="currentColor"></path>
+                                            </svg>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </div>
+                                    <div class="fw-bold text-muted">Validées</div>
+                                </div>
+                                <!--end::Stats-->
+                            </div>
+                            <!--end::Info-->
+                        </div>
+                        <!--end::User Info-->
+                        <!--end::Summary-->
+                        <!--begin::Details toggle-->
+                        <div class="d-flex flex-stack fs-4 py-3">
+                            <div class="fw-bolder rotate collapsible" data-bs-toggle="collapse" href="#kt_user_view_details" role="button" aria-expanded="false" aria-controls="kt_user_view_details">Details 
+                            <span class="ms-2 rotate-180">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                <span class="svg-icon svg-icon-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="currentColor"></path>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span></div>
+                            <form action="{{path('users.delete')}}" method="POST" id="kt_delete_user_form" class="d-inline">
+                                <input type="hidden" name="usersDeleted[]" value="{{user.id}}">
+                                <span data-bs-toggle="tooltip" data-bs-trigger="hover" title="" data-bs-original-title="">
+                                    <a href="#" class="btn btn-sm btn-light-danger" data-bs-toggle="modal" data-bs-target="#kt_modal_update_details">Supprimer</a>
+                                </span>
+                            </form>
+                        </div>
+                        <!--end::Details toggle-->
+                        <div class="separator"></div>
+                        <!--begin::Details content-->
+                        <div id="kt_user_view_details" class="collapse show">
+                            <div class="pb-5 fs-6">
+                                <!--begin::Details item-->
+                                <div class="fw-bolder mt-5">Account ID</div>
+                                <div class="text-gray-600">ID-{{user.id}}</div>
+                                <!--begin::Details item-->
+                                <!--begin::Details item-->
+                                <div class="fw-bolder mt-5">Email</div>
+                                <div class="text-gray-600">
+                                    <a href="#" class="text-gray-600 text-hover-primary">{{user.email}}</a>
+                                </div>
+                                <!--begin::Details item-->
+                                <!--begin::Details item-->
+                                <div class="fw-bolder mt-5">Address</div>
+                                <div class="text-gray-600">{{user.adresse}}, 
+                                <br>{{user.commune}} {{user.ville}}
+                                <br>{{user.pays}}</div>
+                                <!--begin::Details item-->
+                                <!--begin::Details item-->
+                                <div class="fw-bolder mt-5">Date de naissance</div>
+                                <div class="text-gray-600">{{user.birth|date('d M Y')}}</div>
+                                <!--begin::Details item-->
+                                <!--begin::Details item-->
+                                <div class="fw-bolder mt-5">Code Parrainage</div>
+                                <div class="text-gray-600"></div>
+                                <!--begin::Details item-->
+                            </div>
+                        </div>
+                        <!--end::Details content-->
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Card-->
+            </div>
+            <!--end::Sidebar-->
+            <!--begin::Content-->
+            <div class="flex-lg-row-fluid ms-lg-15">
+                <!--begin:::Tabs-->
+                <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                    <!--begin:::Tab item-->
+                    <li class="nav-item">
+                        <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" href="#kt_user_view_details_tab">Details</a>
+                    </li>
+                    <!--end:::Tab item-->
+                    <!--begin:::Tab item-->
+                    <li class="nav-item">
+                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_info_profil_tab">Info Profil</a>
+                    </li>
+                    <!--end:::Tab item-->
+                    <!--begin:::Tab item-->
+                    <li class="nav-item">
+                        <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_sondages_tab">Sondages</a>
+                    </li>
+                    <!--end:::Tab item-->
+                    <!--begin:::Tab item-->
+                    <li class="nav-item">
+                        <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_parrainage_tab">Parrainage</a>
+                    </li>
+                    <!--end:::Tab item-->
+                    <!--begin:::Tab item-->
+                    <li class="nav-item">
+                        <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_commandes_tab">Commandes</a>
+                    </li>
+                    <!--end:::Tab item-->
+                </ul>
+                <!--end:::Tabs-->
+                <!--begin:::Tab content-->
+                <div class="tab-content" id="myTabContent">
+                    <!--begin:::Tab pane-->
+                    <div class="tab-pane fade active show" id="kt_user_view_details_tab" role="tabpanel">
+                        <!--begin::Card-->
+                        <div class="card pt-4 mb-6 mb-xl-9">
+                            <form class="form fv-plugins-bootstrap5 fv-plugins-framework" id="kt_update_user_form" action="{{path('users.update', {id: user.id})}}" method="POST" enctype="multipart/form-data">
+                                <!--begin::Card body-->
+                                <div class="card-body pt-0 pb-5">
+                                    <!--begin::User toggle-->
+                                    <div class="fw-boldest fs-3 rotate collapsible mb-7" data-bs-toggle="collapse" href="#kt_modal_update_user_user_info" role="button" aria-expanded="false" aria-controls="kt_modal_update_user_user_info">Informations Générales 
+                                        <span class="ms-2 rotate-180">
+                                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                            <span class="svg-icon svg-icon-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="currentColor"></path>
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                        </span>
+                                    </div>
+                                    <!--end::User toggle-->
+                                    <!--begin::User form-->
+                                    <div id="kt_modal_update_user_user_info" class="collapse show">
+                                        <!--begin::Input group-->
+                                        <div class="mb-7">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold mb-2">
+                                                <span>Avatar</span>
+                                                <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="" data-bs-original-title="Allowed file types: png, jpg, jpeg." aria-label="Allowed file types: png, jpg, jpeg."></i>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Image input wrapper-->
+                                            <div class="mt-1">
+                                                <!--begin::Image input-->
+                                                <div class="image-input image-input-outline" data-kt-image-input="true" style="background-image: url({{asset('assets/media/svg/avatars/blank.svg')}})">
+                                                    <!--begin::Preview existing avatar-->
+                                                    <div class="image-input-wrapper w-125px h-125px" style="background-image: url({{asset('uploads/images/'~ user.avatar.tempFile|default('blank.png'))}})"></div>
+                                                    <!--end::Preview existing avatar-->
+                                                    <!--begin::Edit-->
+                                                    <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="" data-bs-original-title="Change avatar">
+                                                        <i class="bi bi-pencil-fill fs-7"></i>
+                                                        <!--begin::Inputs-->
+                                                        <input type="file" name="avatar" accept=".png, .jpg, .jpeg">
+                                                        <input type="hidden" name="avatar_remove">
+                                                        <!--end::Inputs-->
+                                                    </label>
+                                                    <!--end::Edit-->
+                                                    <!--begin::Cancel-->
+                                                    <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="" data-bs-original-title="Cancel avatar">
+                                                        <i class="bi bi-x fs-2"></i>
+                                                    </span>
+                                                    <!--end::Cancel-->
+                                                    <!--begin::Remove-->
+                                                    <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="" data-bs-original-title="Remove avatar">
+                                                        <i class="bi bi-x fs-2"></i>
+                                                    </span>
+                                                    <!--end::Remove-->
+                                                </div>
+                                                <!--end::Image input-->
+                                            </div>
+                                            <!--end::Image input wrapper-->
+                                        </div>
+                                        <!--end::Input group-->
+                                        <!--begin::Input group-->
+                                        <div class="fv-row row mb-7 fv-plugins-icon-container">
+                                            <!--begin::Col-->
+                                            <div class="col-md-6 fv-row fv-plugins-icon-container">
+                                                <!--begin::Label-->
+                                                <label class="required fs-6 fw-bold mb-2">Nom</label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <input type="text" class="form-control form-control-solid" placeholder="Nom" name="fname" value="{{user.firstname}}">
+                                                <!--end::Input-->
+                                                <div class="fv-plugins-message-container invalid-feedback"></div>
+                                            </div>
+                                            <!--begin::Col-->
+                                            <div class="col-md-6 fv-row fv-plugins-icon-container">
+                                                <!--begin::Label-->
+                                                <label class="required fs-6 fw-bold mb-2">Prénom</label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <input type="text" class="form-control form-control-solid" placeholder="Prénom" name="lname" value="{{user.lastname}}">
+                                                <!--end::Input-->
+                                                <div class="fv-plugins-message-container invalid-feedback"></div>
+                                            </div>
+                                            <!--end::Col-->
+                                        </div>
+                                        <!--end::Input group-->
+                                        <!--begin::Input group-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="required fs-6 fw-bold mb-2">
+                                                <span>Date de Naissance</span>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input class="form-control form-control-solid" placeholder="Pick date rage" id="kt_daterangepicker_3" name="birth" value="{{user.birth|date('m/d/Y')}}"/>
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                        <!--begin::Input group-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="required fs-6 fw-bold mb-2">
+                                                <span>Contact</span>
+                                                <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="" data-bs-original-title="Le Numero de Téléphone doit être actif" aria-label="Le Numero de Téléphone doit être actif"></i>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="text" class="form-control form-control-solid" placeholder="Numero de Téléphone" name="contact" value="{{user.contact}}">
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                    </div>
+                                    <!--end::User form-->
+                                    <!--begin::Address toggle-->
+                                    <div class="fw-boldest fs-3 rotate collapsible collapsed mb-7" data-bs-toggle="collapse" href="#kt_modal_update_user_address" role="button" aria-expanded="false" aria-controls="kt_modal_update_user_address">Details Addresse 
+                                    <span class="ms-2 rotate-180">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                        <span class="svg-icon svg-icon-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="currentColor"></path>
+                                            </svg>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span></div>
+                                    <!--end::Address toggle-->
+                                    <!--begin::Address form-->
+                                    <div id="kt_modal_update_user_address" class="collapse">
+                                        <!--begin::Input group-->
+                                        <div class="fv-row mb-10 fv-plugins-icon-container">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold mb-2">
+                                                <span class="">Adresse / Quartier</span>
+                                                <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="" data-bs-original-title="Les informations sont générées automatiquement" aria-label="Les informations sont générées automatiquement"></i>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="text" id="adresse_entreprise" class="form-control form-control-solid" placeholder="Entrez une adresse ou un nom de quartier" name="adresse" value="{{user.adresse}}">
+                                            <!--end::Input-->
+                                            <div class="fv-plugins-message-container invalid-feedback"></div>
+                                        </div>
+                                        <!--end::Input group-->
+                                        <!--begin::Input group-->
+                                        <div class="row g-9 mb-7">
+                                            <!--begin::Col-->
+                                            <div class="col-md-4 fv-row fv-plugins-icon-container">
+                                                <!--begin::Label-->
+                                                <label class="fs-6 fw-bold mb-2">Commune</label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <input type="text" id="sublocality" class="form-control form-control-solid" placeholder="Commune" name="commune" value="{{user.commune}}" readonly>
+                                                <!--end::Input-->
+                                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                                            <!--end::Col-->
+                                            <!--begin::Col-->
+                                            <div class="col-md-4 fv-row fv-plugins-icon-container">
+                                                <!--begin::Label-->
+                                                <label class="fs-6 fw-bold mb-2">Ville</label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <input type="text" id="locality" class="form-control form-control-solid" placeholder="Ville" name="ville" value="{{user.ville}}" readonly>
+                                                <!--end::Input-->
+                                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                                            <!--end::Col-->
+                                            <!--begin::Col-->
+                                            <div class="col-md-4 fv-row fv-plugins-icon-container">
+                                                <!--begin::Label-->
+                                                <label class="fs-6 fw-bold mb-2">Pays</label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <input type="text" id="country" class="form-control form-control-solid" placeholder="Pays" name="pays" value="{{user.pays}}" readonly>
+                                                <!--end::Input-->
+                                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                                            <!--end::Col-->
+                                        </div>
+                                        <!--end::Input group-->
+                                    </div>
+                                    <!--end::Address form-->
+                                </div>
+                                <!--begin::Actions-->
+                                <div class="card-footer d-flex justify-content-end py-6 px-9">
+                                    <button type="submit" class="btn btn-primary" id="kt_update_user_submit" data-kt-users-modal-action="submit">
+                                        <span class="indicator-label">Sauvegarder</span>
+                                        <span class="indicator-progress">Veuillez patienter... 
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                    </button>
+                                </div>
+                                <!--end::Actions-->
+                            </form>
+                        </div>
+                        <!-- end::Card-->
+                        <!--begin::Card-->
+                        <div class="card pt-4 mb-6 mb-xl-9">
+                            <!--begin::Card header-->
+                            <div class="card-header border-0">
+                                <!--begin::Card title-->
+                                <div class="card-title">
+                                    <h2>Authentification</h2>
+                                </div>
+                                <!--end::Card title-->
+                            </div>
+                            <!--end::Card header-->
+                            <!--begin::Card body-->
+                            <div class="card-body pt-0 pb-5">
+                                <!--begin::Table wrapper-->
+                                <div class="table-responsive">
+                                    <!--begin::Table-->
+                                    <table class="table align-middle table-row-dashed gy-5" id="kt_table_users_login_session">
+                                        <!--begin::Table body-->
+                                        <tbody class="fs-6 fw-bold text-gray-600">
+                                            <tr>
+                                                <td>Email</td>
+                                                <td>{{user.email}}</td>
+                                                <td class="text-end">
+                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_update_email">
+                                                        <!--begin::Svg Icon | path: icons/duotune/art/art005.svg-->
+                                                        <span class="svg-icon svg-icon-3">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                <path opacity="0.3" d="M21.4 8.35303L19.241 10.511L13.485 4.755L15.643 2.59595C16.0248 2.21423 16.5426 1.99988 17.0825 1.99988C17.6224 1.99988 18.1402 2.21423 18.522 2.59595L21.4 5.474C21.7817 5.85581 21.9962 6.37355 21.9962 6.91345C21.9962 7.45335 21.7817 7.97122 21.4 8.35303ZM3.68699 21.932L9.88699 19.865L4.13099 14.109L2.06399 20.309C1.98815 20.5354 1.97703 20.7787 2.03189 21.0111C2.08674 21.2436 2.2054 21.4561 2.37449 21.6248C2.54359 21.7934 2.75641 21.9115 2.989 21.9658C3.22158 22.0201 3.4647 22.0084 3.69099 21.932H3.68699Z" fill="currentColor"></path>
+                                                                <path d="M5.574 21.3L3.692 21.928C3.46591 22.0032 3.22334 22.0141 2.99144 21.9594C2.75954 21.9046 2.54744 21.7864 2.3789 21.6179C2.21036 21.4495 2.09202 21.2375 2.03711 21.0056C1.9822 20.7737 1.99289 20.5312 2.06799 20.3051L2.696 18.422L5.574 21.3ZM4.13499 14.105L9.891 19.861L19.245 10.507L13.489 4.75098L4.13499 14.105Z" fill="currentColor"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <!--end::Svg Icon-->
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Mot de Passe</td>
+                                                <td>******</td>
+                                                <td class="text-end">
+                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_update_password">
+                                                        <!--begin::Svg Icon | path: icons/duotune/art/art005.svg-->
+                                                        <span class="svg-icon svg-icon-3">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                <path opacity="0.3" d="M21.4 8.35303L19.241 10.511L13.485 4.755L15.643 2.59595C16.0248 2.21423 16.5426 1.99988 17.0825 1.99988C17.6224 1.99988 18.1402 2.21423 18.522 2.59595L21.4 5.474C21.7817 5.85581 21.9962 6.37355 21.9962 6.91345C21.9962 7.45335 21.7817 7.97122 21.4 8.35303ZM3.68699 21.932L9.88699 19.865L4.13099 14.109L2.06399 20.309C1.98815 20.5354 1.97703 20.7787 2.03189 21.0111C2.08674 21.2436 2.2054 21.4561 2.37449 21.6248C2.54359 21.7934 2.75641 21.9115 2.989 21.9658C3.22158 22.0201 3.4647 22.0084 3.69099 21.932H3.68699Z" fill="currentColor"></path>
+                                                                <path d="M5.574 21.3L3.692 21.928C3.46591 22.0032 3.22334 22.0141 2.99144 21.9594C2.75954 21.9046 2.54744 21.7864 2.3789 21.6179C2.21036 21.4495 2.09202 21.2375 2.03711 21.0056C1.9822 20.7737 1.99289 20.5312 2.06799 20.3051L2.696 18.422L5.574 21.3ZM4.13499 14.105L9.891 19.861L19.245 10.507L13.489 4.75098L4.13499 14.105Z" fill="currentColor"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <!--end::Svg Icon-->
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <!--end::Table-->
+                                </div>
+                                <!--end::Table wrapper-->
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                        <!--end::Card-->
+                    </div>
+                    <!--end:::Tab pane-->
+                    <!--begin:::Tab pane-->
+                    <div class="tab-pane fade" id="kt_user_view_info_profil_tab" role="tabpanel">
+                        <!--begin::Card-->
+                        <div class="card card-flush mb-6 mb-xl-9">
+                            <!--begin::Card header-->
+                            <div class="card-header mt-6">
+                                <!--begin::Card title-->
+                                <div class="card-title flex-column">
+                                    <h2 class="mb-1">Info Profil</h2>
+                                    <div class="fs-6 fw-bold text-muted">Pour tous les mois de l'année</div>
+                                </div>
+                                <!--end::Card title-->
+                                <!--begin::Card toolbar-->
+                                <div class="card-toolbar">
+                                    {# <button type="button" class="btn btn-light-primary btn-sm" data-bs-toggle="modal" data-bs-target="#kt_modal_add_schedule">
+                                    <!--SVG file not found: media/icons/duotune/art/art008.svg-->
+                                    Add Schedule</button> #}
+                                </div>
+                                <!--end::Card toolbar-->
+                            </div>
+                            <!--end::Card header-->
+                            <!--begin::Card body-->
+                            <div class="card-body p-9 pt-4">
+                                <!--begin::Dates-->
+                                <ul class="nav nav-pills d-flex flex-nowrap hover-scroll-x py-2">
+                                    {% for index in 0..12 %}
+                                    {% set laDate = 'now'|date_modify("-"~ index ~" month") %}
+                                    <!--begin::Date-->
+                                    <li class="nav-item me-1">
+                                        <a class="nav-link btn d-flex flex-column flex-center rounded-pill min-w-40px me-2 py-4 btn-active-primary {% if loop.first %}active{% endif %}" data-bs-toggle="tab" href="#kt_schedule_day_{{index}}">
+                                            <span class="opacity-50 fs-7 fw-bold">{{laDate|date('M')}}</span>
+                                            <span class="fs-6 fw-boldest">{{laDate|date('Y')}}</span>
+                                        </a>
+                                    </li>
+                                    <!--end::Date-->
+                                    {% endfor %}
+                                </ul>
+                                <!--end::Dates-->
+                                <!--begin::Tab Content-->
+                                <div class="tab-content">
+                                    {% for index in 0..12 %}
+                                    <!--begin::Day-->
+                                    <div id="kt_schedule_day_{{index}}" class="tab-pane fade {% if loop.first %}active show{% endif %}">
+                                        {% for profil in user.infoProfil|filter(p => p.updatedAt|date('M') == 'now'|date_modify("-{{index}} month")|date('M')) %}
+                                        <!--begin::Time-->
+                                        <div class="d-flex flex-stack position-relative mt-6">
+                                            <!--begin::Bar-->
+                                            <div class="position-absolute h-100 w-4px bg-{% if profil.status %}success{% else %}secondary{% endif %} rounded top-0 start-0"></div>
+                                            <!--end::Bar-->
+                                            <!--begin::Info-->
+                                            <div class="fw-bold ms-5">
+                                                <!--begin::Time-->
+                                                <div class="fs-7 mb-1">Le {{profil.createdAt|date('d M Y')}} 
+                                                <span class="fs-7 text-muted text-uppercase">à {{profil.createdAt|date('H:m')}}</span></div>
+                                                <!--end::Time-->
+                                                <!--begin::Title-->
+                                                <a href="{{path('enquetes.view', {id: profil.enquete.id})}}" class="fs-5 fw-bolder text-dark text-hover-primary mb-2">{{profil.enquete.nom}}</a>
+                                                <!--end::Title-->
+                                            </div>
+                                            <!--end::Info-->
+                                            <!--begin::Action-->
+                                            <a href="{{path('enquetes.view', {id: profil.enquete.id})}}" class="btn btn-light bnt-active-light-primary btn-sm">Voir</a>
+                                            <!--end::Action-->
+                                        </div>
+                                        <!--end::Time-->
+                                        {% endfor %}
+                                    </div>
+                                    <!--end::Day-->
+                                    {% endfor %}
+                                </div>
+                                <!--end::Tab Content-->
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                        <!--end::Card-->
+                    </div>
+                    <!--begin:::Tab pane-->
+                    <div class="tab-pane fade" id="kt_user_view_sondages_tab" role="tabpanel">
+                        <!--begin::Tasks-->
+                        <div class="card card-flush mb-6 mb-xl-9">
+                            <!--begin::Card header-->
+                            <div class="card-header mt-6">
+                                <!--begin::Card title-->
+                                <div class="card-title flex-column">
+                                    <h2 class="mb-1">Sondages</h2>
+                                    <div class="fs-6 fw-bold text-muted">Total {{user.participations|length}} participations</div>
+                                </div>
+                                <!--end::Card title-->
+                                <!--begin::Card toolbar-->
+                                <div class="card-toolbar">
+                                    {# <button type="button" class="btn btn-light-primary btn-sm" data-bs-toggle="modal" data-bs-target="#kt_modal_add_task">
+                                    <!--begin::Svg Icon | path: icons/duotune/files/fil005.svg-->
+                                    <span class="svg-icon svg-icon-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM16 13.5L12.5 13V10C12.5 9.4 12.6 9.5 12 9.5C11.4 9.5 11.5 9.4 11.5 10L11 13L8 13.5C7.4 13.5 7 13.4 7 14C7 14.6 7.4 14.5 8 14.5H11V18C11 18.6 11.4 19 12 19C12.6 19 12.5 18.6 12.5 18V14.5L16 14C16.6 14 17 14.6 17 14C17 13.4 16.6 13.5 16 13.5Z" fill="currentColor"></path>
+                                            <rect x="11" y="19" width="10" height="2" rx="1" transform="rotate(-90 11 19)" fill="currentColor"></rect>
+                                            <rect x="7" y="13" width="10" height="2" rx="1" fill="currentColor"></rect>
+                                            <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
+                                        </svg>
+                                    </span>
+                                    <!--end::Svg Icon-->Add Task</button> #}
+                                </div>
+                                <!--end::Card toolbar-->
+                            </div>
+                            <!--end::Card header-->
+                            <!--begin::Card body-->
+                            <div class="card-body d-flex flex-column">
+                                {% for participation in user.participations %}
+                                <!--begin::Item-->
+                                <div class="d-flex align-items-center position-relative mb-7">
+                                    <!--begin::Label-->
+                                    <div class="position-absolute top-0 start-0 rounded h-100 bg-secondary w-4px"></div>
+                                    <!--end::Label-->
+                                    <!--begin::Details-->
+                                    <div class="fw-bold ms-5">
+                                        <!--begin::Time-->
+                                        <div class="fs-7 mb-1">Le {{participation.createdAt|date('d M Y')}} 
+                                        <span class="fs-7 text-muted text-uppercase">à {{participation.createdAt|date('H:m')}}</span></div>
+                                        <!--end::Time-->
+                                        <a href="{{path('sondages.view', {id: participation.sondage.id})}}" class="fs-5 fw-bolder text-dark text-hover-primary">{{participation.sondage.titre}}</a>
+                                        <!--begin::Info-->
+                                        <div class="fs-7 text-muted">Demandé par 
+                                        <a href="{{path('entreprises.view', {id: participation.sondage.entreprise.id})}}">{{participation.sondage.entreprise.nom}}</a></div>
+                                        <!--end::Info-->
+                                    </div>
+                                    <!--end::Details-->
+                                    <!--begin::Menu-->
+                                        <a href="{{path('sondages.view', {id: participation.sondage.id})}}" class="btn btn-light bnt-active-light-primary btn-sm">Voir</a>
+                                    <!--end::Menu-->
+                                </div>
+                                <!--end::Item-->
+                                {% endfor %}
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                        <!--end::Tasks-->
+                    </div>
+                    <!--end:::Tab pane-->
+                    <!--begin:::Tab pane-->
+                    <div class="tab-pane fade" id="kt_user_view_parrainage_tab" role="tabpanel">
+                        <!--begin::Card-->
+                        <div class="card pt-4 mb-6 mb-xl-9">
+                            <!--begin::Card header-->
+                            <div class="card-header border-0">
+                                <!--begin::Card title-->
+                                <div class="card-title">
+                                    <h2>Parrainage</h2>
+                                </div>
+                                <!--end::Card title-->
+                            </div>
+                            <!--end::Card header-->
+                            <!--begin::Card body-->
+                            <div class="card-body pt-0 pb-5">
+                                <!--begin::Table wrapper-->
+                                <div class="table-responsive">
+                                    <!--begin::Table-->
+                                    <table class="table align-middle table-row-dashed gy-5" id="kt_table_users_login_session">
+                                        <!--begin::Table head-->
+                                        <thead class="border-bottom border-gray-200 fs-7 fw-bolder">
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-muted text-uppercase gs-0">
+                                                <th class="min-w-100px">Id</th>
+                                                <th>Nom & Prénom</th>
+                                                <th>Date Naissance</th>
+                                                <th class="min-w-125px">Points</th>
+                                                <th class="min-w-70px">Filiation</th>
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fs-6 fw-bold text-gray-600">
+                                            {% if user.parrain %}
+                                            <tr>
+                                                <!--begin::Invoice=-->
+                                                <td>{{user.parrain.id}}</td>
+                                                <!--end::Invoice=-->
+                                                <!--begin::Status=-->
+                                                <td>{{user.parrain.firstname}} {{user.parrain.lastname}}</td>
+                                                <!--end::Status=-->
+                                                <!--begin::Amount=-->
+                                                <td>{{user.parrain.birth|date('d M Y')}}</td>
+                                                <!--end::Amount=-->
+                                                <!--begin::Date=-->
+                                                <td>{{user.parrain.points}}</td>
+                                                <!--end::Date=-->
+                                                <!--begin::Action=-->
+                                                <td>
+                                                    <div class="badge badge-light-danger">Parrain</div>
+                                                </td>
+                                                <!--end::Action=-->
+                                            </tr>
+                                            {% endif %}
+                                            {% for filleul in user.filleuls %}
+                                            <tr>
+                                                <!--begin::Invoice=-->
+                                                <td>{{filleul.id}}</td>
+                                                <!--end::Invoice=-->
+                                                <!--begin::Status=-->
+                                                <td>{{filleul.firstname}} {{filleul.lastname}}</td>
+                                                <!--end::Status=-->
+                                                <!--begin::Amount=-->
+                                                <td>{{filleul.birth|date('d M Y')}}</td>
+                                                <!--end::Amount=-->
+                                                <!--begin::Date=-->
+                                                <td>{{filleul.points}}</td>
+                                                <!--end::Date=-->
+                                                <!--begin::Action=-->
+                                                <td>
+                                                    <div class="badge badge-light-success">Filleuls</div>
+                                                </td>
+                                                <!--end::Action=-->
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <!--end::Table-->
+                                </div>
+                                <!--end::Table wrapper-->
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                        <!--end::Card-->
+                    </div>
+                    <!--end:::Tab pane-->
+                    <!--begin:::Tab pane-->
+                    <div class="tab-pane fade" id="kt_user_view_commandes_tab" role="tabpanel">
+                        <div class="card card-flush h-md-100">
+                            <!--begin::Header-->
+                            <div class="card-header pt-7">
+                                <!--begin::Title-->
+                                <h3 class="card-title align-items-start flex-column">
+                                    <span class="card-label fw-bolder text-gray-800">Commandes</span>
+                                    <span class="text-gray-400 mt-1 fw-bold fs-6">{{user.commandes|length}} au total</span>
+                                </h3>
+                                <!--end::Title-->
+                                <!--begin::Toolbar-->
+                                {# <div class="card-toolbar">
+                                    <a href="/jet-html-free/?page=apps/ecommerce/catalog/categories" class="btn btn-sm btn-light">View All</a>
+                                </div> #}
+                                <!--end::Toolbar-->
+                            </div>
+                            <!--end::Header-->
+                            <!--begin::Body-->
+                            <div class="card-body pt-4">
+                                <!--begin::Table container-->
+                                <div class="table-responsive">
+                                    <!--begin::Table-->
+                                    <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4 my-0">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <tr class="fs-7 fw-bolder text-gray-500 border-bottom-0">
+                                                <th class="p-0 w-50px pb-1">ARTICLE</th>
+                                                <th class="ps-0 min-w-140px"></th>
+                                                <th class="text-center min-w-140px">DATE</th>
+                                                <th class="text-center min-w-140px">STATUT</th>
+                                                <th class="text-end min-w-140px p-0 pb-1">TOTAL POINTS</th>
+                                            </tr>
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody>
+                                            {% for commande in user.commandes %}
+                                            <tr>
+                                                <td>
+                                                    <img src="{{asset('uploads/images/'~ commande.articles|first.cover.tempFile|default('blank-image.svg'))}}" class="w-50px" alt="{{commande.articles|first.nom}}">
+                                                </td>
+                                                <td class="ps-0">
+                                                    <a href="{{path('commandes.view', {id: articles|first.id})}}" class="text-gray-800 fw-bolder text-hover-primary mb-1 fs-6 text-start pe-0">{{commande.articles|first.nom}}</a>
+                                                    <span class="text-gray-400 fw-bold fs-7 d-block text-start ps-0">N° cmde: #XDG-{{commande.id}}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-gray-800 d-block fs-6 ps-0 text-center">{{commande.createdAt|date('d M Y')}}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    {% if commande.status == 'Livré' %}<div class="badge badge-light-success">Livré</div>
+                                                    {% elseif commande.status == 'Refusé' %}<div class="badge badge-light-danger">Refusé</div>
+                                                    {% else %}<div class="badge badge-light-warning">En cours</div>{% endif %}
+                                                </td>
+                                                <td>
+                                                    <span class="text-gray-800 fw-bolder d-block fs-6 ps-0 text-end">{{commande.total}}</span>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            <tr>
+                                                <td>
+                                                    <img src="/jet-html-free/assets/media/stock/ecommerce/215.gif" class="w-50px" alt="">
+                                                </td>
+                                                <td class="ps-0">
+                                                    <a href="/jet-html-free/?page=apps/ecommerce/sales/details" class="text-gray-800 fw-bolder text-hover-primary mb-1 fs-6 text-start pe-0">Red Laga</a>
+                                                    <span class="text-gray-400 fw-bold fs-7 d-block text-start ps-0">Item: #XDG-2347</span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-gray-800 d-block fs-6 ps-0 text-center">12 May 2022</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="badge badge-light-success">Livré</div>
+                                                </td>
+                                                <td>
+                                                    <span class="text-gray-800 fw-bolder d-block fs-6 ps-0 text-end">$45.00</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img src="/jet-html-free/assets/media/stock/ecommerce/209.gif" class="w-50px" alt="">
+                                                </td>
+                                                <td class="ps-0">
+                                                    <a href="/jet-html-free/?page=apps/ecommerce/sales/details" class="text-gray-800 fw-bolder text-hover-primary mb-1 fs-6 text-start pe-0">RiseUP</a>
+                                                    <span class="text-gray-400 fw-bold fs-7 d-block text-start ps-0">Item: #XDG-2347</span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-gray-800 d-block fs-6 ps-0 text-center">12 May 2022</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="badge badge-light-success">Livré</div>
+                                                </td>
+                                                <td>
+                                                    <span class="text-gray-800 fw-bolder d-block fs-6 ps-0 text-end">$168.00</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img src="/jet-html-free/assets/media/stock/ecommerce/214.gif" class="w-50px" alt="">
+                                                </td>
+                                                <td class="ps-0">
+                                                    <a href="/jet-html-free/?page=apps/ecommerce/sales/details" class="text-gray-800 fw-bolder text-hover-primary mb-1 fs-6 text-start pe-0">Yellow Stone</a>
+                                                    <span class="text-gray-400 fw-bold fs-7 d-block text-start ps-0">Item: #XDG-2347</span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-gray-800 d-block fs-6 ps-0 text-center">12 May 2022</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="badge badge-light-success">Livré</div>
+                                                </td>
+                                                <td>
+                                                    <span class="text-gray-800 fw-bolder d-block fs-6 ps-0 text-end">$72.00</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                </div>
+                                <!--end::Table-->
+                            </div>
+                            <!--end::Body-->
+                        </div>
+                    </div>
+                    <!--end:::Tab pane-->
+                </div>
+                <!--end:::Tab content-->
+            </div>
+            <!--end::Content-->
+        </div>
+        <!--end::Layout-->
+        <!--begin::Modals-->
+        <!--begin::Modal - Update email-->
+        <div class="modal fade" id="kt_modal_update_email" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-650px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2 class="fw-bolder">Modifier l'Addresse Email</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-users-modal-action="close">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor"></rect>
+                                    <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor"></rect>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+                        <!--begin::Form-->
+                        <form id="kt_modal_update_email_form" class="form fv-plugins-bootstrap5 fv-plugins-framework" action="{{path('users.update', {id: user.id})}}" method="POST">
+                            <!--begin::Notice-->
+                            <!--begin::Notice-->
+                            <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-9 p-6">
+                                <!--begin::Icon-->
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen044.svg-->
+                                <span class="svg-icon svg-icon-2tx svg-icon-primary me-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"></rect>
+                                        <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)" fill="currentColor"></rect>
+                                        <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)" fill="currentColor"></rect>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                                <!--end::Icon-->
+                                <!--begin::Wrapper-->
+                                <div class="d-flex flex-stack flex-grow-1">
+                                    <!--begin::Content-->
+                                    <div class="fw-bold">
+                                        <div class="fs-6 text-gray-700">Veuillez noter qu'une adresse Email valide est nécessaire pour effectuer la vérification par courriel.</div>
+                                    </div>
+                                    <!--end::Content-->
+                                </div>
+                                <!--end::Wrapper-->
+                            </div>
+                            <!--end::Notice-->
+                            <!--end::Notice-->
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mb-2">
+                                    <span class="required">Adresse Email</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input class="form-control form-control-solid" placeholder="" name="email" value="{{user.email}}" onblur="checkEmail()">
+                                <!--end::Input-->
+                            <div class="fv-plugins-message-container invalid-feedback text_msg"></div></div>
+                            <!--end::Input group-->
+                            <!--begin::Actions-->
+                            <div class="text-center pt-15">
+                                <button type="reset" class="btn btn-light me-3" data-kt-users-modal-action="cancel">Fermer</button>
+                                <button type="submit" class="btn btn-primary" data-kt-users-modal-action="submit">
+                                    <span class="indicator-label">Soumettre</span>
+                                    <span class="indicator-progress">Veuillez Patienter... 
+                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                </button>
+                            </div>
+                            <!--end::Actions-->
+                        <div></div></form>
+                        <!--end::Form-->
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Update email-->
+        <!--begin::Modal - Update password-->
+        <div class="modal fade" id="kt_modal_update_password" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-650px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2 class="fw-bolder">Changer de Mot de Passe</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-users-modal-action="close">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor"></rect>
+                                    <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor"></rect>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+                        <!--begin::Form-->
+                        <form id="kt_modal_update_password_form" class="form fv-plugins-bootstrap5 fv-plugins-framework" action="#">
+                            <!--begin::Input group=-->
+                            <div class="fv-row mb-10 fv-plugins-icon-container">
+                                <label class="required form-label fs-6 mb-2">Mot de Passe Actuel</label>
+                                <input class="form-control form-control-lg form-control-solid" type="password" placeholder="" name="current_password" autocomplete="off">
+                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                            <!--end::Input group=-->
+                            <!--begin::Input group-->
+                            <div class="mb-10 fv-row fv-plugins-icon-container" data-kt-password-meter="true">
+                                <!--begin::Wrapper-->
+                                <div class="mb-1">
+                                    <!--begin::Label-->
+                                    <label class="form-label fw-bold fs-6 mb-2">Nouveau Mot de Passe</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input wrapper-->
+                                    <div class="position-relative mb-3">
+                                        <input class="form-control form-control-lg form-control-solid" type="password" placeholder="" name="password" autocomplete="off">
+                                        <span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2" data-kt-password-meter-control="visibility">
+                                            <i class="bi bi-eye-slash fs-2"></i>
+                                            <i class="bi bi-eye fs-2 d-none"></i>
+                                        </span>
+                                    </div>
+                                    <!--end::Input wrapper-->
+                                    <!--begin::Meter-->
+                                    <div class="d-flex align-items-center mb-3" data-kt-password-meter-control="highlight">
+                                        <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
+                                        <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
+                                        <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
+                                        <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px"></div>
+                                    </div>
+                                    <!--end::Meter-->
+                                </div>
+                                <!--end::Wrapper-->
+                                <!--begin::Hint-->
+                                <div class="text-muted">Utilisez 8 caractères ou plus avec un mélange de lettres, de chiffres et de symboles.</div>
+                                <!--end::Hint-->
+                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                            <!--end::Input group=-->
+                            <!--begin::Input group=-->
+                            <div class="fv-row mb-10 fv-plugins-icon-container">
+                                <label class="form-label fw-bold fs-6 mb-2">Confirmer le Mot de Passe</label>
+                                <input class="form-control form-control-lg form-control-solid" type="password" placeholder="" name="confirm_password" autocomplete="off">
+                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                            <!--end::Input group=-->
+                            <!--begin::Actions-->
+                            <div class="text-center pt-15">
+                                <button type="reset" class="btn btn-light me-3" data-kt-users-modal-action="cancel">Fermer</button>
+                                <button type="submit" class="btn btn-primary" data-kt-users-modal-action="submit">
+                                    <span class="indicator-label">Soumettre</span>
+                                    <span class="indicator-progress">Veuillez Patienter... 
+                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                </button>
+                            </div>
+                            <!--end::Actions-->
+                        <div></div></form>
+                        <!--end::Form-->
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Update password-->
+        <!--end::Modals-->
+    </div>
+    <!--end::Container-->
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<!--begin::Page Vendors Javascript(used by this page)-->
+<script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+<!--end::Page Vendors Javascript-->
+<!--begin::Page Custom Javascript(used by this page)-->
+<script src="{{asset('assets/js/custom/apps/user-management/users/view/view.js')}}"></script>
+<script src="{{asset('assets/js/custom/apps/user-management/users/view/update-details.js')}}"></script>
+<script src="{{asset('assets/js/custom/apps/user-management/users/view/update-email.js')}}"></script>
+<script src="{{asset('assets/js/custom/apps/user-management/users/view/update-password.js')}}"></script>
+<script src="{{asset('assets/js/widgets.bundle.js')}}"></script>
+<script src="{{asset('assets/js/custom/widgets.js')}}"></script>
+<!--end::Page Custom Javascript-->
+
+<!-- Include Google Maps JS API -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAGvHAv2FM7u0y-MEhQ456v8J5CwMQD_Ss"></script>
+<script type="text/javascript">
+const button = document.getElementById('kt_delete_user_form');
+const formDelete = document.querySelector('#kt_delete_user_form');
+
+button.addEventListener('click', e =>{
+    e.preventDefault();
+
+    Swal.fire({
+        html: "Êtes-vous sûr de vouloir supprimer <strong>{{user.firstname}} {{user.lastname}}</strong>!",
+        icon: "warning",
+        buttonsStyling: false,
+        showCancelButton: true,
+        confirmButtonText: "Oui, supprimer!",
+        cancelButtonText: 'Non, fermer',
+        customClass: {
+            confirmButton: "btn btn-danger",
+            cancelButton: 'btn btn-light'
+        }
+    }).then(function (result) {
+        if (result.value) {
+            setTimeout(function () {
+                Swal.fire({
+                    html: "Utilisateur supprimé!<br>Vous serez redirigé vers la liste des Utilisateurs.",
+                    icon: "success",
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok, compris!",
+                    customClass: {
+                        confirmButton: "btn fw-bold btn-primary",
+                    }
+                }).then(function () {
+                    
+                });
+                formDelete.submit(); // Submit form
+            }, 3000);
+        } else if (result.dismiss === 'cancel') {
+            Swal.fire({
+                text: "L'Utilisateur n'a pas été supprimé.",
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, compris!",
+                customClass: {
+                    confirmButton: "btn fw-bold btn-primary",
+                }
+            });
+        }
+    });
+});
+
+function checkEmail() {
+    var email = $('#kt_modal_update_email_form input[name=email]').val();
+    let url = "{{ path('users.checkEmail') }}";
+    $.ajax({
+        url: url,
+        type: "post",
+        dataType: 'json',
+        async: true,
+        data: {
+            'email': email
+        }
+    })
+    .done(function(data){
+        if (data) {
+            $('.fv-plugins-message-container.text_msg').html('<div data-field="email" data-validator="emailAddress">Cet Email existe déjà, veuillez en choissir un autre.</div>');
+            $('#kt_modal_update_email_form button[type=submit]').addClass('disabled');
+        }
+        else {
+            $('.fv-plugins-message-container.text_msg').html('');
+            $('#kt_modal_update_email_form button[type=submit]').removeClass('disabled');
+        }
+    });
+}
+
+function initializeAutocomplete(id) {
+    var element = document.getElementById(id);
+    if (element) {
+        var autocomplete = new google.maps.places.Autocomplete(element, {types: ['geocode']});
+        google.maps.event.addListener(autocomplete, 'place_changed', onPlaceChanged);
+    }
+}
+
+function onPlaceChanged() {
+    var place = this.getPlace();
+
+    // console.log(place);  // Uncomment this line to view the full object returned by Google API.
+    $('.gglocation').show();
+    // $('input[name=lat]').val(place.geometry.location.lat());
+    // $('input[name=long]').val(place.geometry.location.lng());
+
+    for (var i in place.address_components) {
+        var component = place.address_components[i];
+        for (var j in component.types) { // Some types are ["country", "political"]
+            var type_element = document.getElementById(component.types[j]);
+            if (type_element) {
+                type_element.value = component.long_name;
+                // console.log('c', type_element)
+            }
+        }
+    }
+}
+
+google.maps.event.addDomListener(window, 'load', function () {
+    initializeAutocomplete('adresse_entreprise');
+});
+
+$("#kt_daterangepicker_3").daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: false,
+        minYear: 1901,
+        maxYear: parseInt(moment().format("YYYY"),10)
+    }, function(start, end, label) {
+        var years = moment().diff(start, "years");
+        // alert("You are " + years + " years old!");
+    }
+);
+</script>
+{% endblock %}

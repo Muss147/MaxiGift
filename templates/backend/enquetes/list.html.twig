@@ -1,0 +1,284 @@
+{% extends "backend/layout.html.twig" %}
+
+{% block title %}Liste des Enquêtes{% endblock %}
+{% block description %}{% endblock %}
+
+{% block stylesheets %}
+<style type="text/css">
+#kt_customers_table_wrapper div.col-lg-3.col-md-4.col-sm-6 .card-title:not(:first-child) {
+    display: none;
+}
+</style>
+{% endblock %}
+
+{% block pageTitle %}
+<div class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-2 pb-lg-0" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
+    <!--begin::Heading-->
+    <h1 class="text-dark fw-bolder my-1 fs-2">Liste des Enquêtes 
+    <small class="text-muted fs-6 fw-normal ms-1"></small></h1>
+    <!--end::Heading-->
+    <!--begin::Breadcrumb-->
+    <ul class="breadcrumb fw-bold fs-base my-1">
+        <li class="breadcrumb-item text-muted">
+            <a href="{{path('dash')}}" class="text-muted">Dashboards</a>
+        </li>
+        <li class="breadcrumb-item text-muted">Enquêtes</li>
+        <li class="breadcrumb-item text-dark">Liste des Enquêtes</li>
+    </ul>
+    <!--end::Breadcrumb-->
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Container-->
+    <div class="container-xxl" id="kt_content_container">
+        <!--begin::Card-->
+        <div class="card">
+            <!--begin::Card header-->
+            <div class="card-header pt-6">
+                <!--begin::Card title-->
+                <div class="card-title">
+                    <!--begin::Search-->
+                    <div class="d-flex align-items-center position-relative my-1">
+                        <!--begin::Display-->
+                        <button type="button" class="btn btn-light-dark py-2 px-3 me-3 active">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr078.svg-->
+                            <span class="svg-icon svg-icon-2 m-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M6 7H3C2.4 7 2 6.6 2 6V3C2 2.4 2.4 2 3 2H6C6.6 2 7 2.4 7 3V6C7 6.6 6.6 7 6 7Z" fill="currentColor"/>
+                                    <path opacity="0.3" d="M13 7H10C9.4 7 9 6.6 9 6V3C9 2.4 9.4 2 10 2H13C13.6 2 14 2.4 14 3V6C14 6.6 13.6 7 13 7ZM21 6V3C21 2.4 20.6 2 20 2H17C16.4 2 16 2.4 16 3V6C16 6.6 16.4 7 17 7H20C20.6 7 21 6.6 21 6ZM7 13V10C7 9.4 6.6 9 6 9H3C2.4 9 2 9.4 2 10V13C2 13.6 2.4 14 3 14H6C6.6 14 7 13.6 7 13ZM14 13V10C14 9.4 13.6 9 13 9H10C9.4 9 9 9.4 9 10V13C9 13.6 9.4 14 10 14H13C13.6 14 14 13.6 14 13ZM21 13V10C21 9.4 20.6 9 20 9H17C16.4 9 16 9.4 16 10V13C16 13.6 16.4 14 17 14H20C20.6 14 21 13.6 21 13ZM7 20V17C7 16.4 6.6 16 6 16H3C2.4 16 2 16.4 2 17V20C2 20.6 2.4 21 3 21H6C6.6 21 7 20.6 7 20ZM14 20V17C14 16.4 13.6 16 13 16H10C9.4 16 9 16.4 9 17V20C9 20.6 9.4 21 10 21H13C13.6 21 14 20.6 14 20ZM21 20V17C21 16.4 20.6 16 20 16H17C16.4 16 16 16.4 16 17V20C16 20.6 16.4 21 17 21H20C20.6 21 21 20.6 21 20Z" fill="currentColor"/>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </button>
+                        <!--end::Display-->
+                        <button type="button" class="btn btn-light-dark py-2 px-3 me-3" data-bs-toggle="collapse" data-bs-target="#kt_docs_card_collapsible" onclick="cardDidplay($(this))">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr078.svg-->
+                            <span class="svg-icon svg-icon-2 m-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M21 7H3C2.4 7 2 6.6 2 6V4C2 3.4 2.4 3 3 3H21C21.6 3 22 3.4 22 4V6C22 6.6 21.6 7 21 7Z" fill="currentColor"/>
+                                    <path opacity="0.3" d="M21 14H3C2.4 14 2 13.6 2 13V11C2 10.4 2.4 10 3 10H21C21.6 10 22 10.4 22 11V13C22 13.6 21.6 14 21 14ZM22 20V18C22 17.4 21.6 17 21 17H3C2.4 17 2 17.4 2 18V20C2 20.6 2.4 21 3 21H21C21.6 21 22 20.6 22 20Z" fill="currentColor"/>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </button>
+                    </div>
+                    <!--end::Search-->
+                </div>
+                <!--begin::Card title-->
+                <!--begin::Card toolbar-->
+                <div class="card-toolbar">
+                    <!--begin::Toolbar-->
+                    <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                        <!--begin::Filter-->
+                        <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                        <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
+                        <span class="svg-icon svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="currentColor"></path>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->Filtre</button>
+                        <!--begin::Menu 1-->
+                        <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true" id="kt-toolbar-filter">
+                            <!--begin::Header-->
+                            <div class="px-7 py-5">
+                                <div class="fs-4 text-dark fw-bolder">Options de Filtre</div>
+                            </div>
+                            <!--end::Header-->
+                            <!--begin::Separator-->
+                            <div class="separator border-gray-200"></div>
+                            <!--end::Separator-->
+                            <!--begin::Content-->
+                            <div class="px-7 py-5">
+                                <!--begin::Input group-->
+                                <div class="mb-10">
+                                    <!--begin::Label-->
+                                    <label class="form-label fs-5 fw-bold mb-3">Ordre:</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select class="form-select form-select-solid fw-bolder select2-hidden-accessible" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-kt-customer-table-filter="secteur" data-hide-search="true" data-select2-id="select2-data-7-i9sr" tabindex="-1" aria-hidden="true">
+                                        <option data-select2-id="select2-data-9-hy3k"></option>
+                                        <option>Date de Création</option>
+                                        <option>Date de Modification</option>
+                                        <option>Alphabétique</option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                                <!--begin::Input group-->
+                                <div class="mb-10">
+                                    <!--begin::Label-->
+                                    <label class="form-label fs-5 fw-bold mb-3">Statut:</label>
+                                    <!--end::Label-->
+                                    <!--begin::Options-->
+                                    <div class="d-flex flex-column flex-wrap fw-bold" data-kt-customer-table-filter="compte_type">
+                                        <!--begin::Option-->
+                                        <label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
+                                            <input class="form-check-input" type="radio" name="compte_type" value="all" checked="checked">
+                                            <span class="form-check-label text-gray-600">Tous</span>
+                                        </label>
+                                        <!--end::Option-->
+                                        <!--begin::Option-->
+                                        <label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
+                                            <input class="form-check-input" type="radio" name="compte_type" value="En Ligne">
+                                            <span class="form-check-label text-gray-600">En Ligne</span>
+                                        </label>
+                                        <!--end::Option-->
+                                        <!--begin::Option-->
+                                        <label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
+                                            <input class="form-check-input" type="radio" name="compte_type" value="Hors Ligne">
+                                            <span class="form-check-label text-gray-600">Hors Ligne</span>
+                                        </label>
+                                        <!--end::Option-->
+                                    </div>
+                                    <!--end::Options-->
+                                </div>
+                                <!--end::Input group-->
+                                <!--begin::Actions-->
+                                <div class="d-flex justify-content-end">
+                                    <button type="reset" class="btn btn-light btn-active-light-primary me-2" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset">Fermer</button>
+                                    <button type="submit" class="btn btn-primary" data-kt-menu-dismiss="true" data-kt-customer-table-filter="filter">Appliquer</button>
+                                </div>
+                                <!--end::Actions-->
+                            </div>
+                            <!--end::Content-->
+                        </div>
+                        <!--end::Menu 1-->
+                        <!--end::Filter-->
+                        <!--begin::Add customer-->
+                        <a href="{{path('enquetes.create')}}" class="btn btn-primary">Nouvelle Enquête</a>
+                        <!--end::Add customer-->
+                    </div>
+                    <!--end::Toolbar-->
+                </div>
+                <!--end::Card toolbar-->
+            </div>
+            <!--end::Card header-->
+            <!--begin::Card body-->
+            <div class="card-body">
+                <!--begin::Table-->
+                <div id="kt_customers_table_wrapper" class="row dt-bootstrap4 no-footer">
+                    {% for enquete in enquetes %}
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-header border-0 collapsible rotate ribbon ribbon-end ribbon-clip pe-5">
+                                <h3 class="card-title"><a href="{{path('enquetes.create', {id: enquete.id})}}">{{enquete.nom}}</a></h3>
+                                <h3 class="card-title">{{enquete.points}} points</h3>
+                                <h3 class="card-title">{{enquete.questions|length}} questions</h3>
+                                <h3 class="card-title">Modifié le {{enquete.updatedAt|date('d M Y')}}</h3>
+                                <h3 class="card-title">Créée le {{enquete.createdAt|date('d M Y')}}</h3>
+                                <h3 class="card-title"></h3>
+                                {% if enquete.status %}<div class="ribbon-label bg-success">En Ligne<span class="ribbon-inner bg-success"></span></div>
+                                {% else %}<div class="ribbon-label bg-danger">Hors Ligne<span class="ribbon-inner bg-danger"></span></div>{% endif %}
+                            </div>
+                            <div id="kt_docs_card_collapsible" class="collapse show">
+                                <div class="card-body p-0">
+                                    <a href="{{path('enquetes.create', {id: enquete.id})}}"><img src="{{asset('uploads/images/'~ enquete.cover.tempFile|default('blank-image.svg'))}}" alt="{{enquete.nom}}" class="w-100" style="object-fit: contain; height: 100px"></a>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between">
+                                    <span class="text-gray-400 fw-bolder">{{enquete.questions|length}} questions</span>
+                                    <span>{{enquete.points}} points</span>
+                                    <button class="btn btn-link p-0" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        <span class="svg-icon svg-icon-muted svg-icon-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="10" y="10" width="4" height="4" rx="2" fill="currentColor"/><rect x="10" y="3" width="4" height="4" rx="2" fill="currentColor"/><rect x="10" y="17" width="4" height="4" rx="2" fill="currentColor"/></svg>
+                                        </span>
+                                    </button>
+                                    <!--begin::Menu-->
+                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <a href="{{path('enquetes.create', {id: enquete.id})}}" class="menu-link px-3">Voir</a>
+                                        </div>
+                                        <!--end::Menu item-->
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <a href="#" class="menu-link px-3" data-kt-users-table-filter="delete_row">Résultats</a>
+                                        </div>
+                                        <!--end::Menu item-->
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <form action="{{path('enquetes.delete', {id: enquete.id})}}" method="POST" id="kt_delete_admin_form" class="d-inline">
+                                                <a href="javascript:;" type="submit" class="menu-link px-3" data-kt-users-table-filter="delete_row">Supprimer</a>
+                                            </form>
+                                        </div>
+                                        <!--end::Menu item-->
+                                    </div>
+                                    <!--end::Menu-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-header border-0 collapsible rotate ribbon ribbon-end ribbon-clip">
+                                <div class="ribbon-label bg-danger">
+                                    Hors Ligne
+                                    <span class="ribbon-inner bg-danger"></span>
+                                </div>
+                                <h3 class="card-title">Title</h3>
+                            </div>
+                            <div id="kt_docs_card_collapsible" class="collapse show">
+                                <div class="card-body p-0">
+                                    <a href=""><img src="{{asset('uploads/images/blank-image.svg')}}" class="w-100" style="object-fit: contain; height: 100px"></a>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between">
+                                    <span class="text-gray-400 fw-bolder">11 réponses</span>
+                                    <span>120 points</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-header border-0 collapsible rotate ribbon ribbon-end ribbon-clip">
+                                <div class="ribbon-label bg-success">
+                                    En Ligne
+                                    <span class="ribbon-inner bg-success"></span>
+                                </div>
+                                <h3 class="card-title">Title</h3>
+                            </div>
+                            <div id="kt_docs_card_collapsible" class="collapse show">
+                                <div class="card-body p-0">
+                                    <a href=""><img src="{{asset('uploads/images/blank-image.svg')}}" class="w-100" style="object-fit: contain; height: 100px"></a>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between">
+                                    <span class="text-gray-400 fw-bolder">1 réponses</span>
+                                    <span>20 points</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end::Container-->
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<!--begin::Page Custom Javascript(used by this page)-->
+<script src="{{asset('assets/js/custom/apps/customers/list/list.js')}}"></script>
+<script src="{{asset('assets/js/custom/apps/customers/list/add.js')}}"></script>
+<script src="{{asset('assets/js/widgets.bundle.js')}}"></script>
+<script src="{{asset('assets/js/custom/widgets.js')}}"></script>
+<!--end::Page Custom Javascript-->
+<script type="text/javascript">
+function cardDidplay(event) {
+    $('button.btn-light-dark.active').removeClass('active').attr({
+        'data-bs-toggle': 'collapse',
+        'data-bs-target': '#kt_docs_card_collapsible',
+        onclick: 'cardDidplay($(this))'
+    });
+    event.addClass('active').attr({
+        'data-bs-toggle': '',
+        'data-bs-target': '',
+        onclick: ''
+    });
+    $('#kt_customers_table_wrapper > div').toggleClass('col-lg-3 col-md-4 col-sm-6');
+}
+</script>
+{% endblock %}

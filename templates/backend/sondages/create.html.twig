@@ -1,0 +1,1578 @@
+{% extends "backend/layout.html.twig" %}
+
+{% block title %}Détails Sondage{% endblock %}
+{% block description %}{% endblock %}
+
+{% block stylesheets %}
+<!--begin::Page Vendor Stylesheets(used by this page)-->
+<link href="{{asset('assets/plugins/custom/prismjs/prismjs.bundle.css')}}" rel="stylesheet" type="text/css" />
+<!--end::Page Vendor Stylesheets-->
+
+<style type="text/css">
+input, textarea {
+    outline: none;
+}
+.modal-body textarea[name=description], .modal-body textarea[name=description]::placeholder {
+   font-size: 18px;
+   opacity: .7;
+}
+.modal-body textarea[name=description]::placeholder { 
+   font-style: italic;
+}
+.modal-body input[name=libelle] {
+   font-size: 23px
+}
+.modal-body input[name=libelle]::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */ 
+   font-style: italic;
+   font-size: 23px
+}
+
+/* PREVIEW CSS */
+.questshow-container {
+    max-width: 1000px;
+    margin: auto;
+}
+.myQuests {
+    display: none;
+}
+.myQuests.fader {
+    animation-name: fader;
+    animation-duration: 1.5s;
+}
+@keyframes fader {
+    from {opacity: .4}
+    to {opacity: 1}
+}
+
+</style>
+{% endblock %}
+
+{% block pageTitle %}
+<div class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-2 pb-lg-0" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
+    <!--begin::Heading-->
+    <h1 class="text-dark fw-bolder my-1 fs-2">Détails Sondage 
+    <small class="text-muted fs-6 fw-normal ms-1"></small></h1>
+    <!--end::Heading-->
+    <!--begin::Breadcrumb-->
+    <ul class="breadcrumb fw-bold fs-base my-1">
+        <li class="breadcrumb-item text-muted">
+            <a href="{{path('dash')}}" class="text-muted">Dashboards</a>
+        </li>
+        <li class="breadcrumb-item text-muted">Sondages</li>
+        <li class="breadcrumb-item text-muted">
+            <a href="{{path('sondages.list')}}" class="text-muted">Liste des Sondages</a>
+        </li>
+        <li class="breadcrumb-item text-dark">Détails Sondage</li>
+    </ul>
+    <!--end::Breadcrumb-->
+</div>
+{% endblock %}
+
+{% block body %}<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Container-->
+    <div class="container-xxl" id="kt_content_container">
+        <!--begin::Form-->
+        <form id="kt_enquete_edit_form" class="form d-flex flex-column flex-lg-row" action="" method="POST" enctype="multipart/form-data">
+            <!--begin::Aside column-->
+            <div class="w-100 flex-lg-row-auto w-lg-300px mb-7 me-7 me-lg-10">
+                <!--begin::Order details-->
+                <div class="card card-flush py-4 mb-5 mb-xl-8">
+                    <!--begin::Card header-->
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h2>Informations Générales</h2>
+                        </div>
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Card body-->
+                    <div class="card-body pt-0">
+                        <div class="d-flex flex-column gap-10">
+                            <!--begin::Input group-->
+                            <div class="fv-row">
+                                <!--begin::Label-->
+                                <label class="form-label">Couverture</label>
+                                <!--end::Label-->
+                                <!--begin::Image input-->
+                                <div class="image-input image-input-outline w-100" data-kt-image-input="true" style="background-image: url({{asset('assets/media/svg/avatars/blank-image.svg')}}); background-size: contain; background-position: center;">
+                                    <!--begin::Preview existing avatar-->
+                                    <div class="image-input-wrapper w-100 h-125px" style="background-image: url({{asset('uploads/images/'~ sondage.cover.tempFile|default('blank-image.svg'))}}); background-size: contain; background-position: center; background-repeat: no-repeat;"></div>
+                                    <!--end::Preview existing avatar-->
+                                    <!--begin::Label-->
+                                    <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="" data-bs-original-title="Change avatar">
+                                        <i class="bi bi-pencil-fill fs-7"></i>
+                                        <!--begin::Inputs-->
+                                        <input type="file" name="cover" accept=".png, .jpg, .jpeg">
+                                        <input type="hidden" name="cover_remove">
+                                        <!--end::Inputs-->
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Cancel-->
+                                    <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="" data-bs-original-title="Cancel avatar">
+                                        <i class="bi bi-x fs-2"></i>
+                                    </span>
+                                    <!--end::Cancel-->
+                                    <!--begin::Remove-->
+                                    <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="" data-bs-original-title="Remove avatar">
+                                        <i class="bi bi-x fs-2"></i>
+                                    </span>
+                                    <!--end::Remove-->
+                                </div>
+                                <!--end::Image input-->
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="fv-row">
+                                <!--begin::Label-->
+                                <label class="required form-label">Nom du Sondage</label>
+                                <!--end::Label-->
+                                <!--begin::Select2-->
+                                <input type="text" class="form-control form-control-solid" name="nom" placeholder="" value="{{sondage.titre}}"/>
+                                <input type="hidden" name="id" value="{{sondage.id}}"/>
+                                <input type="hidden" name="publish" value="{{sondage.status}}" disabled/>
+                                <!--end::Select2-->
+                                <!--begin::Description-->
+                                <div class="text-muted fs-7">Le nom du Sondage doit être unique.</div>
+                                <!--end::Description-->
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="fv-row">
+                                <!--begin::Label-->
+                                <label class="required form-label">Points</label>
+                                <!--end::Label-->
+                                <!--begin::Select2-->
+                                <input type="number" class="form-control form-control-solid" name="points" placeholder="" value="{{sondage.points}}"/>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="fv-row fv-plugins-icon-container">
+                                <!--begin::Label-->
+                                <label class="required form-label">Entreprise</label>
+                                <!--end::Label-->
+                                <!--begin::Select2-->
+                                <select class="form-select mb-2 select2-hidden-accessible" data-control="select2" data-hide-search="true" data-placeholder="Selectionner une entreprise" name="entreprise" id="kt_ecommerce_edit_order_payment" data-select2-id="select2-data-kt_ecommerce_edit_order_payment" tabindex="-1" aria-hidden="true">
+                                    <option></option>
+                                    {% for entreprise in entreprises %}
+                                        <option value="{{entreprise.id}}" {% if sondage.entreprise and sondage.entreprise == entreprise %}selected{% endif %}>{{entreprise.nom}}</option>
+                                    {% endfor %}
+                                </select>
+                                <!--end::Select2-->
+                                <div class="fv-plugins-message-container invalid-feedback"></div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="fv-row">
+                                <!--begin::Label-->
+                                <label class="required form-label">Description</label>
+                                <!--end::Label-->
+                                <!--begin::Editor-->
+                                <textarea id="" rows="5" name="description" placeholder="Message à afficher..." class="form-control mb-2">{{sondage.description}}</textarea>
+                                <!--end::Editor-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                    </div>
+                    <!--end::Card header-->
+                </div>
+                <div class="card card-flush py-4 mb-5 mb-xl-8">
+                    <!--begin::Card header-->
+                    <div class="card-header border-0">
+                        <div class="card-title">
+                            <h3 class="fw-bolder m-0">Paramètre d’envoi</h3>
+                        </div>
+                        <!--begin::Description-->
+                        <div class="text-muted fs-7">Choisissez le(s) moyen(s) par le(s)quels sera envoyé votre Sondage</div>
+                        <!--end::Description-->
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Card body-->
+                    <div class="card-body pt-2">
+                        <!--begin::Items-->
+                        <div class="py-2">
+                            <!--begin::Item-->
+                            <div class="d-flex flex-stack">
+                                <div class="d-flex">
+                                    <img src="{{asset('assets/media/icons/duotune/communication/com011.svg')}}" class="w-30px me-6" alt="Email">
+                                    <div class="d-flex flex-column">
+                                        <a href="#" class="fs-5 text-dark text-hover-primary fw-bolder">Email</a>
+                                        <div class="fs-6 fw-bold text-muted">40% de performance</div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <!--begin::Switch-->
+                                    <label class="form-check form-switch form-switch-sm form-check-custom form-check-solid">
+                                        <!--begin::Input-->
+                                        <input class="form-check-input" name="paramEnvoi[]" type="checkbox" value="Email" id="kt_modal_connected_accounts_google" {% if "Email" in sondage.paramEnvoi %}checked{% endif %}>
+                                        <!--end::Input-->
+                                        <!--begin::Label-->
+                                        <span class="form-check-label fw-bold text-muted" for="kt_modal_connected_accounts_google"></span>
+                                        <!--end::Label-->
+                                    </label>
+                                    <!--end::Switch-->
+                                </div>
+                            </div>
+                            <!--end::Item-->
+                            <div class="separator separator-dashed my-5"></div>
+                            <!--begin::Item-->
+                            <div class="d-flex flex-stack">
+                                <div class="d-flex">
+                                    <img src="{{asset('assets/media/icons/duotune/communication/com003.svg')}}" class="w-30px me-6" alt="Message SMS">
+                                    <div class="d-flex flex-column">
+                                        <a href="#" class="fs-5 text-dark text-hover-primary fw-bolder">Message SMS</a>
+                                        <div class="fs-6 fw-bold text-muted">60% de performance</div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <!--begin::Switch-->
+                                    <label class="form-check form-switch form-switch-sm form-check-custom form-check-solid">
+                                        <!--begin::Input-->
+                                        <input class="form-check-input" name="paramEnvoi[]" type="checkbox" value="Message SMS" id="kt_modal_connected_accounts_github" {% if "Message SMS" in sondage.paramEnvoi %}checked{% endif %}>
+                                        <!--end::Input-->
+                                        <!--begin::Label-->
+                                        <span class="form-check-label fw-bold text-muted" for="kt_modal_connected_accounts_github"></span>
+                                        <!--end::Label-->
+                                    </label>
+                                    <!--end::Switch-->
+                                </div>
+                            </div>
+                            <!--end::Item-->
+                            <div class="separator separator-dashed my-5"></div>
+                            <!--begin::Item-->
+                            <div class="d-flex flex-stack">
+                                <div class="d-flex">
+                                    <img src="{{asset('assets/media/icons/duotune/communication/com021.svg')}}" class="w-30px me-6" alt="WhatsApp">
+                                    <div class="d-flex flex-column">
+                                        <a href="#" class="fs-5 text-dark text-hover-primary fw-bolder">WhatsApp</a>
+                                        <div class="fs-6 fw-bold text-muted">80% de performance</div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <!--begin::Switch-->
+                                    <label class="form-check form-switch form-switch-sm form-check-custom form-check-solid">
+                                        <!--begin::Input-->
+                                        <input class="form-check-input" name="paramEnvoi[]" type="checkbox" value="WhatsApp" id="kt_modal_connected_accounts_slack" {% if "WhatsApp" in sondage.paramEnvoi %}checked{% endif %}>
+                                        <!--end::Input-->
+                                        <!--begin::Label-->
+                                        <span class="form-check-label fw-bold text-muted" for="kt_modal_connected_accounts_slack"></span>
+                                        <!--end::Label-->
+                                    </label>
+                                    <!--end::Switch-->
+                                </div>
+                            </div>
+                            <!--end::Item-->
+                        </div>
+                        <!--end::Items-->
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Order details-->
+            </div>
+            <!--end::Aside column-->
+            <!--begin::Main column-->
+            <div class="d-flex flex-column flex-lg-row-fluid gap-7 gap-lg-10">
+                <!--begin::Order details-->
+                <div class="card card-flush py-4 stepper stepper-pills" id="kt_stepper_example_clickable">
+                    <!--begin::Card header-->
+                    <div class="card-header stepper-nav flex-center flex-wrap mb-10">
+                        <!--begin::Step 1-->
+                        <div class="stepper-item mx-2 my-4 current" data-kt-stepper-element="nav" data-kt-stepper-action="step">
+                            <!--begin::Line-->
+                            <div class="stepper-line w-40px d-none"></div>
+                            <!--end::Line-->
+
+                            <!--begin::Icon-->
+                            <div class="stepper-icon w-40px h-40px">
+                                <i class="stepper-check fas fa-check"></i>
+                                <span class="stepper-number">1</span>
+                            </div>
+                            <!--end::Icon-->
+
+                            <!--begin::Label-->
+                            <div class="stepper-label">
+                                <h3 class="stepper-title">
+                                    Questions
+                                </h3>
+
+                                <div class="stepper-desc">
+                                    Les questions du Sondage
+                                </div>
+                            </div>
+                            <!--end::Label-->
+                        </div>
+                        <!--end::Step 1-->
+
+                        <!--begin::Step 2-->
+                        <div class="stepper-item mx-2 my-4" data-kt-stepper-element="nav" data-kt-stepper-action="step">
+                            <!--begin::Line-->
+                            <div class="stepper-line w-40px d-none"></div>
+                            <!--end::Line-->
+
+                            <!--begin::Icon-->
+                            <div class="stepper-icon w-40px h-40px">
+                                <i class="stepper-check fas fa-check"></i>
+                                <span class="stepper-number">2</span>
+                            </div>
+                            <!--begin::Icon-->
+
+                            <!--begin::Label-->
+                            <div class="stepper-label">
+                                <h3 class="stepper-title">
+                                    Conditions
+                                </h3>
+
+                                <div class="stepper-desc">
+                                    Conditions aux questions
+                                </div>
+                            </div>
+                            <!--end::Label-->
+                        </div>
+                        <!--end::Step 2-->
+
+                        <!--begin::Step 3-->
+                        <div class="stepper-item mx-2 my-4" data-kt-stepper-element="nav" data-kt-stepper-action="step">
+                            <!--begin::Line-->
+                            <div class="stepper-line w-40px d-none"></div>
+                            <!--end::Line-->
+
+                            <!--begin::Icon-->
+                            <div class="stepper-icon w-40px h-40px">
+                                <i class="stepper-check fas fa-check"></i>
+                                <span class="stepper-number">3</span>
+                            </div>
+                            <!--begin::Icon-->
+
+                            <!--begin::Label-->
+                            <div class="stepper-label">
+                                <h3 class="stepper-title">
+                                    Ciblage
+                                </h3>
+
+                                <div class="stepper-desc">
+                                    Critères de ciblage
+                                </div>
+                            </div>
+                            <!--end::Label-->
+                        </div>
+                        <!--end::Step 3-->
+
+                        <!--begin::Step 4-->
+                        <div class="stepper-item mx-2 my-4" data-kt-stepper-element="nav" data-kt-stepper-action="step">
+                            <!--begin::Line-->
+                            <div class="stepper-line w-40px d-none"></div>
+                            <!--end::Line-->
+
+                            <!--begin::Icon-->
+                            <div class="stepper-icon w-40px h-40px">
+                                <i class="stepper-check fas fa-check"></i>
+                                <span class="stepper-number">4</span>
+                            </div>
+                            <!--begin::Icon-->
+
+                            <!--begin::Label-->
+                            <div class="stepper-label">
+                                <h3 class="stepper-title">
+                                    Prévisualisation
+                                </h3>
+
+                                <div class="stepper-desc">
+                                    Aperçu du Sondage
+                                </div>
+                            </div>
+                            <!--end::Label-->
+                        </div>
+                        <!--end::Step 4-->
+
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Card body-->
+                    <div class="card-body pt-0">
+                        <div class="d-flex flex-column gap-10">
+                            <!--begin::Group-->
+                            <div class="mb-5">
+                                <!--begin::Step 1-->
+                                <div class="flex-column current" data-kt-stepper-element="content">
+                                    <div class="row g-10 draggable-zone hover-scroll mh-500px">
+                                        {% for question in sondage.questions|sort((a, b) => a.numero <=> b.numero) %}
+                                        <div id="quest_{{question.id}}" class="draggable" data-type="{{question.type}}">
+                                            <!--begin::Card-->
+                                            <div class="card card-bordered">
+                                                <div class="card-header bg-light">
+                                                    <div class="card-title">
+                                                        <h3 class="card-label cursor-pointer" data-bs-toggle="modal" data-bs-target="#kt_modal_update_question" onclick="editQuestion({{question.id}})">{{question.numero}} - {{question.libelle}} {% if question.required %}<sup>(*)</sup>{% endif %}</h3>
+                                                        <input type="hidden" name="questions[]" value="{{question.id}}">
+                                                    </div>
+                                                    <div class="card-toolbar">
+                                                        <a href="#" class="btn btn-icon btn-sm btn-hover-light-primary draggable-handle">
+                                                            <!--begin::Svg Icon | path: icons/duotune/abstract/abs015.svg-->
+                                                            <span class="svg-icon svg-icon-2x">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <path d="M21 7H3C2.4 7 2 6.6 2 6V4C2 3.4 2.4 3 3 3H21C21.6 3 22 3.4 22 4V6C22 6.6 21.6 7 21 7Z" fill="currentColor"></path>
+                                                                    <path opacity="0.3" d="M21 14H3C2.4 14 2 13.6 2 13V11C2 10.4 2.4 10 3 10H21C21.6 10 22 10.4 22 11V13C22 13.6 21.6 14 21 14ZM22 20V18C22 17.4 21.6 17 21 17H3C2.4 17 2 17.4 2 18V20C2 20.6 2.4 21 3 21H21C21.6 21 22 20.6 22 20Z" fill="currentColor"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body hover-scroll mh-125px">
+                                                    {% if question.reponses|length != 0 %}
+                                                        {% for reponse in question.reponses %}
+                                                            <label class="form-check form-check-custom form-check-solid mb-2">
+                                                                <input class="form-check-input" type="{% if question.type == "Choix Multiple" %}checkbox{% else %}radio{% endif %}" value="" {% if loop.first %}checked{% endif %} disabled/>
+                                                                <span class="form-check-label">
+                                                                    {{reponse.libelle}}
+                                                                </span>
+                                                            </label>
+                                                        {% endfor %}
+                                                    {% elseif question.type == "Note" %}
+                                                        <div class="rating">
+                                                            <div class="rating-label checked">
+                                                                <span class="svg-icon svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13.0079 2.6L15.7079 7.2L21.0079 8.4C21.9079 8.6 22.3079 9.7 21.7079 10.4L18.1079 14.4L18.6079 19.8C18.7079 20.7 17.7079 21.4 16.9079 21L12.0079 18.8L7.10785 21C6.20785 21.4 5.30786 20.7 5.40786 19.8L5.90786 14.4L2.30785 10.4C1.70785 9.7 2.00786 8.6 3.00786 8.4L8.30785 7.2L11.0079 2.6C11.3079 1.8 12.5079 1.8 13.0079 2.6Z" fill="currentColor"/></svg></span>
+                                                            </div>
+                                                            <div class="rating-label checked">
+                                                                <span class="svg-icon svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13.0079 2.6L15.7079 7.2L21.0079 8.4C21.9079 8.6 22.3079 9.7 21.7079 10.4L18.1079 14.4L18.6079 19.8C18.7079 20.7 17.7079 21.4 16.9079 21L12.0079 18.8L7.10785 21C6.20785 21.4 5.30786 20.7 5.40786 19.8L5.90786 14.4L2.30785 10.4C1.70785 9.7 2.00786 8.6 3.00786 8.4L8.30785 7.2L11.0079 2.6C11.3079 1.8 12.5079 1.8 13.0079 2.6Z" fill="currentColor"/></svg></span>
+                                                            </div>
+                                                            <div class="rating-label checked">
+                                                                <span class="svg-icon svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13.0079 2.6L15.7079 7.2L21.0079 8.4C21.9079 8.6 22.3079 9.7 21.7079 10.4L18.1079 14.4L18.6079 19.8C18.7079 20.7 17.7079 21.4 16.9079 21L12.0079 18.8L7.10785 21C6.20785 21.4 5.30786 20.7 5.40786 19.8L5.90786 14.4L2.30785 10.4C1.70785 9.7 2.00786 8.6 3.00786 8.4L8.30785 7.2L11.0079 2.6C11.3079 1.8 12.5079 1.8 13.0079 2.6Z" fill="currentColor"/></svg></span>
+                                                            </div>
+                                                            <div class="rating-label">
+                                                                <span class="svg-icon svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13.0079 2.6L15.7079 7.2L21.0079 8.4C21.9079 8.6 22.3079 9.7 21.7079 10.4L18.1079 14.4L18.6079 19.8C18.7079 20.7 17.7079 21.4 16.9079 21L12.0079 18.8L7.10785 21C6.20785 21.4 5.30786 20.7 5.40786 19.8L5.90786 14.4L2.30785 10.4C1.70785 9.7 2.00786 8.6 3.00786 8.4L8.30785 7.2L11.0079 2.6C11.3079 1.8 12.5079 1.8 13.0079 2.6Z" fill="currentColor"/></svg></span>
+                                                            </div>
+                                                            <div class="rating-label">
+                                                                <span class="svg-icon svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13.0079 2.6L15.7079 7.2L21.0079 8.4C21.9079 8.6 22.3079 9.7 21.7079 10.4L18.1079 14.4L18.6079 19.8C18.7079 20.7 17.7079 21.4 16.9079 21L12.0079 18.8L7.10785 21C6.20785 21.4 5.30786 20.7 5.40786 19.8L5.90786 14.4L2.30785 10.4C1.70785 9.7 2.00786 8.6 3.00786 8.4L8.30785 7.2L11.0079 2.6C11.3079 1.8 12.5079 1.8 13.0079 2.6Z" fill="currentColor"/></svg></span>
+                                                            </div>
+                                                        </div>
+                                                    {% else %}
+                                                        {{question.type}}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="position-absolute bottom-0 end-0">
+                                                    <button class="btn btn-icon btn-circle btn-active-color-danger w-35px h-35px bg-body shadow kt_delete_question" data-bs-toggle="tooltip" data-id="{{question.id}}" data-title="{{question.libelle}}" title="Supprimer la question" data-bs-original-title="Supprimer la question">
+                                                        <i class="bi bi-x fs-2"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <!--end::Card-->
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="text-center mt-5">
+                                        <button type="button" class="btn btn-light-dark" data-bs-toggle="modal" data-bs-target="#kt_modal_new_question">
+                                            <span class="svg-icon svg-icon-muted svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"/>
+                                                <rect x="10.8891" y="17.8033" width="12" height="2" rx="1" transform="rotate(-90 10.8891 17.8033)" fill="currentColor"/>
+                                                <rect x="6.01041" y="10.9247" width="12" height="2" rx="1" fill="currentColor"/>
+                                                </svg>
+                                            </span>
+                                            Nouvelle Question
+                                        </a>
+                                    </div>
+                                </div>
+                                <!--begin::Step 1-->
+
+                                <!--begin::Step 2-->
+                                <div id="conditions" class="flex-column" data-kt-stepper-element="content">
+                                    {% for index, condition in sondage.conditions %}
+                                    {% set dataReponses = [] %}
+                                    <!--begin::Input group-->
+                                    <div class="fv-row row mb-10" data-index="{{index}}">
+                                        <div class="col-md-4">
+                                            <!--begin::Label-->
+                                            <label class="form-label">Si</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="hidden" name="conditions[{{index}}][id]" value="{{condition.id}}">
+                                            <select class="form-select form-select-solid" name="conditions[{{index}}][question]" data-control="select2" data-placeholder="Question" data-hide-search="true" onchange="generateRedirection($(this))" required>
+                                                <option></option>
+                                                {% for question in sondage.questions|filter(q => q.type == 'Choix Multiple' or q.type == 'Choix Unique' or q.type == 'Oui / Non') %}
+                                                    <option value="{{question.id}}" {% if question == condition.question %}{% set dataReponses = question.reponses %}selected{% endif %}>{{question.libelle}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!--begin::Label-->
+                                            <label class="form-label">Est égale à</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select class="form-select form-select-solid" name="conditions[{{index}}][reponse]" data-control="select2" data-placeholder="Reponse" data-hide-search="true" required>
+                                                <option></option>
+                                                {% for reponse in dataReponses %}
+                                                    <option value="{{reponse.id}}" {% if reponse == condition.reponse %}selected{% endif %}>{{reponse.libelle}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-4">
+                                            <!--begin::Label-->
+                                            <label class="form-label">Alors</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select class="form-select form-select-solid" name="conditions[{{index}}][return]" data-control="select2" data-placeholder="Redirection vers" data-hide-search="true" required>
+                                                <option></option>
+                                                {% for question in sondage.questions %}
+                                                    <option value="{{question.id}}" {% if question == condition.redirection %}selected{% endif %} {% if question == condition.question %}disabled{% endif %}>{{question.libelle}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-1 d-flex align-items-end">
+                                            <button class="btn btn-light-danger" data-bs-toggle="tooltip" title="Supprimer" data-bs-original-title="Supprimer" data-id="{{condition.id}}" onclick="removeCondition($(this))">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor"/><rect x="7" y="15.3137" width="12" height="2" rx="1" transform="rotate(-45 7 15.3137)" fill="currentColor"/><rect x="8.41422" y="7" width="12" height="2" rx="1" transform="rotate(45 8.41422 7)" fill="currentColor"/></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!--end::Input group-->
+                                    {% endfor %}
+
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-10">
+                                        <!--begin::Label-->
+                                        <button type="button" class="btn text-primary btn-active-light-primary fs-4" onclick="addCondition($(this).parent())">
+                                            <span class="svg-icon svg-icon-primary svg-icon-2x"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor"/>
+                                                <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor"/>
+                                                </svg>
+                                            </span> 
+                                            Ajouter une condition
+                                        </button>
+                                        <!--end::Label-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--begin::Step 2-->
+
+                                <!--begin::Step 3-->
+                                <div class="flex-column" data-kt-stepper-element="content">
+                                    <!--begin::Accordion-->
+                                    <div class="accordion" id="kt_ciblage">
+                                        <!--begin::Item-->
+                                        <div class="mb-5">
+                                            <!--begin::Header-->
+                                            <div class="accordion-header py-3 d-flex mb-5" data-bs-toggle="collapse" data-bs-target="#kt_ciblage_csp">
+                                                <span class="accordion-icon"><span class="svg-icon svg-icon-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6.28548 15.0861C7.34369 13.1814 9.35142 12 11.5304 12H12.4696C14.6486 12 16.6563 13.1814 17.7145 15.0861L19.3493 18.0287C20.0899 19.3618 19.1259 21 17.601 21H6.39903C4.87406 21 3.91012 19.3618 4.65071 18.0287L6.28548 15.0861Z" fill="currentColor"/><rect opacity="0.3" x="8" y="3" width="8" height="8" rx="4" fill="currentColor"/></svg></span></span>
+                                                <h3 class="fs-4 fw-bold mb-0 ms-4">CSP</h3>
+                                            </div>
+                                            <!--end::Header-->
+
+                                            <!--begin::Body-->
+                                            <div id="kt_ciblage_csp" class="fs-6 collapse show ps-10" data-bs-parent="#kt_ciblage">
+                                                <div class="fv-row mb-7 fv-plugins-icon-container">
+                                                    <label class="fs-6 fw-bold mb-2">Sexe</label>
+                                                    <div class="d-flex">
+                                                        <label class="form-check form-check-custom form-check-solid me-5">
+                                                            <input class="form-check-input" type="checkbox" value="tout" {% if sondage.ciblage.sexe|default([])|length == 3 %}checked{% endif %}/>
+                                                            <span class="form-check-label">
+                                                                Tout sexe
+                                                            </span>
+                                                        </label>
+                                                        <label class="form-check form-check-custom form-check-solid me-5">
+                                                            <input class="form-check-input" type="checkbox" name="sexeCible[]" value="Hommes" {% if 'Hommes' in sondage.ciblage.sexe|default([]) %}checked{% endif %}/>
+                                                            <span class="form-check-label">
+                                                                Hommes
+                                                            </span>
+                                                        </label>
+                                                        <label class="form-check form-check-custom form-check-solid me-5">
+                                                            <input class="form-check-input" type="checkbox" name="sexeCible[]" value="Femmes" {% if 'Femmes' in sondage.ciblage.sexe|default([]) %}checked{% endif %}/>
+                                                            <span class="form-check-label">
+                                                                Femmes
+                                                            </span>
+                                                        </label>
+                                                        <label class="form-check form-check-custom form-check-solid me-5">
+                                                            <input class="form-check-input" type="checkbox" name="sexeCible[]" value="Autres" {% if 'Autres' in sondage.ciblage.sexe|default([]) %}checked{% endif %}/>
+                                                            <span class="form-check-label">
+                                                                Autres
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="fv-row my-15 fv-plugins-icon-container">
+                                                    <label class="fs-6 fw-bold mb-2">Tranche d'Âge<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Choose the budget allocated for each day. Higher budget will generate better results"></i></label>
+                                                    <div id="kt_slider_tooltip"></div>
+                                                    <input type="hidden" name="ageMini" value="{{sondage.ciblage.ageMini|default(null)}}">
+                                                    <input type="hidden" name="ageMaxi" value="{{sondage.ciblage.ageMaxi|default(null)}}">
+                                                </div>
+                                                <div class="fv-row mb-7 fv-plugins-icon-container">
+                                                    <label class="fs-6 fw-bold mb-2">Catégorie socio professionnelle</label>
+                                                    <div class="mt-5">
+                                                        <label class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" value="tout" {% if sondage.ciblage.categoriesSP|default([])|length == 9 %}checked{% endif %}/>
+                                                            <span class="form-check-label">
+                                                                Tout sélectionner
+                                                            </span>
+                                                        </label>
+                                                        <label class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" name="metierCible[]" value="Agriculteurs exploitants" {% if 'Agriculteurs exploitants' in sondage.ciblage.categoriesSP|default([]) %}checked{% endif %}/>
+                                                            <span class="form-check-label">
+                                                                Les agriculteurs exploitants
+                                                            </span>
+                                                        </label>
+                                                        <label class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" name="metierCible[]" value="Artisans, commerçants et chefs d'entreprise" {% if "Artisans, commerçants et chefs d'entreprise" in sondage.ciblage.categoriesSP|default([]) %}checked{% endif %}/>
+                                                            <span class="form-check-label">
+                                                                Les artisans, commerçants et chefs d'entreprise
+                                                            </span>
+                                                        </label>
+                                                        <label class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" name="metierCible[]" value="Cadres et professions intellectuelles supérieures" {% if 'Cadres et professions intellectuelles supérieures' in sondage.ciblage.categoriesSP|default([]) %}checked{% endif %}/>
+                                                            <span class="form-check-label">
+                                                                Les cadres et professions intellectuelles supérieures
+                                                            </span>
+                                                        </label>
+                                                        <label class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" name="metierCible[]" value="Professions intermédiaires" {% if 'Professions intermédiaires' in sondage.ciblage.categoriesSP|default([]) %}checked{% endif %}/>
+                                                            <span class="form-check-label">
+                                                                Les professions intermédiaires
+                                                            </span>
+                                                        </label>
+                                                        <label class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" name="metierCible[]" value="Employés" {% if 'Employés' in sondage.ciblage.categoriesSP|default([]) %}checked{% endif %}/>
+                                                            <span class="form-check-label">
+                                                                Les employés
+                                                            </span>
+                                                        </label>
+                                                        <label class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" name="metierCible[]" value="Ouvriers" {% if 'Ouvriers' in sondage.ciblage.categoriesSP|default([]) %}checked{% endif %}/>
+                                                            <span class="form-check-label">
+                                                                Les ouvriers
+                                                            </span>
+                                                        </label>
+                                                        <label class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" name="metierCible[]" value="Retraités" {% if 'Retraités' in sondage.ciblage.categoriesSP|default([]) %}checked{% endif %}/>
+                                                            <span class="form-check-label">
+                                                                Les retraités
+                                                            </span>
+                                                        </label>
+                                                        <label class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" name="metierCible[]" value="Étudiants, lycéens, collegiens, écolier" {% if 'Étudiants, lycéens, collegiens, écolier' in sondage.ciblage.categoriesSP|default([]) %}checked{% endif %}/>
+                                                            <span class="form-check-label">
+                                                                Les étudiants, lycéens, collegiens, écolier
+                                                            </span>
+                                                        </label>
+                                                        <label class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" name="metierCible[]" value="Autres personnes sans activité professionnelle" {% if 'Autres personnes sans activité professionnelle' in sondage.ciblage.categoriesSP|default([]) %}checked{% endif %}/>
+                                                            <span class="form-check-label">
+                                                                Autres personnes sans activité professionnelle
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="fv-row mb-10 fv-plugins-icon-container">
+                                                    <label class="fs-6 fw-bold mb-2">
+                                                        <span class="">Adresse Géographique / Location</span>
+                                                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="" data-bs-original-title="Veuillez saisir uniquement le nom de quartier. Les informations sont générées automatiquement" aria-label="Les informations sont générées automatiquement"></i>
+                                                    </label>
+                                                    <input type="text" id="adresse_cible" class="form-control form-control-solid" placeholder="Entrez une adresse ou un nom de quartier uniquement" name="" value="">
+                                                    <div id="cibleTags" class="d-flex justify-content-start mt-3">
+                                                        {% for index, locat in sondage.ciblage.locations|default([]) %}
+                                                        <span class="badge badge-light-primary me-3 mb-3">
+                                                            {{locat.adresse}} <i class="bi bi-x fs-2 cursor-pointer" onclick="$(this).parent().remove()"></i>
+                                                            <input type="hidden" name="adressCible[{{index}}][id]" value="{{locat.id}}"><input type="hidden" name="adressCible[{{index}}][sublocality]" value="{{locat.commune}}"><input type="hidden" name="adressCible[{{index}}][locality]" value="{{locat.ville}}"><input type="hidden" name="adressCible[{{index}}][country]" value="{{locat.pays}}">
+                                                        </span>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--end::Body-->
+                                        </div>
+                                        <!--end::Item-->
+
+                                        <!--begin::Item-->
+                                        <div class="mb-5">
+                                            <!--begin::Header-->
+                                            <div class="accordion-header py-3 d-flex mb-5 collapsed" data-bs-toggle="collapse" data-bs-target="#kt_ciblage_enquete">
+                                                <span class="accordion-icon"><span class="svg-icon svg-icon-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21.7 18.9L18.6 15.8C17.9 16.9 16.9 17.9 15.8 18.6L18.9 21.7C19.3 22.1 19.9 22.1 20.3 21.7L21.7 20.3C22.1 19.9 22.1 19.3 21.7 18.9Z" fill="currentColor"/><path opacity="0.3" d="M11 20C6 20 2 16 2 11C2 6 6 2 11 2C16 2 20 6 20 11C20 16 16 20 11 20ZM11 4C7.1 4 4 7.1 4 11C4 14.9 7.1 18 11 18C14.9 18 18 14.9 18 11C18 7.1 14.9 4 11 4ZM8 11C8 9.3 9.3 8 11 8C11.6 8 12 7.6 12 7C12 6.4 11.6 6 11 6C8.2 6 6 8.2 6 11C6 11.6 6.4 12 7 12C7.6 12 8 11.6 8 11Z" fill="currentColor"/></svg></span></span>
+                                                <h3 class="fs-4 fw-bold mb-0 ms-4">Enquêtes profils</h3>
+                                            </div>
+                                            <!--end::Header-->
+
+                                            <!--begin::Body-->
+                                            <div id="kt_ciblage_enquete" class="collapse fs-6 ps-10" data-bs-parent="#kt_ciblage">            
+                                                {% for index, cible in sondage.ciblage.cibles|default([]) %}
+                                                {% set dataQuest = [] %}
+                                                {% set dataResp = [] %}
+                                                <!--begin::Input group-->
+                                                <div class="fv-row row mb-10" data-index="{{index}}">
+                                                    <div class="col-md-4">
+                                                        <!--begin::Label-->
+                                                        <label class="form-label">Personnes ayant participés à</label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <input type="hidden" name="cibles[{{index}}][id]" value="{{cible.id}}">
+                                                        <select class="form-select form-select-solid" name="cibles[{{index}}][enquete]" data-control="select2" data-placeholder="Enquête" data-hide-search="true" onchange="generateQuestion($(this))" required>
+                                                            <option></option>
+                                                            {% for enquete in enquetes %}
+                                                                <option value="{{enquete.id}}" {% if enquete == cible.enquete %}{% set dataQuest = enquete.questions %}selected{% endif %}>{{enquete.nom}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <!--begin::Label-->
+                                                        <label class="form-label">Dont la question</label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <select class="form-select form-select-solid" name="cibles[{{index}}][question]" data-control="select2" data-placeholder="Question" data-hide-search="true" onchange="generateResponses($(this))">
+                                                            <option></option>
+                                                            {% for question in dataQuest|filter(q => q.type == 'Choix Multiple' or q.type == 'Choix Unique' or q.type == 'Oui / Non') %}
+                                                                <option value="{{question.id}}" {% if question == cible.question %}{% set dataResp = question.reponses %}selected{% endif %}>{{question.libelle}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <!--begin::Label-->
+                                                        <label class="form-label">Est égale à</label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        {% set cibleReponses = cible.reponses|default([]) %}
+                                                        <select class="form-select form-select-solid" name="cibles[{{index}}][reponses][]" data-control="select2" data-placeholder="Réponses" data-hide-search="true">
+                                                            {% for reponse in dataResp %}
+                                                                <option value="{{reponse.id}}" {% if reponse in cibleReponses %}selected{% endif %}>{{reponse.libelle}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <div class="col-md-1 d-flex align-items-end">
+                                                        <button class="btn btn-light-danger" data-bs-toggle="tooltip" title="Supprimer" data-bs-original-title="Supprimer" data-id="{{cible.id}}" onclick="removeCondition($(this))">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor"/><rect x="7" y="15.3137" width="12" height="2" rx="1" transform="rotate(-45 7 15.3137)" fill="currentColor"/><rect x="8.41422" y="7" width="12" height="2" rx="1" transform="rotate(45 8.41422 7)" fill="currentColor"/></svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <!--end::Input group-->
+                                                {% endfor %}
+
+                                                <!--begin::Input group-->
+                                                <div class="fv-row mb-10">
+                                                    <!--begin::Label-->
+                                                    <button type="button" class="btn text-primary btn-active-light-primary fs-4" onclick="ciblerEnquete($(this).parent())">
+                                                        <span class="svg-icon svg-icon-primary svg-icon-2x"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path opacity="0.3" d="M11 13H7C6.4 13 6 12.6 6 12C6 11.4 6.4 11 7 11H11V13ZM17 11H13V13H17C17.6 13 18 12.6 18 12C18 11.4 17.6 11 17 11Z" fill="currentColor"/><path d="M22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2C17.5 2 22 6.5 22 12ZM17 11H13V7C13 6.4 12.6 6 12 6C11.4 6 11 6.4 11 7V11H7C6.4 11 6 11.4 6 12C6 12.6 6.4 13 7 13H11V17C11 17.6 11.4 18 12 18C12.6 18 13 17.6 13 17V13H17C17.6 13 18 12.6 18 12C18 11.4 17.6 11 17 11Z" fill="currentColor"/></svg>
+                                                        </span> 
+                                                        Cibler une enquête
+                                                    </button>
+                                                    <!--end::Label-->
+                                                </div>
+                                                <!--end::Input group-->
+                                            </div>
+                                            <!--end::Body-->
+                                        </div>
+                                        <!--end::Item-->
+
+                                        <!--begin::Item-->
+                                        <div class="mb-5">
+                                            <!--begin::Header-->
+                                            <div class="accordion-header py-3 d-flex mb-5 collapsed" data-bs-toggle="collapse" data-bs-target="#kt_ciblage_ecommerce">
+                                                <span class="accordion-icon"><span class="svg-icon svg-icon-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path opacity="0.3" d="M18.041 22.041C18.5932 22.041 19.041 21.5932 19.041 21.041C19.041 20.4887 18.5932 20.041 18.041 20.041C17.4887 20.041 17.041 20.4887 17.041 21.041C17.041 21.5932 17.4887 22.041 18.041 22.041Z" fill="currentColor"/><path opacity="0.3" d="M6.04095 22.041C6.59324 22.041 7.04095 21.5932 7.04095 21.041C7.04095 20.4887 6.59324 20.041 6.04095 20.041C5.48867 20.041 5.04095 20.4887 5.04095 21.041C5.04095 21.5932 5.48867 22.041 6.04095 22.041Z" fill="currentColor"/><path opacity="0.3" d="M7.04095 16.041L19.1409 15.1409C19.7409 15.1409 20.141 14.7409 20.341 14.1409L21.7409 8.34094C21.9409 7.64094 21.4409 7.04095 20.7409 7.04095H5.44095L7.04095 16.041Z" fill="currentColor"/><path d="M19.041 20.041H5.04096C4.74096 20.041 4.34095 19.841 4.14095 19.541C3.94095 19.241 3.94095 18.841 4.14095 18.541L6.04096 14.841L4.14095 4.64095L2.54096 3.84096C2.04096 3.64096 1.84095 3.04097 2.14095 2.54097C2.34095 2.04097 2.94096 1.84095 3.44096 2.14095L5.44096 3.14095C5.74096 3.24095 5.94096 3.54096 5.94096 3.84096L7.94096 14.841C7.94096 15.041 7.94095 15.241 7.84095 15.441L6.54096 18.041H19.041C19.641 18.041 20.041 18.441 20.041 19.041C20.041 19.641 19.641 20.041 19.041 20.041Z" fill="currentColor"/></svg></span></span>
+                                                <h3 class="fs-4 fw-bold mb-0 ms-4">e-Commerce</h3>
+                                            </div>
+                                            <!--end::Header-->
+
+                                            <!--begin::Body-->
+                                            <div id="kt_ciblage_ecommerce" class="collapse fs-6 ps-10" data-bs-parent="#kt_ciblage">
+                                                <div class="fv-row row mb-10">
+                                                    <div class="col-12">
+                                                        <label class="form-label">Date de la dernière commande</label>
+                                                        <select class="form-select form-select-solid" name="lastCmd" data-control="select2" data-placeholder="Date dernière commande" data-hide-search="true">
+                                                            <option></option>
+                                                            <option {% if sondage.ciblage and sondage.ciblage.lastCmd == "30 derniers jours" %}selected{% endif %}>30 derniers jours</option>
+                                                            <option {% if sondage.ciblage and sondage.ciblage.lastCmd == "90 derniers jours" %}selected{% endif %}>90 derniers jours</option>
+                                                            <option {% if sondage.ciblage and sondage.ciblage.lastCmd == "6 derniers mois" %}selected{% endif %}>6 derniers mois</option>
+                                                            <option {% if sondage.ciblage and sondage.ciblage.lastCmd == "Plus de 6 mois" %}selected{% endif %}>Plus de 6 mois</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="fv-row row mb-10">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Catégorie</label>
+                                                        <select class="form-select form-select-solid" name="typeCat" data-control="select2" data-placeholder="Catégorie" data-hide-search="true">
+                                                            <option></option>
+                                                            <option>Cate1</option>
+                                                            <option>Cate2</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Sous catégories</label>
+                                                        <select class="form-select form-select-solid" name="sousCat" data-control="select2" data-placeholder="Sous catégories" data-hide-search="true">
+                                                            <option></option>
+                                                            <option>sousCate1</option>
+                                                            <option>sousCate2</option>
+                                                            <option>sousCate3</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--end::Body-->
+                                        </div>
+                                        <!--end::Item-->
+                                    </div>
+                                    <!--end::Accordion-->
+                                </div>
+                                <!--begin::Step 3-->
+
+                                <!--begin::Step 4-->
+                                <div class="flex-column" data-kt-stepper-element="content">
+                                    <!--begin::Input group-->
+                                    <div class="d-flex align-items-end justify-content-center mb-10">
+                                        <!--begin::Label-->
+                                        <button type="button" class="btn btn-light-primary fs-4" data-bs-toggle="modal" data-bs-target="#kt_modal_preview">
+                                            <span class="svg-icon svg-icon-primary svg-icon-2x">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21.7 18.9L18.6 15.8C17.9 16.9 16.9 17.9 15.8 18.6L18.9 21.7C19.3 22.1 19.9 22.1 20.3 21.7L21.7 20.3C22.1 19.9 22.1 19.3 21.7 18.9Z" fill="currentColor"/><path opacity="0.3" d="M11 20C6 20 2 16 2 11C2 6 6 2 11 2C16 2 20 6 20 11C20 16 16 20 11 20ZM11 4C7.1 4 4 7.1 4 11C4 14.9 7.1 18 11 18C14.9 18 18 14.9 18 11C18 7.1 14.9 4 11 4ZM8 11C8 9.3 9.3 8 11 8C11.6 8 12 7.6 12 7C12 6.4 11.6 6 11 6C8.2 6 6 8.2 6 11C6 11.6 6.4 12 7 12C7.6 12 8 11.6 8 11Z" fill="currentColor"/></svg>
+                                            </span> 
+                                            Cliquer ici pour Prévisualiser
+                                        </button>
+                                        <!--end::Label-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--begin::Step 4-->
+                            </div>
+                            <!--end::Group-->
+
+                            <!--begin::Actions-->
+                            <div class="d-flex flex-stack">
+                                <!--begin::Wrapper-->
+                                <div class="me-2">
+                                    <button type="button" class="btn btn-light btn-active-light-primary" data-kt-stepper-action="previous">
+                                        Retour
+                                    </button>
+                                </div>
+                                <!--end::Wrapper-->
+
+                                <!--begin::Wrapper-->
+                                <div>
+                                    <button type="button" id="kt_enquete_edit_submit" class="btn btn-primary" data-kt-stepper-action="submit">
+                                        <span class="indicator-label">
+                                            Enregistrer
+                                        </span>
+                                        <span class="indicator-progress">
+                                            Veuillez patienter... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </span>
+                                    </button>
+                                    <button type="submit" id="kt_enquete_edit_publish" class="btn btn-{% if sondage.status %}danger{% else %}success{% endif %}" data-kt-stepper-action="submit">
+                                        <span class="indicator-label">
+                                            Enregistrer et {% if sondage.status %}Depublier{% else %}Publier{% endif %}
+                                        </span>
+                                        <span class="indicator-progress">
+                                            Veuillez patienter... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </span>
+                                    </button>
+
+                                    <button type="button" class="btn btn-primary" data-kt-stepper-action="next">
+                                        Continuer
+                                    </button>
+                                </div>
+                                <!--end::Wrapper-->
+                            </div>
+                            <!--end::Actions-->
+                        </div>
+                    </div>
+                    <!--end::Card header-->
+                </div>
+                <!--end::Order details-->
+            </div>
+        </form>
+    </div>
+    <!--Modals-->
+    <!--begin::New Question-->
+    <div class="modal fade" tabindex="-1" id="kt_modal_new_question">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{{path('question.create', {idModel: sondage.id, modele: 'sondage'})}}" method="POST">
+                    <div class="modal-header border-bottom-0">
+                        <h5 class="modal-title">Nouvelle Question</h5>
+
+                        <div class="w-25 m-auto">
+                            {# <select class="form-select mb-2" data-control="select2"> #}
+                            <select class="form-select select2-hidden-accessible" name="type" placeholder="Type de Question" data-placeholder="Type de Question" data-hide-search="true" id="kt_docs_select2_icon" onchange="changeType($(this))">
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/general/gen037.svg')}}">Choix Multiple</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/general/gen043.svg')}}">Choix Unique</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/graphs/gra009.svg')}}">Oui / Non</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/general/gen003.svg')}}">Note</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/art/art001.svg')}}">Champ Text</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/text/txt005.svg')}}">Long Text</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/communication/com011.svg')}}">Email</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/electronics/elc002.svg')}}">Téléphone</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/general/gen014.svg')}}">Date</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/coding/cod007.svg')}}">SiteWeb</option>
+                            </select>
+                        </div>
+                        <!--begin::Close-->
+                        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                            <span class="svg-icon svg-icon-muted svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="7.05025" y="15.5356" width="12" height="2" rx="1" transform="rotate(-45 7.05025 15.5356)" fill="currentColor"/>
+                                <rect x="8.46447" y="7.05029" width="12" height="2" rx="1" transform="rotate(45 8.46447 7.05029)" fill="currentColor"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <!--end::Close-->
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="w-50 m-auto">
+                            <div class="d-flex align-items-baseline">
+                                <label class="fs-2">
+                                    <span class="numero">1</span>
+                                    <span class="svg-icon svg-icon-muted svg-icon-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="currentColor"/>
+                                        <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="currentColor"/>
+                                        </svg>
+                                    </span>
+                                </label>
+                                <div class="ms-4">
+                                    <input type="text" name="libelle" class="border-0 text-bold w-100" placeholder="Saisissez votre question ici..." style="height:40px" required>
+                                    <input type="hidden" name="numero" value="">
+                                    <textarea class="border-0 text-bold w-100" rows="1" name="description" placeholder="Description (optionnelle)"></textarea>
+                                </div>
+                            </div>
+                            <div class="reponses_div mt-10">
+                                <div class="input-group mb-5">
+                                    <span class="d-flex align-items-center" id="basic-addon1">
+                                        <!--begin::Svg Icon | path: icons/duotune/communication/com006.svg-->
+                                        <span class="svg-icon svg-icon-2hx">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor"/>
+                                            <path d="M10.4343 12.4343L8.75 10.75C8.33579 10.3358 7.66421 10.3358 7.25 10.75C6.83579 11.1642 6.83579 11.8358 7.25 12.25L10.2929 15.2929C10.6834 15.6834 11.3166 15.6834 11.7071 15.2929L17.25 9.75C17.6642 9.33579 17.6642 8.66421 17.25 8.25C16.8358 7.83579 16.1642 7.83579 15.75 8.25L11.5657 12.4343C11.2533 12.7467 10.7467 12.7467 10.4343 12.4343Z" fill="currentColor"/>
+                                            </svg>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <input type="text" class="form-control border-0 fs-2" name="reponses[]" placeholder="Saisissez le texte..." aria-label="Saisissez le texte..." aria-describedby="basic-addon1"/ required>
+                                </div>
+                                <button type="button" class="btn text-primary btn-active-light-primary fs-4" onclick="addChoice($(this), 5)">
+                                    <span class="svg-icon svg-icon-primary svg-icon-2x"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor"/>
+                                        <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor"/>
+                                        </svg>
+                                    </span> 
+                                    Ajouter un choix
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer justify-content-between">
+                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                            <input class="form-check-input h-20px w-30px" type="checkbox" name="required" value="1" id="flexSwitch20x30"/>
+                            <label class="form-check-label" for="flexSwitch20x30">
+                                Question Obligatoire (*)
+                            </label>
+                        </div>
+                        <div>
+                            <button type="reset" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--end::New Question-->
+    <!--begin::Update Question-->
+    <div class="modal fade" tabindex="-1" id="kt_modal_update_question">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <form id="update_question" action="{{path('question.create', {idModel: sondage.id, modele: 'sondage'})}}" method="POST">
+                    <div class="modal-header border-bottom-0">
+                        <h5 class="modal-title">Modification de Question</h5>
+
+                        <div class="w-25 m-auto">
+                            {# <select class="form-select mb-2" data-control="select2"> #}
+                            <select class="form-select select2-hidden-accessible" name="type" placeholder="Type de Question" data-placeholder="Type de Question" data-hide-search="true" id="kt_docs_select2_icon_2" onchange="changeType($(this))">
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/general/gen037.svg')}}">Choix Multiple</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/general/gen043.svg')}}">Choix Unique</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/graphs/gra009.svg')}}">Oui / Non</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/general/gen003.svg')}}">Note</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/art/art001.svg')}}">Champ Text</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/text/txt005.svg')}}">Long Text</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/communication/com011.svg')}}">Email</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/electronics/elc002.svg')}}">Téléphone</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/general/gen014.svg')}}">Date</option>
+                                <option data-kt-select2-icon="{{asset('assets/media/icons/duotune/coding/cod007.svg')}}">SiteWeb</option>
+                            </select>
+                        </div>
+                        <!--begin::Close-->
+                        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                            <span class="svg-icon svg-icon-muted svg-icon-2hx">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect opacity="0.5" x="7.05025" y="15.5356" width="12" height="2" rx="1" transform="rotate(-45 7.05025 15.5356)" fill="currentColor"/><rect x="8.46447" y="7.05029" width="12" height="2" rx="1" transform="rotate(45 8.46447 7.05029)" fill="currentColor"/></svg>
+                            </span>
+                        </div>
+                        <!--end::Close-->
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="w-50 m-auto">
+                            <div class="d-flex align-items-baseline">
+                                <label class="fs-2">
+                                    <span class="numero">1</span>
+                                    <span class="svg-icon svg-icon-muted svg-icon-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="currentColor"/>
+                                        <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="currentColor"/>
+                                        </svg>
+                                    </span>
+                                </label>
+                                <div class="ms-4">
+                                    <input type="text" name="libelle" class="border-0 text-bold w-100" placeholder="Saisissez votre question ici..." style="height:40px" required>
+                                    <input type="hidden" name="idQuestion" value="">
+                                    <input type="hidden" name="numero" value="">
+                                    <textarea class="border-0 text-bold w-100" rows="1" name="description" placeholder="Description (optionnelle)"></textarea>
+                                </div>
+                            </div>
+                            <div class="reponses_div mt-10">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer justify-content-between">
+                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                            <input class="form-check-input h-20px w-30px" type="checkbox" name="required" value="1" id="flexSwitch20x30"/>
+                            <label class="form-check-label" for="flexSwitch20x30">
+                                Question Obligatoire (*)
+                            </label>
+                        </div>
+                        <div>
+                            <button type="reset" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--end::Update Question-->
+    <!--begin::Preview-->
+    <div class="modal bg-white fade" tabindex="-1" id="kt_modal_preview">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content shadow-none">
+                <div class="modal-header">
+                    <h5 class="modal-title">Prévisualisation</h5>
+
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <span class="svg-icon svg-icon-muted svg-icon-2hx">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect opacity="0.5" x="7.05025" y="15.5356" width="12" height="2" rx="1" transform="rotate(-45 7.05025 15.5356)" fill="currentColor"/><rect x="8.46447" y="7.05029" width="12" height="2" rx="1" transform="rotate(45 8.46447 7.05029)" fill="currentColor"/></svg>
+                        </span>
+                    </div>
+                    <!--end::Close-->
+                </div>
+
+                <div id="kt_block_ui_2_target" class="modal-body">
+                    <div class="container">
+                        <div class="d-flex justify-content-between mb-5">
+                            <h2 class="">Enquête : <span class="fw-normal nomEnq" style="color: rgb(10, 187, 135)"></span></h2>
+                            <h2 class="fw-normal pointsEnq" style="color: rgb(253, 57, 122)">points</h2>
+                        </div>
+                        <div class="mb-5 shadow cover" style="height:250px; background-size: cover; background-position: center;">
+                        </div>
+                        <div class="starter">
+                            <p class="description"></p>
+                            <center>
+                                <button id="kt_block_ui_2_button" class="btn btn-primary my-5">Commencer</button>
+                            </center>
+                        </div>
+                        <div class="questshow-container">
+                            <!-- Next and previous buttons -->
+                            <center my-10>
+                                <a class="btn btn-light-primary btn-sm prev" onclick="plusQuests(-1)">Précédent</a>
+                                <a class="btn btn-light-primary btn-sm next" onclick="plusQuests(1)">Suivant</a>
+                                <a class="btn btn-light btn-sm cclose" data-bs-dismiss="modal">Terminer</a>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end::Preview-->
+    <!--end::Modals-->
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<!--begin::Page Vendors Javascript(used by this page)-->
+<script src="{{asset('assets/plugins/custom/prismjs/prismjs.bundle.js')}}"></script>
+<script src="{{asset('assets/plugins/custom/draggable/draggable.bundle.js')}}"></script>
+<!--end::Page Vendors Javascript-->
+<!--begin::Page Custom Javascript(used by this page)-->
+<script src="{{asset('assets/js/custom/apps/enquetes/view/add.js')}}"></script>
+<script src="{{asset('assets/js/custom/apps/enquetes/view/preview.js')}}"></script>
+<script src="{{asset('assets/js/custom/apps/enquetes/view/addQuestion.js')}}"></script>
+<script src="{{asset('assets/js/widgets.bundle.js')}}"></script>
+<script src="{{asset('assets/js/custom/widgets.js')}}"></script>
+<!--end::Page Custom Javascript-->
+
+<!-- Include Google Maps JS API -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAGvHAv2FM7u0y-MEhQ456v8J5CwMQD_Ss"></script>
+<script type="text/javascript">
+// Stepper element
+var element = document.querySelector("#kt_stepper_example_clickable");
+var stepper = new KTStepper(element);
+stepper.on("kt.stepper.click", function (stepper) {
+    stepper.goTo(stepper.getClickedStepIndex()); // go to clicked step
+});
+stepper.on("kt.stepper.next", function (stepper) {
+    stepper.goNext(); // go next step
+});
+stepper.on("kt.stepper.previous", function (stepper) {
+    stepper.goPrevious(); // go previous step
+});
+
+// Draggable element
+var containers = document.querySelectorAll(".draggable-zone");
+//if (containers.length === 0) return false;
+var swappable = new Sortable.default(containers, {
+    draggable: ".draggable",
+    handle: ".draggable .draggable-handle",
+    mirror: {
+        //appendTo: selector,
+        appendTo: "body",
+        constrainDimensions: true
+    }
+});
+
+// Add Question
+$('div.modal form').submit(function(e) {
+    var form = $(this);
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        dataType: "html",
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function(response) {
+            question = jQuery.parseJSON(response);
+            var content = '<div id="quest_'+question.id+'" class="draggable" data-type="'+question.type+'">'+
+                    '<div class="card card-bordered">'+
+                        '<div class="card-header bg-light">'+
+                            '<div class="card-title">'+
+                                '<h3 class="card-label cursor-pointer" data-bs-toggle="modal" data-bs-target="#kt_modal_update_question" onclick="editQuestion('+question.id+')">'+question.numero+' - '+question.libelle;
+                                if (question.required) content += '<sup>(*)</sup>';
+                                content += '</h3>'+
+                                '<input type="hidden" name="questions[]" value="'+question.id+'">'+
+                            '</div>'+
+                            '<div class="card-toolbar">'+
+                                '<a href="#" class="btn btn-icon btn-sm btn-hover-light-primary draggable-handle">'+
+                                    '<span class="svg-icon svg-icon-2x"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 7H3C2.4 7 2 6.6 2 6V4C2 3.4 2.4 3 3 3H21C21.6 3 22 3.4 22 4V6C22 6.6 21.6 7 21 7Z" fill="currentColor"></path><path opacity="0.3" d="M21 14H3C2.4 14 2 13.6 2 13V11C2 10.4 2.4 10 3 10H21C21.6 10 22 10.4 22 11V13C22 13.6 21.6 14 21 14ZM22 20V18C22 17.4 21.6 17 21 17H3C2.4 17 2 17.4 2 18V20C2 20.6 2.4 21 3 21H21C21.6 21 22 20.6 22 20Z" fill="currentColor"></path></svg></span>'+
+                                '</a>'+
+                            '</div>'+
+                        '</div>'+
+                        '<div class="card-body hover-scroll mh-125px">';
+                            if (question.type == "Choix Multiple" || question.type == "Choix Unique") {
+                                $.each(question.reponses, function(index, reponse){
+                                    content += '<label class="form-check form-check-custom form-check-solid mb-2">'+
+                                        '<input class="form-check-input" type="';
+                                        if (question.type == "Choix Multiple") content += 'checkbox'; else content += 'radio'; content += '" value="" ';
+                                        if (index == 0) content += 'checked'; content += ' disabled/>'+
+                                        '<span class="form-check-label">'+reponse+'</span>'+
+                                    '</label>';
+                                });
+                            }
+                            else if (question.type == "Oui / Non") {
+                                content += '<label class="form-check form-check-custom form-check-solid mb-2">'+
+                                    '<input class="form-check-input" type="radio" value="" checked disabled/>'+
+                                    '<span class="form-check-label">Oui</span>'+
+                                '</label>'+
+                                '<label class="form-check form-check-custom form-check-solid mb-2">'+
+                                    '<input class="form-check-input" type="radio" value="" disabled/>'+
+                                    '<span class="form-check-label">Non</span>'+
+                                '</label>';
+                            }
+                            else if (question.type == "Note") {
+                                content += '<div class="rating">'+
+                                    '<div class="rating-label checked"><span class="svg-icon svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13.0079 2.6L15.7079 7.2L21.0079 8.4C21.9079 8.6 22.3079 9.7 21.7079 10.4L18.1079 14.4L18.6079 19.8C18.7079 20.7 17.7079 21.4 16.9079 21L12.0079 18.8L7.10785 21C6.20785 21.4 5.30786 20.7 5.40786 19.8L5.90786 14.4L2.30785 10.4C1.70785 9.7 2.00786 8.6 3.00786 8.4L8.30785 7.2L11.0079 2.6C11.3079 1.8 12.5079 1.8 13.0079 2.6Z" fill="currentColor"/></svg></span></div>'+
+                                    '<div class="rating-label checked"><span class="svg-icon svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13.0079 2.6L15.7079 7.2L21.0079 8.4C21.9079 8.6 22.3079 9.7 21.7079 10.4L18.1079 14.4L18.6079 19.8C18.7079 20.7 17.7079 21.4 16.9079 21L12.0079 18.8L7.10785 21C6.20785 21.4 5.30786 20.7 5.40786 19.8L5.90786 14.4L2.30785 10.4C1.70785 9.7 2.00786 8.6 3.00786 8.4L8.30785 7.2L11.0079 2.6C11.3079 1.8 12.5079 1.8 13.0079 2.6Z" fill="currentColor"/></svg></span></div>'+
+                                    '<div class="rating-label checked"><span class="svg-icon svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13.0079 2.6L15.7079 7.2L21.0079 8.4C21.9079 8.6 22.3079 9.7 21.7079 10.4L18.1079 14.4L18.6079 19.8C18.7079 20.7 17.7079 21.4 16.9079 21L12.0079 18.8L7.10785 21C6.20785 21.4 5.30786 20.7 5.40786 19.8L5.90786 14.4L2.30785 10.4C1.70785 9.7 2.00786 8.6 3.00786 8.4L8.30785 7.2L11.0079 2.6C11.3079 1.8 12.5079 1.8 13.0079 2.6Z" fill="currentColor"/></svg></span></div>'+
+                                    '<div class="rating-label"><span class="svg-icon svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13.0079 2.6L15.7079 7.2L21.0079 8.4C21.9079 8.6 22.3079 9.7 21.7079 10.4L18.1079 14.4L18.6079 19.8C18.7079 20.7 17.7079 21.4 16.9079 21L12.0079 18.8L7.10785 21C6.20785 21.4 5.30786 20.7 5.40786 19.8L5.90786 14.4L2.30785 10.4C1.70785 9.7 2.00786 8.6 3.00786 8.4L8.30785 7.2L11.0079 2.6C11.3079 1.8 12.5079 1.8 13.0079 2.6Z" fill="currentColor"/></svg></span></div>'+
+                                    '<div class="rating-label"><span class="svg-icon svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13.0079 2.6L15.7079 7.2L21.0079 8.4C21.9079 8.6 22.3079 9.7 21.7079 10.4L18.1079 14.4L18.6079 19.8C18.7079 20.7 17.7079 21.4 16.9079 21L12.0079 18.8L7.10785 21C6.20785 21.4 5.30786 20.7 5.40786 19.8L5.90786 14.4L2.30785 10.4C1.70785 9.7 2.00786 8.6 3.00786 8.4L8.30785 7.2L11.0079 2.6C11.3079 1.8 12.5079 1.8 13.0079 2.6Z" fill="currentColor"/></svg></span></div>'+
+                                '</div>';
+                            }
+                            else content += question.type;
+                        content += '</div>'+
+                        '<div class="position-absolute bottom-0 end-0">'+
+                            '<button class="btn btn-icon btn-circle btn-active-color-danger w-35px h-35px bg-body shadow kt_delete_question" data-bs-toggle="tooltip" data-id="'+question.id+'" data-title="'+question.libelle+'" title="Supprimer la question" data-bs-original-title="Supprimer la question">'+
+                                '<i class="bi bi-x fs-2"></i>'+
+                            '</button>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'
+            ;
+            console.log(form[0].id);
+            if (form[0].id == "update_question") $('#quest_'+question.id).replaceWith(content);
+            else $('div.draggable-zone').append(content);
+
+            if (!$('input[name=id]').val()) $('input[name=id]').val(question.id);
+            $('.modal').modal('hide');
+            form.trigger("reset");
+        }
+    });
+});
+function editQuestion(id) {
+    var url = "{{path('question.search', {id: 'ide'})}}";
+    $.ajax({
+        type: "POST",
+        dataType: "html",
+        url: url.replace('ide', id),
+        //data: data,
+        success: function(datas) {
+            var question = jQuery.parseJSON(datas);
+            $('#kt_docs_select2_icon_2').val(question.type).trigger('change.select2');
+            $('#kt_modal_update_question input[name=libelle]').val(question.libelle);
+            $('#kt_modal_update_question textarea[name=description]').text(question.description);
+            $('#kt_modal_update_question input[name=numero]').val(question.numero);
+            $('#kt_modal_update_question span.numero').text(question.numero);
+            $('#kt_modal_update_question input[name=idQuestion]').val(question.id);
+            if (question.required) $('#kt_modal_update_question input[name=required]').prop( "checked", true );
+            else $('#kt_modal_update_question input[name=required]').prop( "checked", false );
+            var data_content = '';
+            $.each(question.reponses, function(index, reponse){
+                data_content += '<div class="input-group mb-5">'+
+                        '<span class="d-flex align-items-center" id="basic-addon1">'+
+                            '<span class="svg-icon svg-icon-2hx">'+
+                                '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">'+
+                                '<rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor"/>';
+                                if (index == 0) {
+                                    if (question.type == "Choix Multiple") data_content += '<path d="M10.4343 12.4343L8.75 10.75C8.33579 10.3358 7.66421 10.3358 7.25 10.75C6.83579 11.1642 6.83579 11.8358 7.25 12.25L10.2929 15.2929C10.6834 15.6834 11.3166 15.6834 11.7071 15.2929L17.25 9.75C17.6642 9.33579 17.6642 8.66421 17.25 8.25C16.8358 7.83579 16.1642 7.83579 15.75 8.25L11.5657 12.4343C11.2533 12.7467 10.7467 12.7467 10.4343 12.4343Z" fill="currentColor"/>';
+                                    else data_content += '<path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" fill="currentColor"/>';
+                                }
+                                data_content += '</svg>'+
+                            '</span>'+
+                        '</span>'+
+                        '<input type="text" class="form-control border-0 fs-2" name="reponses[]" placeholder="Saisissez le texte ici..." aria-label="Saisissez le texte ici..." aria-describedby="basic-addon1" value="'+reponse.libelle+'" required/>'+
+                        '<input type="hidden" name="reponsesId[]" value="'+reponse.id+'" required/>';
+                        if (index != 0) {
+                        data_content += '<span class="svg-icon svg-icon-danger svg-icon-2x cursor-pointer d-flex align-items-center" data-id="'+reponse.id+'" onclick="removeResponse($(this))">'+
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">'+
+                                '<rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"/>'+
+                                '<rect x="7" y="15.3137" width="12" height="2" rx="1" transform="rotate(-45 7 15.3137)" fill="currentColor"/>'+
+                                '<rect x="8.41422" y="7" width="12" height="2" rx="1" transform="rotate(45 8.41422 7)" fill="currentColor"/>'+
+                            '</svg>'+
+                        '</span>';
+                        }
+                data_content += '</div>';
+            });
+            data_content += '<button type="button" class="btn text-primary btn-active-light-primary fs-4" onclick="addChoice($(this), '; if (question.type == "Choix Multiple") data_content += '5'; else data_content += '10'; data_content += ')">'+
+                        '<span class="svg-icon svg-icon-primary svg-icon-2x"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">'+
+                            '<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor"/>'+
+                            '<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor"/>'+
+                            '</svg>'+
+                        '</span> Ajouter un choix'+
+                    '</button>';
+            if (question.type == "Choix Multiple" || question.type == "Choix Unique") {
+                $('#kt_modal_update_question .reponses_div').html(data_content);
+            }
+        }
+    });
+
+    // Init Select2 --- more info: https://select2.org/
+    $('#kt_docs_select2_icon_2').select2({
+        templateSelection: optionFormat,
+        templateResult: optionFormat
+    });
+}
+
+var button = $('button.kt_delete_question');
+button.click(function(e) {
+    e.preventDefault();
+    var self = $(this);
+    var title = self.attr('data-title');
+    var id = self.attr('data-id');
+
+    Swal.fire({
+        html: "Êtes-vous sûr de vouloir supprimer la Question<br><strong>"+title+"</strong>?",
+        icon: "warning",
+        buttonsStyling: false,
+        showCancelButton: true,
+        confirmButtonText: "Oui, supprimer!",
+        cancelButtonText: 'Non, fermer',
+        customClass: {
+            confirmButton: "btn btn-danger",
+            cancelButton: 'btn btn-light'
+        }
+    }).then(function (result) {
+        if (result.value) {
+			// Submit
+            var url = "{{path('question.delete', {id: 'ide'})}}";
+			$.ajax({
+				type: "POST",
+				dataType: "html",
+				url: url.replace('ide', id),
+				//data: data,
+				success: function(response, status, xhr) {
+                    Swal.fire({
+                        html: "Question supprimé!",
+                        icon: "success",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, compris!",
+                        customClass: {
+                            confirmButton: "btn fw-bold btn-primary",
+                        }
+                    }).then(function () {
+                        
+                    });
+				},
+				error: function(response) {
+					toastr.error(
+						"Veuillez réessayer plus tard.", 
+						"Quelque chose a mal tourné!", 
+						{timeOut: 0, extendedTimeOut: 0, closeButton: true, closeDuration: 0}
+					);
+				},
+				complete: function() {
+					self.parent().parent().parent().remove();
+				}
+			});
+        } else if (result.dismiss === 'cancel') {
+            Swal.fire({
+                text: "La Question n'a pas été supprimé.",
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, compris!",
+                customClass: {
+                    confirmButton: "btn fw-bold btn-primary",
+                }
+            });
+        }
+    });
+});
+
+function removeResponse(event) {
+    var id = event.attr('data-id');
+    Swal.fire({
+        html: "La réponse sera supprimée de la base?",
+        icon: "warning",
+        buttonsStyling: false,
+        showCancelButton: true,
+        confirmButtonText: "Oui, supprimer!",
+        cancelButtonText: 'Non, fermer',
+        customClass: {
+            confirmButton: "btn btn-danger",
+            cancelButton: 'btn btn-light'
+        }
+    }).then(function (result) {
+        if (result.value) {
+			// Submit
+            var url = "{{path('reponse.delete', {id: 'ide'})}}";
+			$.ajax({
+				type: "POST",
+				dataType: "html",
+				url: url.replace('ide', id),
+				//data: data,
+				success: function(response, status, xhr) {
+                    event.parent().remove();
+				}
+            });
+        }
+    });
+}
+
+function removeCondition(event) {
+    var id = event.attr('data-id');
+    Swal.fire({
+        html: "La Condition sera supprimée de la base?",
+        icon: "warning",
+        buttonsStyling: false,
+        showCancelButton: true,
+        confirmButtonText: "Oui, supprimer!",
+        cancelButtonText: 'Non, fermer',
+        customClass: {
+            confirmButton: "btn btn-danger",
+            cancelButton: 'btn btn-light'
+        }
+    }).then(function (result) {
+        if (result.value) {
+			// Submit
+            var url = "{{path('condition.delete', {id: 'ide'})}}";
+			$.ajax({
+				type: "POST",
+				dataType: "html",
+				url: url.replace('ide', id),
+				//data: data,
+				success: function(response, status, xhr) {
+                    event.parent().parent().remove();
+				}
+            });
+        }
+    });
+}
+
+function addCondition(event) {
+    index = parseInt(event.prev().attr('data-index')) + 1;
+    if (!index) index = 0;
+    event.before('<div class="fv-row row mb-10" data-index="'+index+'">'+
+            '<div class="col-md-4">'+
+                '<label class="form-label">Si</label>'+
+                '<select class="form-select form-select-solid" name="conditions['+index+'][question]" data-control="select2" data-placeholder="Question" data-hide-search="true" onchange="generateRedirection($(this))" required>'+
+                    '<option></option>'+
+                    {% for question in sondage.questions|filter(q => q.type == 'Choix Multiple' or q.type == 'Choix Unique' or q.type == 'Oui / Non') %}
+                        '<option value="{{question.id}}">{{question.libelle}}</option>'+
+                    {% endfor %}
+                '</select>'+
+            '</div>'+
+            '<div class="col-md-3">'+
+                '<label class="form-label">Est égale à</label>'+
+                '<select class="form-select form-select-solid" name="conditions['+index+'][reponse]" data-control="select2" data-placeholder="Reponse" data-hide-search="true" required>'+
+                    '<option></option>'+
+                '</select>'+
+            '</div>'+
+            '<div class="col-md-4">'+
+                '<label class="form-label">Alors</label>'+
+                '<select class="form-select form-select-solid" name="conditions['+index+'][return]" data-control="select2" data-placeholder="Redirection vers" data-hide-search="true" required>'+
+                    '<option></option>'+
+                '</select>'+
+            '</div>'+
+            '<div class="col-md-1 d-flex align-items-end">'+
+                '<button class="btn btn-light-danger" data-bs-toggle="tooltip" title="Supprimer" data-bs-original-title="Supprimer" onclick="$(this).parent().parent().remove()">'+
+                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor"/><rect x="7" y="15.3137" width="12" height="2" rx="1" transform="rotate(-45 7 15.3137)" fill="currentColor"/><rect x="8.41422" y="7" width="12" height="2" rx="1" transform="rotate(45 8.41422 7)" fill="currentColor"/></svg>'+
+                '</button>'+
+            '</div>'+
+        '</div>')
+    ;
+    $('#conditions select').select2({
+        minimumResultsForSearch: -1
+    });
+}
+
+function generateRedirection(event) {
+    var value = event.val();
+    var redirections = '<option></option>';
+    {% for question in sondage.questions %}
+        if (value == "{{question.id}}") {
+            var reponses = '<option></option>';
+            {% for reponse in question.reponses %}reponses += '<option value="{{reponse.id}}">{{reponse.libelle}}</option>';{% endfor %}
+            event.parent().next().find('select').html(reponses);
+
+            redirections += '<option value="{{question.id}}" disabled>{{question.libelle}}</option>';
+        }
+        else redirections += '<option value="{{question.id}}">{{question.libelle}}</option>';
+    {% endfor %}
+    event.parent().next().next().find('select').html(redirections);
+}
+
+$('#kt_ciblage input[type=checkbox]').change(function() {
+    var checked = $(this).parent().parent().find('input[type=checkbox]:checked').length;
+    var unchecked = parseInt($(this).parent().parent().find('input[type=checkbox]').length) -1;
+    if ($(this).is(':checked')) {
+        if ($(this).val() == "tout") $(this).parent().parent().find('input[type=checkbox]').prop('checked', true);
+        else if (checked == unchecked) $(this).parent().parent().find('input[type=checkbox]').prop('checked', true);
+        else $(this).parent().parent().find('input[type=checkbox][value=tout]').prop('checked', false);
+    }
+    else {
+        if ($(this).val() == "tout") $(this).parent().parent().find('input[type=checkbox]').prop('checked', false);
+        else $(this).parent().parent().find('input[type=checkbox][value=tout]').prop('checked', false);
+    }
+});
+var tooltipSlider = document.querySelector("#kt_slider_tooltip");
+noUiSlider.create(tooltipSlider, {
+    start: [{{sondage.ciblage.ageMini|default(18)}}, {{sondage.ciblage.ageMaxi|default(40)}}],
+    connect: true,
+    tooltips: [wNumb({decimals: 0}), wNumb({decimals: 0})],
+    range: {
+        "min": 10,
+        "max": 100
+    },
+    //pips: {
+    //    mode: "values",
+    //    values: [16, 40],
+    //    density: 4
+    //}
+});
+tooltipSlider.noUiSlider.on("update", function (values, handle) {
+    var age = Math.round(values[handle]);
+    if (handle) {
+        $('input[name=ageMaxi]').val(age);
+    } else {
+        $('input[name=ageMini]').val(age);
+    }
+});
+
+function initializeAutocomplete(id) {
+    var element = document.getElementById(id);
+    if (element) {
+        var autocomplete = new google.maps.places.Autocomplete(element, {types: ['geocode']});
+        google.maps.event.addListener(autocomplete, 'place_changed', onPlaceChanged);
+    }
+}
+function onPlaceChanged() {
+    var place = this.getPlace();
+    //console.log(place);  // Uncomment this line to view the full object returned by Google API.
+    $('.gglocation').show();
+    // $('input[name=lat]').val(place.geometry.location.lat());
+    // $('input[name=long]').val(place.geometry.location.lng());
+    var index = $('#cibleTags > span').length;
+    var content = '<span class="badge badge-light-primary me-3 mb-3">'+place.formatted_address+' <i class="bi bi-x fs-2 cursor-pointer" onclick="$(this).parent().remove()"></i><input type="hidden" name="adressCible['+index+'][adresse]" value="'+place.formatted_address+'">';
+    
+    for (var i in place.address_components) {
+        var component = place.address_components[i];
+        for (var j in component.types) { // Some types are ["country", "political"]
+            //var type_element = document.getElementById(component.types[j]);
+            if (component.types[j] == 'sublocality' || component.types[j] == 'locality' || component.types[j] == 'country') {
+                content += '<input type="hidden" name="adressCible['+index+']['+component.types[j]+']" value="'+component.long_name+'">';
+            }
+        }
+    }
+    content += '</span>';
+    $('#cibleTags').append(content);
+    $('#adresse_cible').val("");
+}
+google.maps.event.addDomListener(window, 'load', function () {
+    initializeAutocomplete('adresse_cible');
+});
+
+function ciblerEnquete(event) {
+    index = parseInt(event.prev().attr('data-index')) + 1;
+    if (!index) index = 0;
+    event.before('<div class="fv-row row mb-10" data-index="'+index+'">'+
+            '<div class="col-md-4">'+
+                '<label class="form-label">Personnes ayant participés à</label>'+
+                '<select class="form-select form-select-solid" name="cibles['+index+'][enquete]" data-control="select2" data-placeholder="Enquête" data-hide-search="true" onchange="generateQuestion($(this))" required>'+
+                    '<option></option>'+
+                    {% for enquete in enquetes %}
+                        '<option value="{{enquete.id}}">{{enquete.nom}}</option>'+
+                    {% endfor %}
+                '</select>'+
+            '</div>'+
+            '<div class="col-md-3">'+
+            '</div>'+
+            '<div class="col-md-4">'+
+            '</div>'+
+            '<div class="col-md-1 d-flex align-items-end">'+
+                '<button class="btn btn-light-danger" data-bs-toggle="tooltip" title="Supprimer" data-bs-original-title="Supprimer" onclick="$(this).parent().parent().remove()">'+
+                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor"/><rect x="7" y="15.3137" width="12" height="2" rx="1" transform="rotate(-45 7 15.3137)" fill="currentColor"/><rect x="8.41422" y="7" width="12" height="2" rx="1" transform="rotate(45 8.41422 7)" fill="currentColor"/></svg>'+
+                '</button>'+
+            '</div>'+
+        '</div>')
+    ;
+    $('#kt_ciblage_enquete select').select2({
+        minimumResultsForSearch: -1
+    });
+}
+function generateQuestion(event) {
+    var index = event.parent().parent().attr('data-index');
+    var content = '<label class="form-label">Dont la question</label><select class="form-select form-select-solid" name="cibles['+index+'][question]" data-control="select2" data-placeholder="Question" data-hide-search="true" onchange="generateResponses($(this))"><option></option>';
+    {% for question in questions|filter(q => q.type == 'Choix Multiple' or q.type == 'Choix Unique' or q.type == 'Oui / Non') %}
+        if (event.val() == "{{question.sondage.id}}") content += '<option value="{{question.id}}">{{question.libelle}}</option>';
+    {% endfor %}
+    content += '</select>';
+    event.parent().next().html(content);
+    $('#kt_ciblage_enquete select').select2({
+        minimumResultsForSearch: -1
+    });
+}
+function generateResponses(event) {
+    var index = event.parent().parent().attr('data-index');
+    var content = '<label class="form-label">Est égale à</label><select class="form-select form-select-solid" name="cibles['+index+'][reponses][]" data-control="select2" data-placeholder="Réponses" data-hide-search="true" multiple><option></option>';
+    {% for reponse in reponses %}
+        if (event.val() == "{{reponse.question.id}}") content += '<option value="{{reponse.id}}">{{reponse.libelle}}</option>';
+    {% endfor %}
+    content += '</select>';
+    event.parent().next().html(content);
+    $('#kt_ciblage_enquete select').select2({
+        minimumResultsForSearch: -1
+    });
+}
+</script>
+{% endblock %}

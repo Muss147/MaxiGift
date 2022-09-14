@@ -1,0 +1,486 @@
+{% extends "backend/layout.html.twig" %}
+
+{% block title %}Liste des roles {% endblock %}
+{% block description %}{% endblock %}
+
+{% block stylesheets %}
+<!--begin::Page Vendor Stylesheets(used by this page)-->
+<link href="{{asset('assets/plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet" type="text/css" />
+<!--end::Page Vendor Stylesheets-->
+
+<style type="text/css')}}">
+</style>
+{% endblock %}
+
+{% block pageTitle %}
+<div class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-2 pb-lg-0" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
+    <!--begin::Heading-->
+    <h1 class="text-dark fw-bolder my-1 fs-2">Liste des roles 
+    <small class="text-muted fs-6 fw-normal ms-1"></small></h1>
+    <!--end::Heading-->
+    <!--begin::Breadcrumb-->
+    <ul class="breadcrumb fw-bold fs-base my-1">
+        <li class="breadcrumb-item text-muted">
+            <a href="{{path('dash')}}" class="text-muted">Dashboards</a>
+        </li>
+        <li class="breadcrumb-item text-muted">Administrateurs</li>
+        <li class="breadcrumb-item text-dark">Liste des roles</li>
+    </ul>
+    <!--end::Breadcrumb-->
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Container-->
+    <div class="container-xxl" id="kt_content_container">
+        <!--begin::Row-->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-5 g-xl-9">
+            {% for role in roles %}
+            <!--begin::Col-->
+            <div class="col-md-4">
+                <!--begin::Card-->
+                <div class="card card-flush h-md-100">
+                    <!--begin::Card header-->
+                    <div class="card-header">
+                        <!--begin::Card title-->
+                        <div class="card-title">
+                            <h2>{{role.libelle}}</h2>
+                        </div>
+                        <!--end::Card title-->
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Card body-->
+                    <div class="card-body pt-1">
+                        <!--begin::Users-->
+                        <div class="fw-bolder text-gray-600 mb-5">Total des admins avec ce rôle: {{role.admins|length}}</div>
+                        <!--end::Users-->
+                        <!--begin::Permissions-->
+                        <div class="d-flex flex-column text-gray-600">
+                            <div class="d-flex align-items-center py-2">
+                                <span class="bullet bg-primary me-3"></span>
+                                {% if role.allAdminAccess %}Tous les droits Admin
+                                {% else %}
+                                    {% for permis in role.permissions %}
+                                        {% if permis.autorisation.core %}{% set core = true %}{% endif %}
+                                    {% endfor %}
+                                    {% if core is defined %}Quelques droits Admin
+                                    {% else %}Aucun droit Admin{% endif %}
+                                {% endif %}
+                            </div>
+                            {% for permis in role.permissions|filter(p => p.lecture == true or p.creation == true or p.ecriture == true)|slice(0, 4) %}
+                            <div class="d-flex align-items-center py-2">
+                                <span class="bullet bg-primary me-3"></span>
+                                {% if permis.lecture %}Lecture{% endif %}{% if permis.creation %}{% if permis.lecture %}, {% endif %}Création{% endif %}{% if permis.ecriture %}{% if permis.lecture or permis.creation %} et {% endif %}Écriture{% endif %} de {{permis.autorisation.libelle}}
+                            </div>
+                            {% endfor %}
+                            {% if role.permissions|filter(p => p.lecture == true or p.creation == true or p.ecriture == true)|length > 4 %}
+                            <div class="d-flex align-items-center py-2">
+                                <span class="bullet bg-primary me-3"></span>
+                                <em>et {{role.permissions|filter(p => p.lecture == true or p.creation == true or p.ecriture == true)|length - 4}} de plus...</em>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <!--end::Permissions-->
+                    </div>
+                    <!--end::Card body-->
+                    <!--begin::Card footer-->
+                    <div class="card-footer flex-wrap pt-0">
+                        <a href="{{path('roles.view', {slug: role.slug})}}" class="btn btn-light btn-active-primary my-1 me-2">Voir</a>
+                        <button type="button" class="btn btn-light btn-active-light-primary my-1" data-bs-toggle="modal" data-bs-target="#kt_modal_update_role" onclick="findRole({{role.id}})">Modifier</button>
+                    </div>
+                    <!--end::Card footer-->
+                </div>
+                <!--end::Card-->
+            </div>
+            <!--end::Col-->
+            {% endfor %}
+            <!--begin::Add new card-->
+            <div class="ol-md-4">
+                <!--begin::Card-->
+                <div class="card h-md-100">
+                    <!--begin::Card body-->
+                    <div class="card-body d-flex flex-center">
+                        <!--begin::Button-->
+                        <button type="button" class="btn btn-clear d-flex flex-column flex-center" data-bs-toggle="modal" data-bs-target="#kt_modal_add_role">
+                            <!--begin::Illustration-->
+                            <img src="{{asset('assets/media/illustrations/sigma-1/4.png')}}" alt="" class="mw-100 mh-150px mb-7">
+                            <!--end::Illustration-->
+                            <!--begin::Label-->
+                            <div class="fw-bolder fs-3 text-gray-600 text-hover-primary">Nouveau Role</div>
+                            <!--end::Label-->
+                        </button>
+                        <!--begin::Button-->
+                    </div>
+                    <!--begin::Card body-->
+                </div>
+                <!--begin::Card-->
+            </div>
+            <!--begin::Add new card-->
+        </div>
+        <!--end::Row-->
+        <!--begin::Modals-->
+        <!--begin::Modal - Add role-->
+        <div class="modal fade" id="kt_modal_add_role" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-750px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2 class="fw-bolder">Ajouter un Role</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-roles-modal-action="close">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor"></rect>
+                                    <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor"></rect>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body scroll-y mx-lg-5 my-7">
+                        <!--begin::Form-->
+                        <form id="kt_modal_add_role_form" class="form fv-plugins-bootstrap5 fv-plugins-framework" action="{{path('roles.new')}}" method="POST">
+                            <!--begin::Scroll-->
+                            <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_role_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_role_header" data-kt-scroll-wrappers="#kt_modal_add_role_scroll" data-kt-scroll-offset="300px" style="max-height: 334px;">
+                                <!--begin::Input group-->
+                                <div class="fv-row mb-10 fv-plugins-icon-container">
+                                    <!--begin::Label-->
+                                    <label class="fs-5 fw-bolder form-label mb-2">
+                                        <span class="required">Nom du Role</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input class="form-control form-control-solid" placeholder="Entrez un nom de role" name="role_name">
+                                    <!--end::Input-->
+                                <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                                <!--end::Input group-->
+                                <!--begin::Input group-->
+                                <div class="fv-row mb-10 fv-plugins-icon-container">
+                                    <!--begin::Label-->
+                                    <label class="fs-5 fw-bolder form-label mb-2">
+                                        <span class="">Description</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <textarea class="form-control form-control-solid" placeholder="Entrez une description" name="role_descr"></textarea>
+                                    <!--end::Input-->
+                                <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                                <!--end::Input group-->
+                                <!--begin::Permissions-->
+                                <div class="fv-row">
+                                    <!--begin::Label-->
+                                    <label class="fs-5 fw-bolder form-label mb-2">Permissions du Role</label>
+                                    <!--end::Label-->
+                                    <!--begin::Table wrapper-->
+                                    <div class="table-responsive">
+                                        <!--begin::Table-->
+                                        <table class="table align-middle table-row-dashed fs-6 gy-5">
+                                            <!--begin::Table body-->
+                                            <tbody class="text-gray-600 fw-bold">
+                                                <!--begin::Table row-->
+                                                <tr>
+                                                    <td class="text-gray-800">Accès Administrateur 
+                                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="" data-bs-original-title="Permet un accès complet au système" aria-label="Permet un accès complet au système"></i></td>
+                                                    <td>
+                                                        <!--begin::Checkbox-->
+                                                        <label class="form-check form-check-custom form-check-solid me-9">
+                                                            <input class="form-check-input" type="checkbox" name="all" value="1" id="kt_roles_select_all">
+                                                            <span class="form-check-label" for="kt_roles_select_all">Tout Selectionner</span>
+                                                        </label>
+                                                        <!--end::Checkbox-->
+                                                    </td>
+                                                </tr>
+                                                <!--end::Table row-->
+                                                {% for autoris in autorisations %}
+                                                <!--begin::Table row-->
+                                                <tr>
+                                                    <!--begin::Label-->
+                                                    <td class="text-gray-800">
+                                                        {{autoris.libelle}}
+                                                        <input type="hidden" name="autoris[]" value="{{autoris.id}}">
+                                                    </td>
+                                                    <!--end::Label-->
+                                                    <!--begin::Options-->
+                                                    <td>
+                                                        <!--begin::Wrapper-->
+                                                        <div class="d-flex">
+                                                            <!--begin::Checkbox-->
+                                                            <label class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-20">
+                                                                <input class="form-check-input" type="checkbox" name="read[]" value="1">
+                                                                <input type="hidden" name="read[]" value="0">
+                                                                <span class="form-check-label">Lecture</span>
+                                                            </label>
+                                                            <!--end::Checkbox-->
+                                                            <!--begin::Checkbox-->
+                                                            <label class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-20">
+                                                                <input class="form-check-input" type="checkbox" name="write[]" value="1">
+                                                                <input type="hidden" name="write[]" value="0">
+                                                                <span class="form-check-label">Écriture</span>
+                                                            </label>
+                                                            <!--end::Checkbox-->
+                                                            <!--begin::Checkbox-->
+                                                            <label class="form-check form-check-sm form-check-custom form-check-solid">
+                                                                <input class="form-check-input" type="checkbox" name="create[]" value="1">
+                                                                <input type="hidden" name="create[]" value="0">
+                                                                <span class="form-check-label">Création</span>
+                                                            </label>
+                                                            <!--end::Checkbox-->
+                                                        </div>
+                                                        <!--end::Wrapper-->
+                                                    </td>
+                                                    <!--end::Options-->
+                                                </tr>
+                                                <!--end::Table row-->
+                                                {% endfor %}
+                                            </tbody>
+                                            <!--end::Table body-->
+                                        </table>
+                                        <!--end::Table-->
+                                    </div>
+                                    <!--end::Table wrapper-->
+                                </div>
+                                <!--end::Permissions-->
+                            </div>
+                            <!--end::Scroll-->
+                            <!--begin::Actions-->
+                            <div class="text-center pt-15">
+                                <button type="reset" class="btn btn-light me-3" data-kt-roles-modal-action="cancel">Fermer</button>
+                                <button type="submit" class="btn btn-primary" data-kt-roles-modal-action="submit">
+                                    <span class="indicator-label">Soumettre</span>
+                                    <span class="indicator-progress">Veuillez patienter... 
+                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                </button>
+                            </div>
+                            <!--end::Actions-->
+                        <div></div></form>
+                        <!--end::Form-->
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Add role-->
+        <!--begin::Modal - Update role-->
+        <div class="modal fade" id="kt_modal_update_role" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-750px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2 class="fw-bolder">Modifier le Role</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-roles-modal-action="close">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor"></rect>
+                                    <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor"></rect>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body scroll-y mx-5 my-7">
+                        <!--begin::Form-->
+                        <form id="kt_modal_update_role_form" class="form fv-plugins-bootstrap5 fv-plugins-framework" action="{{path('roles.new')}}" method="POST">
+                            <!--begin::Scroll-->
+                            <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_update_role_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_update_role_header" data-kt-scroll-wrappers="#kt_modal_update_role_scroll" data-kt-scroll-offset="300px" style="max-height: 334px;">
+                                <!--begin::Input group-->
+                                <div class="fv-row mb-10 fv-plugins-icon-container">
+                                    <!--begin::Label-->
+                                    <label class="fs-5 fw-bolder form-label mb-2">
+                                        <span class="required">Nom du Role</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input class="form-control form-control-solid" placeholder="Entrez un nom de role" name="role_name" value="Developer">
+                                    <input type="hidden" name="id" value="">
+                                    <!--end::Input-->
+                                <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                                <!--end::Input group-->
+                                <!--begin::Input group-->
+                                <div class="fv-row mb-10 fv-plugins-icon-container">
+                                    <!--begin::Label-->
+                                    <label class="fs-5 fw-bolder form-label mb-2">
+                                        <span class="">Description</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <textarea class="form-control form-control-solid" placeholder="Entrez une description" name="role_descr"></textarea>
+                                    <!--end::Input-->
+                                <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                                <!--end::Input group-->
+                                <!--begin::Permissions-->
+                                <div class="fv-row">
+                                    <!--begin::Label-->
+                                    <label class="fs-5 fw-bolder form-label mb-2">Permissions du Role</label>
+                                    <!--end::Label-->
+                                    <!--begin::Table wrapper-->
+                                    <div class="table-responsive">
+                                        <!--begin::Table-->
+                                        <table class="table align-middle table-row-dashed fs-6 gy-5">
+                                            <!--begin::Table body-->
+                                            <tbody class="text-gray-600 fw-bold">
+                                            </tbody>
+                                            <!--end::Table body-->
+                                        </table>
+                                        <!--end::Table-->
+                                    </div>
+                                    <!--end::Table wrapper-->
+                                </div>
+                                <!--end::Permissions-->
+                            </div>
+                            <!--end::Scroll-->
+                            <!--begin::Actions-->
+                            <div class="text-center pt-15">
+                                <button type="reset" class="btn btn-light me-3" data-kt-roles-modal-action="cancel">Discard</button>
+                                <button type="submit" class="btn btn-primary" data-kt-roles-modal-action="submit">
+                                    <span class="indicator-label">Submit</span>
+                                    <span class="indicator-progress">Please wait... 
+                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                </button>
+                            </div>
+                            <!--end::Actions-->
+                        <div></div></form>
+                        <!--end::Form-->
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Update role-->
+        <!--end::Modals-->
+    </div>
+    <!--end::Container-->
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<!--begin::Page Vendors Javascript(used by this page)-->
+<script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+<!--end::Page Vendors Javascript-->
+<!--begin::Page Custom Javascript(used by this page)-->
+<script src="{{asset('assets/js/custom/apps/user-management/roles/list/add.js')}}"></script>
+<script src="{{asset('assets/js/custom/apps/user-management/roles/list/update-role.js')}}"></script>
+<script src="{{asset('assets/js/widgets.bundle.js')}}"></script>
+<script src="{{asset('assets/js/custom/widgets.js')}}"></script>
+<script src="{{asset('assets/js/custom/intro.js')}}"></script>
+<!--end::Page Custom Javascript-->
+
+<script type="text/javascript">
+initTable();
+function initTable() {
+    $("table.table input[type=checkbox]:not(input[name=all])").change(function() {
+        $(this).next().attr('disabled', this.checked);
+    });
+    $("table.table input[name=all]").change(function() {
+        $("table.table input[type=checkbox]").next().attr('disabled', this.checked);
+    });
+}
+function findRole(id) {
+    let url = "{{ path('roles.find', {'id': 'ide'}) }}";
+    url = url.replace("ide", id);
+    $.ajax({
+        url: url,
+        type: "post",
+        dataType: 'json',
+        async: true,
+        data: {}
+    })
+    .done(function(data){
+        $('#kt_modal_update_role_form input[name="id"]').val(data.id);
+        $('#kt_modal_update_role_form input[name="role_name"]').val(data.libelle);
+        $('#kt_modal_update_role_form textarea[name="role_descr"]').text(data.description);
+        var autorisations = [];
+        var content = '<tr>'+
+                '<td class="text-gray-800">Accès Administrateur'+
+                '<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="" data-bs-original-title="Permet un accès complet au système" aria-label="Permet un accès complet au système"></i></td>'+
+                '<td>'+
+                    '<label class="form-check form-check-sm form-check-custom form-check-solid me-9">'+
+                        '<input class="form-check-input" type="checkbox" name="all" value="" id="kt_roles_select_all"';
+                        if (data.all) content += ' checked';
+                        content += '><span class="form-check-label" for="kt_roles_select_all">Select all</span>'+
+                    '</label>'+
+                '</td>'+
+            '</tr>';
+        $.each(data.permissions, function(index, permis) { 
+            autorisations.push(permis.autoris.id);
+            content += '<tr>'+
+                '<td class="text-gray-800">'+permis.autoris.libelle+'<input type="hidden" name="autoris[]" value="'+permis.autoris.id+'"></td>'+
+                '<td>'+
+                    '<div class="d-flex">'+
+                        '<label class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-20">'+
+                            '<input class="form-check-input" type="checkbox" name="read[]" value="1"';
+                            if (permis.lecture) content += ' checked><input type="hidden" name="read[]" value="0" disabled>';
+                            else content += '><input type="hidden" name="read[]" value="0">';
+                            content += '<span class="form-check-label">Lecture</span>'+
+                        '</label>'+
+                        '<label class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-20">'+
+                            '<input class="form-check-input" type="checkbox" name="write[]" value="1"';
+                            if (permis.ecriture) content += ' checked><input type="hidden" name="write[]" value="0" disabled>';
+                            else content += '><input type="hidden" name="write[]" value="0">';
+                            content += '<span class="form-check-label">Écriture</span>'+
+                        '</label>'+
+                        '<label class="form-check form-check-sm form-check-custom form-check-solid">'+
+                            '<input class="form-check-input" type="checkbox" name="create[]" value="1"';
+                            if (permis.creation) content += ' checked><input type="hidden" name="create[]" value="0" disabled>';
+                            else content += '><input type="hidden" name="create[]" value="0">';
+                            content += '<span class="form-check-label">Création</span>'+
+                        '</label>'+
+                    '</div>'+
+                '</td>'+
+            '</tr>';
+        });
+        {% for autoris in autorisations %}
+            var trouv = $.inArray(parseInt("{{autoris.id}}"), autorisations);
+            if (trouv == -1) {
+                content += '<tr>'+
+                    '<td class="text-gray-800">{{autoris.libelle}}<input type="hidden" name="autoris[]" value="{{autoris.id}}"></td>'+
+                    '<td>'+
+                        '<div class="d-flex">'+
+                            '<label class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-20">'+
+                                '<input class="form-check-input" type="checkbox" name="read[]" value="1">'+
+                                '<input type="hidden" name="read[]" value="0">'+
+                                '<span class="form-check-label">Lecture</span>'+
+                            '</label>'+
+                            '<label class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-20">'+
+                                '<input class="form-check-input" type="checkbox" name="write[]" value="1">'+
+                                '<input type="hidden" name="write[]" value="0">'+
+                                '<span class="form-check-label">Écriture</span>'+
+                            '</label>'+
+                            '<label class="form-check form-check-sm form-check-custom form-check-solid">'+
+                                '<input class="form-check-input" type="checkbox" name="create[]" value="1">'+
+                                '<input type="hidden" name="create[]" value="0">'+
+                                '<span class="form-check-label">Création</span>'+
+                            '</label>'+
+                        '</div>'+
+                    '</td>'+
+                '</tr>';
+            }
+        {% endfor %}
+        $('#kt_modal_update_role_form table tbody').html(content);
+        KTUsersUpdatePermissions.init();
+        initTable();
+    });
+}
+</script>
+{% endblock %}
