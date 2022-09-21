@@ -704,6 +704,8 @@ input, textarea {
 <!--end::Page Custom Javascript-->
 
 <script type="text/javascript">
+$('body').attr('data-kt-aside-minimize', 'on');
+$('[data-kt-toggle-name="aside-minimize"]').css('visibility', 'hidden');
 // Stepper element
 var element = document.querySelector("#kt_stepper_example_clickable");
 var stepper = new KTStepper(element);

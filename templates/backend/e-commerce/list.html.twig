@@ -1,6 +1,6 @@
 {% extends "backend/layout.html.twig" %}
 
-{% block title %}Liste des Entreprises{% endblock %}
+{% block title %}Liste des Articles{% endblock %}
 {% block description %}{% endblock %}
 
 {% block stylesheets %}
@@ -15,7 +15,7 @@
 {% block pageTitle %}
 <div class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-2 pb-lg-0" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
     <!--begin::Heading-->
-    <h1 class="text-dark fw-bolder my-1 fs-2">Liste des Entreprises 
+    <h1 class="text-dark fw-bolder my-1 fs-2">Liste des Articles 
     <small class="text-muted fs-6 fw-normal ms-1"></small></h1>
     <!--end::Heading-->
     <!--begin::Breadcrumb-->
@@ -23,8 +23,8 @@
         <li class="breadcrumb-item text-muted">
             <a href="{{path('dash')}}" class="text-muted">Dashboards</a>
         </li>
-        <li class="breadcrumb-item text-muted">Entreprises</li>
-        <li class="breadcrumb-item text-dark">Liste des Entreprises</li>
+        <li class="breadcrumb-item text-muted">E-Commerce</li>
+        <li class="breadcrumb-item text-dark">Liste des Articles</li>
     </ul>
     <!--end::Breadcrumb-->
 </div>
@@ -38,7 +38,7 @@
             <div id="kt_aside_menu_wrapper" class="hover-scroll-y me-lg-n4 pe-lg-4" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto" data-kt-scroll-offset="20px" data-kt-scroll-wrappers="#kt_aside_wordspace">
                 <div class="menu-item">
                     <div class="menu-content">
-                        <span class="menu-section fs-5 fw-bold ps-1 py-1">Entreprises</span>
+                        <span class="menu-section fs-5 fw-bold ps-1 py-1">E-Commerce</span>
                     </div>
                 </div>
                 <div class="menu-item here show">
@@ -46,7 +46,7 @@
                         <span class="menu-bullet">
                             <span class="bullet bullet-dot"></span>
                         </span>
-                        <a href="{{path('entreprises.list')}}" class="menu-title">Liste des Entreprises</a>
+                        <a href="{{path('entreprises.list')}}" class="menu-title">Liste des Articles</a>
                     </span>
                 </div>
                 <div class="menu-item">
@@ -54,7 +54,34 @@
                         <span class="menu-bullet">
                             <span class="bullet bullet-dot"></span>
                         </span>
-                        <a href="#" class="menu-title">Secteurs d'activité</a>
+                        <a href="#" class="menu-title">Bons Plans</a>
+                        <span class="menu-arrow"></span>
+                    </span>
+                    <div class="menu-sub menu-sub-accordion" kt-hidden-height="250" style="display: none; overflow: hidden;">
+                        <div class="menu-item">
+                            <a class="menu-link active" href="#">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Tous les bons plans</span>
+                            </a>
+                        </div>
+                        <div class="menu-item">
+                            <a class="menu-link active" href="#">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Types de bons plans</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item here show">
+                    <span class="menu-link">
+                        <span class="menu-bullet">
+                            <span class="bullet bullet-dot"></span>
+                        </span>
+                        <a href="{{path('entreprises.list')}}" class="menu-title">Categories</a>
                     </span>
                 </div>
             </div>

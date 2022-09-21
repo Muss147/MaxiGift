@@ -1,0 +1,396 @@
+{% extends "backend/layout.html.twig" %}
+
+{% block title %}Liste des {{type}}{% endblock %}
+{% block description %}{% endblock %}
+
+{% block stylesheets %}
+<!--begin::Page Vendor Stylesheets(used by this page)-->
+<link href="{{asset('assets/plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet" type="text/css" />
+<!--end::Page Vendor Stylesheets-->
+
+<style type="text/css">
+</style>
+{% endblock %}
+
+{% block pageTitle %}
+<div class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-2 pb-lg-0" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
+    <!--begin::Heading-->
+    <h1 class="text-dark fw-bolder my-1 fs-2">Liste des {{type}} 
+    <small class="text-muted fs-6 fw-normal ms-1"></small></h1>
+    <!--end::Heading-->
+    <!--begin::Breadcrumb-->
+    <ul class="breadcrumb fw-bold fs-base my-1">
+        <li class="breadcrumb-item text-muted">
+            <a href="{{path('dash')}}" class="text-muted">Dashboards</a>
+        </li>
+        <li class="breadcrumb-item text-muted">Parametres</li>
+        <li class="breadcrumb-item text-dark">{{type}}</li>
+    </ul>
+    <!--end::Breadcrumb-->
+</div>
+{% endblock %}
+
+{% block secondaryMenu %}
+<!--begin::Secondary-->
+<div class="aside-secondary d-flex flex-row-fluid">
+    <div class="aside-workspace overflow-auto my-2 my-lg-7 px-2 px-lg-4" id="kt_aside_wordspace">
+        <div class="menu menu-sub-indention menu-rounded menu-column menu-active-bg menu-title-gray-600 menu-icon-gray-400 menu-state-primary menu-arrow-gray-500 fw-semibold fs-6 my-5 mt-lg-2 mb-lg-0" id="kt_aside_menu" data-kt-menu="true">
+            <div id="kt_aside_menu_wrapper" class="hover-scroll-y me-lg-n4 pe-lg-4" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto" data-kt-scroll-offset="20px" data-kt-scroll-wrappers="#kt_aside_wordspace">
+                <div class="menu-item">
+                    <div class="menu-content">
+                        <span class="menu-section fs-5 fw-bold ps-1 py-1">Parametres</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-link">
+                        <span class="menu-bullet">
+                            <span class="bullet bullet-dot"></span>
+                        </span>
+                        <a href="#" class="menu-title">Categories</a>
+                    </span>
+                </div>
+                <div class="menu-item here show">
+                    <span class="menu-link">
+                        <span class="menu-bullet">
+                            <span class="bullet bullet-dot"></span>
+                        </span>
+                        <a href="{{path('entreprises.list')}}" class="menu-title">{{type}}</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Secondary-->
+{% endblock %}
+
+{% block body %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Container-->
+    <div class="container-xxl" id="kt_content_container">
+        <!--begin::Category-->
+        <div class="card card-flush">
+            <!--begin::Card header-->
+            <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+                <!--begin::Card title-->
+                <div class="card-title">
+                    <!--begin::Search-->
+                    <div class="d-flex align-items-center position-relative my-1">
+                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                        <span class="svg-icon svg-icon-1 position-absolute ms-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+                                <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                        {% set word = type|split(' ', 2) %}
+                        <input type="text" data-kt-ecommerce-category-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Rechercher un(e) {{word|first|slice(0, -1)|lower}}" />
+                    </div>
+                    <!--end::Search-->
+                </div>
+                <!--end::Card title-->
+                <!--begin::Card toolbar-->
+                <div class="card-toolbar">
+                    <!--begin::Toolbar-->
+                    <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                        <!--begin::Add customer-->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_param">Ajouter un(e) {{word|first|slice(0, -1)|lower}}</button>
+                        <!--end::Add customer-->
+                    </div>
+                    <!--end::Toolbar-->
+                    <!--begin::Group actions-->
+                    <div class="d-flex justify-content-end align-items-center d-none" data-kt-customer-table-toolbar="selected">
+                        <div class="fw-bolder me-5">
+                        <span class="me-2" data-kt-customer-table-select="selected_count"></span>Selectionné(s)</div>
+                        <form action="{{path('param.delete')}}" method="POST" id="kt_delete_multi_param_form" class="d-inline">
+                            <div class="input-group"></div>
+                            <button type="button" class="btn btn-danger" data-kt-customer-table-select="delete_selected">Supprimer la Selection</button>
+                        </form>
+                    </div>
+                    <!--end::Group actions-->
+                </div>
+                <!--end::Card toolbar-->
+            </div>
+            <!--end::Card header-->
+            <!--begin::Card body-->
+            <div class="card-body pt-0">
+                <!--begin::Table-->
+                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_category_table">
+                    <!--begin::Table head-->
+                    <thead>
+                        <!--begin::Table row-->
+                        <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
+                            <th class="w-10px pe-2">
+                                <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                                    <input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_ecommerce_category_table .form-check-input" value="1" />
+                                </div>
+                            </th>
+                            <th class="min-w-250px">Libelle</th>
+                            <th class="min-w-150px">Type</th>
+                            <th class="min-w-150px">Date</th>
+                            <th class="text-end min-w-70px">Actions</th>
+                        </tr>
+                        <!--end::Table row-->
+                    </thead>
+                    <!--end::Table head-->
+                    <!--begin::Table body-->
+                    <tbody class="fw-semibold text-gray-600">
+                        {% for param in parametres %}
+                        <!--begin::Table row-->
+                        <tr>
+                            <!--begin::Checkbox-->
+                            <td>
+                                <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                    <input class="form-check-input" type="checkbox" value="{{param.id}}" />
+                                </div>
+                            </td>
+                            <!--end::Checkbox-->
+                            <!--begin::Category=-->
+                            <td>
+                                <div class="d-flex">
+                                    {% set random = random(['primary', 'success', 'info', 'danger']) %}
+                                    <!--begin::Thumbnail-->
+                                    <a href="#" class="symbol symbol-50px" data-bs-toggle="modal" data-bs-target="#kt_modal_edit_param" onclick="editParam({{param.id}})">
+                                        {% if param.image %}<span class="symbol-label" style="background-image:url({{asset('uploads/images/'~ param.image.tempFile)}});"></span>
+                                        {% else %}<div class="symbol-label fs-3 bg-light-{{random}} text-{{random}}">{{param.libelle|slice(0, 1)|upper}}</div>{% endif %}
+                                    </a>
+                                    <!--end::Thumbnail-->
+                                    <div class="ms-5">
+                                        <!--begin::Title-->
+                                        <a href="#" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1" data-bs-toggle="modal" data-bs-target="#kt_modal_edit_param" onclick="editParam({{param.id}})" data-kt-ecommerce-category-filter="category_name">{{param.libelle}}</a>
+                                        <!--end::Title-->
+                                        <!--begin::Description-->
+                                        <div class="text-muted fs-7 fw-bold">{{param.description|slice(0, 70)|raw}}</div>
+                                        <!--end::Description-->
+                                    </div>
+                                </div>
+                            </td>
+                            <!--end::Category=-->
+                            <!--begin::Type=-->
+                            <td>
+                                <!--begin::Badges-->
+                                <div class="badge badge-light-{{random}}">{{param.type}}</div>
+                                <!--end::Badges-->
+                            </td>
+                            <!--end::Type=-->
+                            <!--begin::Date=-->
+                            <td>
+                                {{param.createdAt|date('d m Y')}}
+                            </td>
+                            <!--end::Date=-->
+                            <!--begin::Action=-->
+                            <td class="text-end">
+                                <a href="#" class="btn btn-sm btn-light btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions 
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                <span class="svg-icon svg-icon-5 m-0">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="currentColor" />
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon--></a>
+                                <!--begin::Menu-->
+                                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
+                                    <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_edit_param" onclick="editParam({{param.id}})">Modifier</a>
+                                    </div>
+                                    <!--end::Menu item-->
+                                    <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <form action="{{path('param.delete')}}" method="POST" id="kt_delete_param_form" class="d-inline">
+                                            <input type="hidden" name="paramsDeleted[]" value="{{param.id}}">
+                                            <a href="#" class="menu-link px-3" data-kt-ecommerce-category-filter="delete_row">Supprimer</a>
+                                        </form>
+                                    </div>
+                                    <!--end::Menu item-->
+                                </div>
+                                <!--end::Menu-->
+                            </td>
+                            <!--end::Action=-->
+                        </tr>
+                        <!--end::Table row-->
+                        {% endfor %}
+                    </tbody>
+                    <!--end::Table body-->
+                </table>
+                <!--end::Table-->
+            </div>
+            <!--end::Card body-->
+        </div>
+        <!--end::Category-->
+
+        <!--begin::Modals-->
+        <!--begin::Modal Add-->
+        <div class="modal fade" tabindex="-1" id="kt_modal_add_param">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{path('param.add')}}" method="POST" class="form" id="kt_form_add_param" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Nouveau Dossier</h5>
+                            <!--begin::Close-->
+                            <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                                <span class="svg-icon svg-icon-2x"></span>
+                            </div>
+                            <!--end::Close-->
+                        </div>
+
+                        <div class="modal-body">
+							<div class="mb-7">
+								<label class="fs-6 fw-bold mb-2">
+									<span>Image</span>
+									<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="" data-bs-original-title="Types de fichiers autorisés: png, jpg, jpeg." aria-label="Types de fichiers autorisés: png, jpg, jpeg."></i>
+								</label>
+								<!--end::Label-->
+								<!--begin::Image input wrapper-->
+								<div class="mt-1">
+									<!--begin::Image input-->
+									<div class="image-input image-input-outline" data-kt-image-input="true" style="background-image: url({{asset('assets/media/svg/files/blank-image.svg')}})">
+										<!--begin::Preview existing avatar-->
+										<div class="image-input-wrapper" style="background-image: url({{asset('assets/media/svg/files/blank-image.svg')}});background-size: cover;background-position: center;"></div>
+										<!--end::Preview existing avatar-->
+										<!--begin::Edit-->
+										<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="" data-bs-original-title="Change avatar">
+											<i class="bi bi-pencil-fill fs-7"></i>
+											<!--begin::Inputs-->
+											<input id="photo" type="file" name="photo" accept=".png, .jpg, .jpeg">
+											<input type="hidden" name="logo_remove">
+											<!--end::Inputs-->
+										</label>
+										<!--end::Edit-->
+										<!--begin::Cancel-->
+										<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="" data-bs-original-title="Cancel avatar">
+											<i class="bi bi-x fs-2"></i>
+										</span>
+										<!--end::Cancel-->
+										<!--begin::Remove-->
+										<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="" data-bs-original-title="Remove avatar">
+											<i class="bi bi-x fs-2"></i>
+										</span>
+										<!--end::Remove-->
+									</div>
+									<!--end::Image input-->
+								</div>
+								<!--end::Image input wrapper-->
+							</div>
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="required fw-bold fs-6 mb-2">Libelle</label>
+                                <input type="hidden" name="type" value="{{type}}">
+                                <input type="text" name="libelle" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Libellé du dossier" required>
+                            </div>
+                            <div class="fv-row fv-plugins-icon-container">
+                                <label class="fw-bold fs-6 mb-2">Description</label>
+                                <textarea rows="5" name="description" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Entrer une description"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--end::Modal Add-->
+        <!--begin::Modal Add-->
+        <div class="modal fade" tabindex="-1" id="kt_modal_edit_param">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{path('param.add')}}" method="POST" class="form" id="kt_form_edit_param" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modification de Dossier</h5>
+                            <!--begin::Close-->
+                            <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                                <span class="svg-icon svg-icon-2x"></span>
+                            </div>
+                            <!--end::Close-->
+                        </div>
+
+                        <div class="modal-body">
+							<div class="mb-7">
+								<label class="fs-6 fw-bold mb-2">
+									<span>Image</span>
+									<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="" data-bs-original-title="Types de fichiers autorisés: png, jpg, jpeg." aria-label="Types de fichiers autorisés: png, jpg, jpeg."></i>
+								</label>
+								<!--end::Label-->
+								<!--begin::Image input wrapper-->
+								<div class="mt-1">
+									<!--begin::Image input-->
+									<div class="image-input image-input-outline" data-kt-image-input="true" style="background-image: url({{asset('assets/media/svg/files/blank-image.svg')}})">
+										<!--begin::Preview existing avatar-->
+										<div class="image-input-wrapper" style="background-image: url({{asset('assets/media/svg/files/blank-image.svg')}});background-size: contain;background-position: center;"></div>
+										<!--end::Preview existing avatar-->
+										<!--begin::Edit-->
+										<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="" data-bs-original-title="Change avatar">
+											<i class="bi bi-pencil-fill fs-7"></i>
+											<!--begin::Inputs-->
+											<input id="photo" type="file" name="photo" accept=".png, .jpg, .jpeg">
+											<input type="hidden" name="logo_remove">
+											<!--end::Inputs-->
+										</label>
+										<!--end::Edit-->
+										<!--begin::Cancel-->
+										<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="" data-bs-original-title="Cancel avatar">
+											<i class="bi bi-x fs-2"></i>
+										</span>
+										<!--end::Cancel-->
+										<!--begin::Remove-->
+										<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="" data-bs-original-title="Remove avatar">
+											<i class="bi bi-x fs-2"></i>
+										</span>
+										<!--end::Remove-->
+									</div>
+									<!--end::Image input-->
+								</div>
+								<!--end::Image input wrapper-->
+							</div>
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <label class="required fw-bold fs-6 mb-2">Libelle</label>
+                                <input type="hidden" name="id" value="">
+                                <input type="hidden" name="type" value="{{type}}">
+                                <input type="text" name="libelle" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Libellé" required>
+                            </div>
+                            <div class="fv-row fv-plugins-icon-container">
+                                <label class="fw-bold fs-6 mb-2">Description</label>
+                                <textarea rows="5" name="description" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Entrer une description"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Souvegarder</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--end::Modal Add-->
+        <!--end::Modals-->
+    </div>
+    <!--end::Container-->
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<!--begin::Page Vendors Javascript(used by this page)-->
+<script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+<!--end::Page Vendors Javascript-->
+<!--begin::Page Custom Javascript(used by this page)-->
+<script src="{{asset('assets/js/custom/apps/parametres/list.js')}}"></script>
+<script src="{{asset('assets/js/widgets.bundle.js')}}"></script>
+<script src="{{asset('assets/js/custom/widgets.js')}}"></script>
+<!--end::Page Custom Javascript-->
+<script type="text/javascript">
+function editParam(id) {
+    {% for param in parametres %}
+        if (id == "{{param.id}}") {
+            $('#kt_form_edit_param input[name="id"]').val('{{param.id}}');
+            $('#kt_form_edit_param input[name="libelle"]').val('{{param.libelle}}');
+            $('#kt_form_edit_param textarea[name="description"]').text('{{param.description}}');
+            $('#kt_form_edit_param .image-input-wrapper').css("background-image", "url({{asset('uploads/images/'~ param.image.tempFile|default('blank-image.svg'))}})");
+        }
+    {% endfor %}
+}
+</script>
+{% endblock %}

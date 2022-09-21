@@ -1108,6 +1108,8 @@ input, textarea {
 <!-- Include Google Maps JS API -->
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAGvHAv2FM7u0y-MEhQ456v8J5CwMQD_Ss"></script>
 <script type="text/javascript">
+$('body').attr('data-kt-aside-minimize', 'on');
+$('[data-kt-toggle-name="aside-minimize"]').css('visibility', 'hidden');
 // Stepper element
 var element = document.querySelector("#kt_stepper_example_clickable");
 var stepper = new KTStepper(element);

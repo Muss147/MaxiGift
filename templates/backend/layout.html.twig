@@ -26,15 +26,14 @@ Contact: mfofana@aguimaweb.com
 	</head>
 	<!--end::Head-->
 	<!--begin::Body-->
-	<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-disabled">
+	<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-enabled">
 		<!--begin::Main-->
 		<!--begin::Root-->
 		<div class="d-flex flex-column flex-root">
 			<!--begin::Page-->
 			<div class="page d-flex flex-row flex-column-fluid">
 				<!--begin::Aside-->
-				<div id="kt_aside" class="aside aside-extended bg-white" data-kt-drawer="true" data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="auto" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_toggle">
-					<!--begin::Primary-->
+				<div id="kt_aside" class="aside aside-extended" data-kt-drawer="true" data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="auto" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_toggle">					<!--begin::Primary-->
 					<div class="aside-primary d-flex flex-column align-items-lg-center flex-row-auto">
 						<!--begin::Logo-->
 						<div class="aside-logo d-none d-lg-flex flex-column align-items-center flex-column-auto pt-10" id="kt_aside_logo">
@@ -44,347 +43,311 @@ Contact: mfofana@aguimaweb.com
 						</div>
 						<!--end::Logo-->
 						<!--begin::Nav-->
-						<div class="aside-nav d-flex flex-column flex-lg-center flex-column-fluid w-100 pt-5 pt-lg-0" id="kt_aside_nav">
-							<!--begin::Primary menu-->
-							<div id="kt_aside_menu" class="menu menu-column menu-title-gray-600 menu-icon-gray-400 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-bold fs-5" data-kt-menu="true">
-								<div class="menu-item py-2">
-									<a class="menu-link {% if app.session.get('menu') == 'dash' %}active{% endif %} menu-center" href="{{path('dash')}}" title="Dashboard" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-										<span class="menu-icon me-0">
-											<!--begin::Svg Icon | path: icons/duotone/Home/Home2.svg-->
-											<span class="svg-icon svg-icon-1">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-													<path d="M21.4622 10.699C21.4618 10.6986 21.4613 10.6981 21.4609 10.6977L13.3016 2.53955C12.9538 2.19165 12.4914 2 11.9996 2C11.5078 2 11.0454 2.1915 10.6974 2.5394L2.54246 10.6934C2.53971 10.6961 2.53696 10.699 2.53422 10.7018C1.82003 11.42 1.82125 12.5853 2.53773 13.3017C2.86506 13.6292 3.29739 13.8188 3.75962 13.8387C3.77839 13.8405 3.79732 13.8414 3.81639 13.8414H4.14159V19.8453C4.14159 21.0334 5.10833 22 6.29681 22H9.48897C9.81249 22 10.075 21.7377 10.075 21.4141V16.707C10.075 16.1649 10.516 15.7239 11.0582 15.7239H12.941C13.4832 15.7239 13.9242 16.1649 13.9242 16.707V21.4141C13.9242 21.7377 14.1866 22 14.5102 22H17.7024C18.8909 22 19.8576 21.0334 19.8576 19.8453V13.8414H20.1592C20.6508 13.8414 21.1132 13.6499 21.4613 13.302C22.1786 12.5844 22.1789 11.4171 21.4622 10.699V10.699Z" fill="#00B2FF"></path>
-												</svg>
+						<div class="aside-nav d-flex flex-column flex-lg-center flex-column-fluid w-100 py-5 px-3" id="kt_aside_nav">
+							<div class="w-100 hover-scroll-overlay-y d-flex" id="kt_aside_menu_wrapper" data-kt-scroll="true" data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer" data-kt-scroll-wrappers="#kt_aside, #kt_aside_nav, #kt_aside_menu_wrapper" data-kt-scroll-offset="5px">
+								<!--begin::Primary menu-->
+								<div id="kt_aside_menu" class="menu menu-rounded menu-column menu-active-bg menu-title-gray-600 menu-icon-gray-400 menu-state-primary menu-arrow-gray-500 fw-semibold fs-6 my-auto" data-kt-menu="true">
+									<div class="menu-item py-2">
+										<a class="menu-link {% if app.session.get('menu') == 'dash' %}active{% endif %} menu-center" href="{{path('dash')}}" title="Dashboard" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+											<span class="menu-icon me-0">
+												<!--begin::Svg Icon | path: icons/duotone/Home/Home2.svg-->
+												<span class="svg-icon svg-icon-1">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<path d="M21.4622 10.699C21.4618 10.6986 21.4613 10.6981 21.4609 10.6977L13.3016 2.53955C12.9538 2.19165 12.4914 2 11.9996 2C11.5078 2 11.0454 2.1915 10.6974 2.5394L2.54246 10.6934C2.53971 10.6961 2.53696 10.699 2.53422 10.7018C1.82003 11.42 1.82125 12.5853 2.53773 13.3017C2.86506 13.6292 3.29739 13.8188 3.75962 13.8387C3.77839 13.8405 3.79732 13.8414 3.81639 13.8414H4.14159V19.8453C4.14159 21.0334 5.10833 22 6.29681 22H9.48897C9.81249 22 10.075 21.7377 10.075 21.4141V16.707C10.075 16.1649 10.516 15.7239 11.0582 15.7239H12.941C13.4832 15.7239 13.9242 16.1649 13.9242 16.707V21.4141C13.9242 21.7377 14.1866 22 14.5102 22H17.7024C18.8909 22 19.8576 21.0334 19.8576 19.8453V13.8414H20.1592C20.6508 13.8414 21.1132 13.6499 21.4613 13.302C22.1786 12.5844 22.1789 11.4171 21.4622 10.699V10.699Z" fill="#00B2FF"></path>
+													</svg>
+												</span>
+												<!--end::Svg Icon-->
 											</span>
-											<!--end::Svg Icon-->
+										</a>
+									</div>
+									<div {% if app.session.get('menu') != 'admin' %}data-kt-menu-trigger="{default: 'click', lg: 'hover'}"{% endif %} data-kt-menu-placement="right-start" class="menu-item py-2">
+										<span class="menu-link {% if app.session.get('menu') == 'admin' %}active{% endif %} menu-center">
+											<span class="menu-icon me-0">
+												<!--begin::Svg Icon | path: icons/duotone/General/User.svg-->
+												<span class="svg-icon svg-icon-2x">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<path d="M6.28548 15.0861C7.34369 13.1814 9.35142 12 11.5304 12H12.4696C14.6486 12 16.6563 13.1814 17.7145 15.0861L19.3493 18.0287C20.0899 19.3618 19.1259 21 17.601 21H6.39903C4.87406 21 3.91012 19.3618 4.65071 18.0287L6.28548 15.0861Z" fill="currentColor"></path>
+														<rect opacity="0.3" x="8" y="3" width="8" height="8" rx="4" fill="currentColor"></rect>
+													</svg>
+												</span>
+												<!--end::Svg Icon-->
+											</span>
 										</span>
-									</a>
-								</div>
-								<div data-kt-menu-trigger="click" data-kt-menu-placement="right-start" data-kt-menu-flip="bottom" class="menu-item py-2">
-									<span class="menu-link {% if app.session.get('menu') == 'admin' %}active{% endif %} menu-center" title="Administrateurs" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-										<span class="menu-icon me-0">
-											<!--begin::Svg Icon | path: icons/duotone/General/User.svg-->
-											<span class="svg-icon svg-icon-2x">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-													<path d="M6.28548 15.0861C7.34369 13.1814 9.35142 12 11.5304 12H12.4696C14.6486 12 16.6563 13.1814 17.7145 15.0861L19.3493 18.0287C20.0899 19.3618 19.1259 21 17.601 21H6.39903C4.87406 21 3.91012 19.3618 4.65071 18.0287L6.28548 15.0861Z" fill="currentColor"></path>
-													<rect opacity="0.3" x="8" y="3" width="8" height="8" rx="4" fill="currentColor"></rect>
-												</svg>
-											</span>
-											<!--end::Svg Icon-->
-										</span>
-									</span>
-									<div class="menu-sub menu-sub-dropdown w-225px px-1 py-4">
-										<div class="menu-item">
-											<div class="menu-content">
-												<span class="menu-section fs-5 fw-bolder ps-1 py-1">Administrateurs</span>
-											</div>
-										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="{{path('admins.list')}}">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Liste Admins</span>
-											</a>
-										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="{{path('roles.list')}}">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Roles</span>
-											</a>
-										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="{{path('autorisations')}}">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Autorisations</span>
-											</a>
-										</div>
-										{# <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-											<span class="menu-link">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Roles</span>
-												<span class="menu-arrow"></span>
-											</span>
-											<div class="menu-sub menu-sub-accordion">
-												<div class="menu-item">
-													<a class="menu-link" href="#" data-kt-page="pro">
-														<span class="menu-bullet">
-															<span class="bullet bullet-dot"></span>
-														</span>
-														<span class="menu-title">Liste des roles
-														<span class="badge badge-pro badge-light-danger fw-bold fs-9 px-2 py-1 ms-1">Pro</span></span>
-													</a>
-												</div>
-												<div class="menu-item">
-													<a class="menu-link" href="#" data-kt-page="pro">
-														<span class="menu-bullet">
-															<span class="bullet bullet-dot"></span>
-														</span>
-														<span class="menu-title">Free Trial
-														<span class="badge badge-pro badge-light-danger fw-bold fs-9 px-2 py-1 ms-1">Pro</span></span>
-													</a>
-												</div>
-												<div class="menu-item">
-													<a class="menu-link" href="#" data-kt-page="pro">
-														<span class="menu-bullet">
-															<span class="bullet bullet-dot"></span>
-														</span>
-														<span class="menu-title">Coming Soon
-														<span class="badge badge-pro badge-light-danger fw-bold fs-9 px-2 py-1 ms-1">Pro</span></span>
-													</a>
+										<div class="menu-sub menu-sub-indention menu-sub-dropdown menu-sub-dropdown w-225px px-2 py-4">
+											<div class="menu-item">
+												<div class="menu-content">
+													<span class="menu-section fs-5 fw-bolder ps-1 py-1">Administrateurs</span>
 												</div>
 											</div>
-										</div> #}
-									</div>
-								</div>
-								<div data-kt-menu-trigger="click" data-kt-menu-placement="right-start" data-kt-menu-flip="bottom" class="menu-item py-2">
-									<span class="menu-link {% if app.session.get('menu') == 'entreprise' %}active{% endif %} menu-center" title="Entreprises" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-										<span class="menu-icon me-0">
-											<!--begin::Svg Icon | path: icons/duotone/Shopping/Chart.svg-->
-											<span class="svg-icon svg-icon-2x">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-													<path opacity="0.3" d="M20 15H4C2.9 15 2 14.1 2 13V7C2 6.4 2.4 6 3 6H21C21.6 6 22 6.4 22 7V13C22 14.1 21.1 15 20 15ZM13 12H11C10.5 12 10 12.4 10 13V16C10 16.5 10.4 17 11 17H13C13.6 17 14 16.6 14 16V13C14 12.4 13.6 12 13 12Z" fill="currentColor"></path>
-													<path d="M14 6V5H10V6H8V5C8 3.9 8.9 3 10 3H14C15.1 3 16 3.9 16 5V6H14ZM20 15H14V16C14 16.6 13.5 17 13 17H11C10.5 17 10 16.6 10 16V15H4C3.6 15 3.3 14.9 3 14.7V18C3 19.1 3.9 20 5 20H19C20.1 20 21 19.1 21 18V14.7C20.7 14.9 20.4 15 20 15Z" fill="currentColor"></path>
-												</svg>
-											</span>
-											<!--end::Svg Icon-->
-										</span>
-									</span>
-									<div class="menu-sub menu-sub-dropdown w-225px px-1 py-4">
-										<div class="menu-item">
-											<div class="menu-content">
-												<span class="menu-section fs-5 fw-bolder ps-1 py-1">Entreprises</span>
+											<div class="menu-item">
+												<a class="menu-link" href="{{path('admins.list')}}">
+													<span class="menu-bullet">
+														<span class="bullet bullet-dot"></span>
+													</span>
+													<span class="menu-title">Liste des Admins</span>
+												</a>
+											</div>
+											<div class="menu-item">
+												<a class="menu-link" href="{{path('roles.list')}}">
+													<span class="menu-bullet">
+														<span class="bullet bullet-dot"></span>
+													</span>
+													<span class="menu-title">Rôles</span>
+												</a>
+											</div>
+											<div class="menu-item">
+												<a class="menu-link" href="{{path('autorisations')}}">
+													<span class="menu-bullet">
+														<span class="bullet bullet-dot"></span>
+													</span>
+													<span class="menu-title">Autorisations</span>
+												</a>
 											</div>
 										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="{{path('entreprises.list')}}">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Liste des Entreprise</span>
-											</a>
-										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="#" data-kt-page="pro">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Secteurs d'Activité
-											</a>
-										</div>
 									</div>
-								</div>
-								<div class="menu-item py-2">
-									<a href="{{path('users.list')}}" class="menu-link {% if app.session.get('menu') == 'user' %}active{% endif %} menu-center" title="Utilisateurs" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-										<span class="menu-icon me-0">
-											<!--begin::Svg Icon | path: icons/duotone/Communication/Group.svg-->
-											<span class="svg-icon svg-icon-2qx">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-													<path d="M16.0173 9H15.3945C14.2833 9 13.263 9.61425 12.7431 10.5963L12.154 11.7091C12.0645 11.8781 12.1072 12.0868 12.2559 12.2071L12.6402 12.5183C13.2631 13.0225 13.7556 13.6691 14.0764 14.4035L14.2321 14.7601C14.2957 14.9058 14.4396 15 14.5987 15H18.6747C19.7297 15 20.4057 13.8774 19.912 12.945L18.6686 10.5963C18.1487 9.61425 17.1285 9 16.0173 9Z" fill="currentColor"/>
-													<rect opacity="0.3" x="14" y="4" width="4" height="4" rx="2" fill="currentColor"/>
-													<path d="M4.65486 14.8559C5.40389 13.1224 7.11161 12 9 12C10.8884 12 12.5961 13.1224 13.3451 14.8559L14.793 18.2067C15.3636 19.5271 14.3955 21 12.9571 21H5.04292C3.60453 21 2.63644 19.5271 3.20698 18.2067L4.65486 14.8559Z" fill="currentColor"/>
-													<rect opacity="0.3" x="6" y="5" width="6" height="6" rx="3" fill="currentColor"/>
-												</svg>
+									<div {% if app.session.get('menu') != 'entreprise' %}data-kt-menu-trigger="{default: 'click', lg: 'hover'}"{% endif %} data-kt-menu-placement="right-start" class="menu-item py-2">
+										<span class="menu-link {% if app.session.get('menu') == 'entreprise' %}active{% endif %} menu-center">
+											<span class="menu-icon me-0">
+												<!--begin::Svg Icon | path: icons/duotone/Shopping/Chart.svg-->
+												<span class="svg-icon svg-icon-2x">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<path opacity="0.3" d="M20 15H4C2.9 15 2 14.1 2 13V7C2 6.4 2.4 6 3 6H21C21.6 6 22 6.4 22 7V13C22 14.1 21.1 15 20 15ZM13 12H11C10.5 12 10 12.4 10 13V16C10 16.5 10.4 17 11 17H13C13.6 17 14 16.6 14 16V13C14 12.4 13.6 12 13 12Z" fill="currentColor"></path>
+														<path d="M14 6V5H10V6H8V5C8 3.9 8.9 3 10 3H14C15.1 3 16 3.9 16 5V6H14ZM20 15H14V16C14 16.6 13.5 17 13 17H11C10.5 17 10 16.6 10 16V15H4C3.6 15 3.3 14.9 3 14.7V18C3 19.1 3.9 20 5 20H19C20.1 20 21 19.1 21 18V14.7C20.7 14.9 20.4 15 20 15Z" fill="currentColor"></path>
+													</svg>
+												</span>
+												<!--end::Svg Icon-->
 											</span>
-											<!--end::Svg Icon-->
 										</span>
-									</a>
-								</div>
-								<div class="menu-item py-2">
-									<a href="{{path('enquetes.list')}}" class="menu-link {% if app.session.get('menu') == 'enquete' %}active{% endif %} menu-center" title="Enquêtes" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-										<span class="menu-icon me-0">
-											<!--begin::Svg Icon | path: icons/duotone/Communication/Group.svg-->
-											<span class="svg-icon svg-icon-1">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-													<path d="M21.7 18.9L18.6 15.8C17.9 16.9 16.9 17.9 15.8 18.6L18.9 21.7C19.3 22.1 19.9 22.1 20.3 21.7L21.7 20.3C22.1 19.9 22.1 19.3 21.7 18.9Z" fill="currentColor"/>
-													<path opacity="0.3" d="M11 20C6 20 2 16 2 11C2 6 6 2 11 2C16 2 20 6 20 11C20 16 16 20 11 20ZM11 4C7.1 4 4 7.1 4 11C4 14.9 7.1 18 11 18C14.9 18 18 14.9 18 11C18 7.1 14.9 4 11 4ZM8 11C8 9.3 9.3 8 11 8C11.6 8 12 7.6 12 7C12 6.4 11.6 6 11 6C8.2 6 6 8.2 6 11C6 11.6 6.4 12 7 12C7.6 12 8 11.6 8 11Z" fill="currentColor"/>
-												</svg>
-											</span>
-											<!--end::Svg Icon-->
-										</span>
-									</a>
-								</div>
-								<div class="menu-item py-2">
-									<a href="{{path('sondages.list')}}" class="menu-link {% if app.session.get('menu') == 'sondage' %}active{% endif %} menu-center" title="Sondages" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-										<span class="menu-icon me-0">
-											<!--begin::Svg Icon | path: icons/duotone/Communication/Group.svg-->
-											<span class="svg-icon svg-icon-1">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-													<path d="M13.0021 10.9128V3.01281C13.0021 2.41281 13.5021 1.91281 14.1021 2.01281C16.1021 2.21281 17.9021 3.11284 19.3021 4.61284C20.7021 6.01284 21.6021 7.91285 21.9021 9.81285C22.0021 10.4129 21.5021 10.9128 20.9021 10.9128H13.0021Z" fill="currentColor"/>
-													<path opacity="0.3" d="M11.0021 13.7128V4.91283C11.0021 4.31283 10.5021 3.81283 9.90208 3.91283C5.40208 4.51283 1.90209 8.41284 2.00209 13.1128C2.10209 18.0128 6.40208 22.0128 11.3021 21.9128C13.1021 21.8128 14.7021 21.3128 16.0021 20.4128C16.5021 20.1128 16.6021 19.3128 16.1021 18.9128L11.0021 13.7128Z" fill="currentColor"/>
-													<path opacity="0.3" d="M21.9021 14.0128C21.7021 15.6128 21.1021 17.1128 20.1021 18.4128C19.7021 18.9128 19.0021 18.9128 18.6021 18.5128L13.0021 12.9128H20.9021C21.5021 12.9128 22.0021 13.4128 21.9021 14.0128Z" fill="currentColor"/>
-												</svg>
-											</span>
-											<!--end::Svg Icon-->
-										</span>
-									</a>
-								</div>
-								<div data-kt-menu-trigger="click" data-kt-menu-placement="right-start" data-kt-menu-flip="bottom" class="menu-item py-2">
-									<span class="menu-link menu-center" title="eCommerce" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-										<span class="menu-icon me-0">
-											<!--begin::Svg Icon | path: icons/duotone/Shopping/Cart6.svg-->
-											<span class="svg-icon svg-icon-1">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-													<path opacity="0.3" d="M18 10V20C18 20.6 18.4 21 19 21C19.6 21 20 20.6 20 20V10H18Z" fill="currentColor"/>
-													<path opacity="0.3" d="M11 10V17H6V10H4V20C4 20.6 4.4 21 5 21H12C12.6 21 13 20.6 13 20V10H11Z" fill="currentColor"/>
-													<path opacity="0.3" d="M10 10C10 11.1 9.1 12 8 12C6.9 12 6 11.1 6 10H10Z" fill="currentColor"/>
-													<path opacity="0.3" d="M18 10C18 11.1 17.1 12 16 12C14.9 12 14 11.1 14 10H18Z" fill="currentColor"/>
-													<path opacity="0.3" d="M14 4H10V10H14V4Z" fill="currentColor"/>
-													<path opacity="0.3" d="M17 4H20L22 10H18L17 4Z" fill="currentColor"/>
-													<path opacity="0.3" d="M7 4H4L2 10H6L7 4Z" fill="currentColor"/>
-													<path d="M6 10C6 11.1 5.1 12 4 12C2.9 12 2 11.1 2 10H6ZM10 10C10 11.1 10.9 12 12 12C13.1 12 14 11.1 14 10H10ZM18 10C18 11.1 18.9 12 20 12C21.1 12 22 11.1 22 10H18ZM19 2H5C4.4 2 4 2.4 4 3V4H20V3C20 2.4 19.6 2 19 2ZM12 17C12 16.4 11.6 16 11 16H6C5.4 16 5 16.4 5 17C5 17.6 5.4 18 6 18H11C11.6 18 12 17.6 12 17Z" fill="currentColor"/>
-												</svg>
-											</span>
-											<!--end::Svg Icon-->
-										</span>
-									</span>
-									<div class="menu-sub menu-sub-dropdown w-225px px-1 py-4">
-										<div class="menu-item">
-											<div class="menu-content">
-												<span class="menu-section fs-5 fw-bolder ps-1 py-1">eCommerce</span>
+										<div class="menu-sub menu-sub-indention menu-sub-dropdown menu-sub-dropdown w-225px px-2 py-4">
+											<div class="menu-item">
+												<div class="menu-content">
+													<span class="menu-section fs-5 fw-bolder ps-1 py-1">Entreprises</span>
+												</div>
+											</div>
+											<div class="menu-item">
+												<a class="menu-link" href="{{path('entreprises.list')}}">
+													<span class="menu-bullet">
+														<span class="bullet bullet-dot"></span>
+													</span>
+													<span class="menu-title">Liste des Entreprise</span>
+												</a>
+											</div>
+											<div class="menu-item">
+												<a class="menu-link" href="{{path('param.list', {type: 'Secteurs d\'Activité'})}}">
+													<span class="menu-bullet">
+														<span class="bullet bullet-dot"></span>
+													</span>
+													<span class="menu-title">Secteurs d'Activité
+												</a>
 											</div>
 										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="general/about.html">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">About Us</span>
-											</a>
-										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="general/faq.html">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">FAQ</span>
-											</a>
-										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="#" data-kt-page="pro">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Wizard
-												<span class="badge badge-pro badge-light-danger fw-bold fs-9 px-2 py-1 ms-1">Pro</span></span>
-											</a>
-										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="#" data-kt-page="pro">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Invoice
-												<span class="badge badge-pro badge-light-danger fw-bold fs-9 px-2 py-1 ms-1">Pro</span></span>
-											</a>
-										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="#" data-kt-page="pro">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Pricing
-												<span class="badge badge-pro badge-light-danger fw-bold fs-9 px-2 py-1 ms-1">Pro</span></span>
-											</a>
-										</div>
 									</div>
-								</div>
-								<div data-kt-menu-trigger="click" data-kt-menu-placement="right-start" data-kt-menu-flip="bottom" class="menu-item py-2">
-									<span class="menu-link menu-center" title="Réglages" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-										<span class="menu-icon me-0">
-											<!--begin::Svg Icon | path: icons/duotone/Communication/More.svg-->
-											<span class="svg-icon svg-icon-1">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-													<path d="M17.5 11H6.5C4 11 2 9 2 6.5C2 4 4 2 6.5 2H17.5C20 2 22 4 22 6.5C22 9 20 11 17.5 11ZM15 6.5C15 7.9 16.1 9 17.5 9C18.9 9 20 7.9 20 6.5C20 5.1 18.9 4 17.5 4C16.1 4 15 5.1 15 6.5Z" fill="currentColor"/>
-													<path opacity="0.3" d="M17.5 22H6.5C4 22 2 20 2 17.5C2 15 4 13 6.5 13H17.5C20 13 22 15 22 17.5C22 20 20 22 17.5 22ZM4 17.5C4 18.9 5.1 20 6.5 20C7.9 20 9 18.9 9 17.5C9 16.1 7.9 15 6.5 15C5.1 15 4 16.1 4 17.5Z" fill="currentColor"/>
-												</svg>
+									<div class="menu-item py-2">
+										<a href="{{path('users.list')}}" class="menu-link {% if app.session.get('menu') == 'user' %}active{% endif %} menu-center" title="Utilisateurs" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+											<span class="menu-icon me-0">
+												<!--begin::Svg Icon | path: icons/duotone/Communication/Group.svg-->
+												<span class="svg-icon svg-icon-2qx">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<path d="M16.0173 9H15.3945C14.2833 9 13.263 9.61425 12.7431 10.5963L12.154 11.7091C12.0645 11.8781 12.1072 12.0868 12.2559 12.2071L12.6402 12.5183C13.2631 13.0225 13.7556 13.6691 14.0764 14.4035L14.2321 14.7601C14.2957 14.9058 14.4396 15 14.5987 15H18.6747C19.7297 15 20.4057 13.8774 19.912 12.945L18.6686 10.5963C18.1487 9.61425 17.1285 9 16.0173 9Z" fill="currentColor"/>
+														<rect opacity="0.3" x="14" y="4" width="4" height="4" rx="2" fill="currentColor"/>
+														<path d="M4.65486 14.8559C5.40389 13.1224 7.11161 12 9 12C10.8884 12 12.5961 13.1224 13.3451 14.8559L14.793 18.2067C15.3636 19.5271 14.3955 21 12.9571 21H5.04292C3.60453 21 2.63644 19.5271 3.20698 18.2067L4.65486 14.8559Z" fill="currentColor"/>
+														<rect opacity="0.3" x="6" y="5" width="6" height="6" rx="3" fill="currentColor"/>
+													</svg>
+												</span>
+												<!--end::Svg Icon-->
 											</span>
-											<!--end::Svg Icon-->
+										</a>
+									</div>
+									<div class="menu-item py-2">
+										<a href="{{path('enquetes.list')}}" class="menu-link {% if app.session.get('menu') == 'enquete' %}active{% endif %} menu-center" title="Enquêtes" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+											<span class="menu-icon me-0">
+												<!--begin::Svg Icon | path: icons/duotone/Communication/Group.svg-->
+												<span class="svg-icon svg-icon-1">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<path d="M21.7 18.9L18.6 15.8C17.9 16.9 16.9 17.9 15.8 18.6L18.9 21.7C19.3 22.1 19.9 22.1 20.3 21.7L21.7 20.3C22.1 19.9 22.1 19.3 21.7 18.9Z" fill="currentColor"/>
+														<path opacity="0.3" d="M11 20C6 20 2 16 2 11C2 6 6 2 11 2C16 2 20 6 20 11C20 16 16 20 11 20ZM11 4C7.1 4 4 7.1 4 11C4 14.9 7.1 18 11 18C14.9 18 18 14.9 18 11C18 7.1 14.9 4 11 4ZM8 11C8 9.3 9.3 8 11 8C11.6 8 12 7.6 12 7C12 6.4 11.6 6 11 6C8.2 6 6 8.2 6 11C6 11.6 6.4 12 7 12C7.6 12 8 11.6 8 11Z" fill="currentColor"/>
+													</svg>
+												</span>
+												<!--end::Svg Icon-->
+											</span>
+										</a>
+									</div>
+									<div class="menu-item py-2">
+										<a href="{{path('sondages.list')}}" class="menu-link {% if app.session.get('menu') == 'sondage' %}active{% endif %} menu-center" title="Sondages" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+											<span class="menu-icon me-0">
+												<!--begin::Svg Icon | path: icons/duotone/Communication/Group.svg-->
+												<span class="svg-icon svg-icon-1">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<path d="M13.0021 10.9128V3.01281C13.0021 2.41281 13.5021 1.91281 14.1021 2.01281C16.1021 2.21281 17.9021 3.11284 19.3021 4.61284C20.7021 6.01284 21.6021 7.91285 21.9021 9.81285C22.0021 10.4129 21.5021 10.9128 20.9021 10.9128H13.0021Z" fill="currentColor"/>
+														<path opacity="0.3" d="M11.0021 13.7128V4.91283C11.0021 4.31283 10.5021 3.81283 9.90208 3.91283C5.40208 4.51283 1.90209 8.41284 2.00209 13.1128C2.10209 18.0128 6.40208 22.0128 11.3021 21.9128C13.1021 21.8128 14.7021 21.3128 16.0021 20.4128C16.5021 20.1128 16.6021 19.3128 16.1021 18.9128L11.0021 13.7128Z" fill="currentColor"/>
+														<path opacity="0.3" d="M21.9021 14.0128C21.7021 15.6128 21.1021 17.1128 20.1021 18.4128C19.7021 18.9128 19.0021 18.9128 18.6021 18.5128L13.0021 12.9128H20.9021C21.5021 12.9128 22.0021 13.4128 21.9021 14.0128Z" fill="currentColor"/>
+													</svg>
+												</span>
+												<!--end::Svg Icon-->
+											</span>
+										</a>
+									</div>
+									<div {% if app.session.get('menu') != 'e-commerce' %}data-kt-menu-trigger="{default: 'click', lg: 'hover'}"{% endif %} data-kt-menu-placement="right-start" class="menu-item py-2">
+										<span class="menu-link {% if app.session.get('menu') == 'entreprise' %}active{% endif %} menu-center">
+											<span class="menu-icon me-0">
+												<!--begin::Svg Icon | path: icons/duotone/Shopping/Cart6.svg-->
+												<span class="svg-icon svg-icon-1">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<path opacity="0.3" d="M18 10V20C18 20.6 18.4 21 19 21C19.6 21 20 20.6 20 20V10H18Z" fill="currentColor"/>
+														<path opacity="0.3" d="M11 10V17H6V10H4V20C4 20.6 4.4 21 5 21H12C12.6 21 13 20.6 13 20V10H11Z" fill="currentColor"/>
+														<path opacity="0.3" d="M10 10C10 11.1 9.1 12 8 12C6.9 12 6 11.1 6 10H10Z" fill="currentColor"/>
+														<path opacity="0.3" d="M18 10C18 11.1 17.1 12 16 12C14.9 12 14 11.1 14 10H18Z" fill="currentColor"/>
+														<path opacity="0.3" d="M14 4H10V10H14V4Z" fill="currentColor"/>
+														<path opacity="0.3" d="M17 4H20L22 10H18L17 4Z" fill="currentColor"/>
+														<path opacity="0.3" d="M7 4H4L2 10H6L7 4Z" fill="currentColor"/>
+														<path d="M6 10C6 11.1 5.1 12 4 12C2.9 12 2 11.1 2 10H6ZM10 10C10 11.1 10.9 12 12 12C13.1 12 14 11.1 14 10H10ZM18 10C18 11.1 18.9 12 20 12C21.1 12 22 11.1 22 10H18ZM19 2H5C4.4 2 4 2.4 4 3V4H20V3C20 2.4 19.6 2 19 2ZM12 17C12 16.4 11.6 16 11 16H6C5.4 16 5 16.4 5 17C5 17.6 5.4 18 6 18H11C11.6 18 12 17.6 12 17Z" fill="currentColor"/>
+													</svg>
+												</span>
+												<!--end::Svg Icon-->
+											</span>
 										</span>
-									</span>
-									<div class="menu-sub menu-sub-dropdown w-225px px-1 py-4">
-										<div class="menu-item">
-											<div class="menu-content">
-												<span class="menu-section fs-5 fw-bolder ps-1 py-1">Réglages</span>
+										<div class="menu-sub menu-sub-indention menu-sub-dropdown menu-sub-dropdown w-225px px-2 py-4">
+											<div class="menu-item">
+												<div class="menu-content">
+													<span class="menu-section fs-5 fw-bolder ps-1 py-1">eCommerce</span>
+												</div>
+											</div>
+											<div class="menu-item">
+												<a class="menu-link" href="general/about.html">
+													<span class="menu-bullet">
+														<span class="bullet bullet-dot"></span>
+													</span>
+													<span class="menu-title">About Us</span>
+												</a>
+											</div>
+											<div class="menu-item">
+												<a class="menu-link" href="general/faq.html">
+													<span class="menu-bullet">
+														<span class="bullet bullet-dot"></span>
+													</span>
+													<span class="menu-title">FAQ</span>
+												</a>
+											</div>
+											<div class="menu-item">
+												<a class="menu-link" href="#" data-kt-page="pro">
+													<span class="menu-bullet">
+														<span class="bullet bullet-dot"></span>
+													</span>
+													<span class="menu-title">Wizard
+													<span class="badge badge-pro badge-light-danger fw-bold fs-9 px-2 py-1 ms-1">Pro</span></span>
+												</a>
+											</div>
+											<div class="menu-item">
+												<a class="menu-link" href="#" data-kt-page="pro">
+													<span class="menu-bullet">
+														<span class="bullet bullet-dot"></span>
+													</span>
+													<span class="menu-title">Invoice
+													<span class="badge badge-pro badge-light-danger fw-bold fs-9 px-2 py-1 ms-1">Pro</span></span>
+												</a>
+											</div>
+											<div class="menu-item">
+												<a class="menu-link" href="#" data-kt-page="pro">
+													<span class="menu-bullet">
+														<span class="bullet bullet-dot"></span>
+													</span>
+													<span class="menu-title">Pricing
+													<span class="badge badge-pro badge-light-danger fw-bold fs-9 px-2 py-1 ms-1">Pro</span></span>
+												</a>
 											</div>
 										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="documentation/base/utilities.html" title="Check out over 200 in-house components, plugins and ready for use solutions" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-												<span class="menu-icon">
-													<!--begin::Svg Icon | path: icons/duotone/Layout/Layout-arrange.svg-->
-													<span class="svg-icon svg-icon-2">
-														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-															<path d="M17.5 11H6.5C4 11 2 9 2 6.5C2 4 4 2 6.5 2H17.5C20 2 22 4 22 6.5C22 9 20 11 17.5 11ZM15 6.5C15 7.9 16.1 9 17.5 9C18.9 9 20 7.9 20 6.5C20 5.1 18.9 4 17.5 4C16.1 4 15 5.1 15 6.5Z" fill="currentColor"/>
-															<path opacity="0.3" d="M17.5 22H6.5C4 22 2 20 2 17.5C2 15 4 13 6.5 13H17.5C20 13 22 15 22 17.5C22 20 20 22 17.5 22ZM4 17.5C4 18.9 5.1 20 6.5 20C7.9 20 9 18.9 9 17.5C9 16.1 7.9 15 6.5 15C5.1 15 4 16.1 4 17.5Z" fill="currentColor"/>
-														</svg>
-													</span>
-													<!--end::Svg Icon-->
+									</div>
+									<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
+										<span class="menu-link menu-center" title="Réglages" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+											<span class="menu-icon me-0">
+												<!--begin::Svg Icon | path: icons/duotone/Communication/More.svg-->
+												<span class="svg-icon svg-icon-1">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<path d="M17.5 11H6.5C4 11 2 9 2 6.5C2 4 4 2 6.5 2H17.5C20 2 22 4 22 6.5C22 9 20 11 17.5 11ZM15 6.5C15 7.9 16.1 9 17.5 9C18.9 9 20 7.9 20 6.5C20 5.1 18.9 4 17.5 4C16.1 4 15 5.1 15 6.5Z" fill="currentColor"/>
+														<path opacity="0.3" d="M17.5 22H6.5C4 22 2 20 2 17.5C2 15 4 13 6.5 13H17.5C20 13 22 15 22 17.5C22 20 20 22 17.5 22ZM4 17.5C4 18.9 5.1 20 6.5 20C7.9 20 9 18.9 9 17.5C9 16.1 7.9 15 6.5 15C5.1 15 4 16.1 4 17.5Z" fill="currentColor"/>
+													</svg>
 												</span>
-												<span class="menu-title">Components</span>
-											</a>
-										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="documentation/getting-started.html" title="Check out the complete documentation" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-												<span class="menu-icon">
-													<!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
-													<span class="svg-icon svg-icon-3">
-														<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-															<path d="M3,16 L5,16 C5.55228475,16 6,15.5522847 6,15 C6,14.4477153 5.55228475,14 5,14 L3,14 L3,12 L5,12 C5.55228475,12 6,11.5522847 6,11 C6,10.4477153 5.55228475,10 5,10 L3,10 L3,8 L5,8 C5.55228475,8 6,7.55228475 6,7 C6,6.44771525 5.55228475,6 5,6 L3,6 L3,4 C3,3.44771525 3.44771525,3 4,3 L10,3 C10.5522847,3 11,3.44771525 11,4 L11,19 C11,19.5522847 10.5522847,20 10,20 L4,20 C3.44771525,20 3,19.5522847 3,19 L3,16 Z" fill="#000000" opacity="0.3" />
-															<path d="M16,3 L19,3 C20.1045695,3 21,3.8954305 21,5 L21,15.2485298 C21,15.7329761 20.8241635,16.200956 20.5051534,16.565539 L17.8762883,19.5699562 C17.6944473,19.7777745 17.378566,19.7988332 17.1707477,19.6169922 C17.1540423,19.602375 17.1383289,19.5866616 17.1237117,19.5699562 L14.4948466,16.565539 C14.1758365,16.200956 14,15.7329761 14,15.2485298 L14,5 C14,3.8954305 14.8954305,3 16,3 Z" fill="#000000" />
-														</svg>
+												<!--end::Svg Icon-->
+											</span>
+										</span>
+										<div class="menu-sub menu-sub-indention menu-sub-dropdown menu-sub-dropdown w-225px px-2 py-4">
+											<div class="menu-item">
+												<div class="menu-content">
+													<span class="menu-section fs-5 fw-bolder ps-1 py-1">Réglages</span>
+												</div>
+											</div>
+											<div class="menu-item">
+												<a class="menu-link" href="documentation/base/utilities.html" title="Check out over 200 in-house components, plugins and ready for use solutions" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+													<span class="menu-icon">
+														<!--begin::Svg Icon | path: icons/duotone/Layout/Layout-arrange.svg-->
+														<span class="svg-icon svg-icon-2">
+															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																<path d="M17.5 11H6.5C4 11 2 9 2 6.5C2 4 4 2 6.5 2H17.5C20 2 22 4 22 6.5C22 9 20 11 17.5 11ZM15 6.5C15 7.9 16.1 9 17.5 9C18.9 9 20 7.9 20 6.5C20 5.1 18.9 4 17.5 4C16.1 4 15 5.1 15 6.5Z" fill="currentColor"/>
+																<path opacity="0.3" d="M17.5 22H6.5C4 22 2 20 2 17.5C2 15 4 13 6.5 13H17.5C20 13 22 15 22 17.5C22 20 20 22 17.5 22ZM4 17.5C4 18.9 5.1 20 6.5 20C7.9 20 9 18.9 9 17.5C9 16.1 7.9 15 6.5 15C5.1 15 4 16.1 4 17.5Z" fill="currentColor"/>
+															</svg>
+														</span>
+														<!--end::Svg Icon-->
 													</span>
-													<!--end::Svg Icon-->
-												</span>
-												<span class="menu-title">Documentation</span>
-											</a>
-										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="#" data-kt-page="pro" title="Build your layout, preview and export HTML for server side integration" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-												<span class="menu-icon">
-													<!--begin::Svg Icon | path: icons/duotone/Shopping/Settings.svg-->
-													<span class="svg-icon svg-icon-3">
-														<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-															<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																<rect opacity="0.200000003" x="0" y="0" width="24" height="24" />
-																<path d="M4.5,7 L9.5,7 C10.3284271,7 11,7.67157288 11,8.5 C11,9.32842712 10.3284271,10 9.5,10 L4.5,10 C3.67157288,10 3,9.32842712 3,8.5 C3,7.67157288 3.67157288,7 4.5,7 Z M13.5,15 L18.5,15 C19.3284271,15 20,15.6715729 20,16.5 C20,17.3284271 19.3284271,18 18.5,18 L13.5,18 C12.6715729,18 12,17.3284271 12,16.5 C12,15.6715729 12.6715729,15 13.5,15 Z" fill="#000000" opacity="0.3" />
-																<path d="M17,11 C15.3431458,11 14,9.65685425 14,8 C14,6.34314575 15.3431458,5 17,5 C18.6568542,5 20,6.34314575 20,8 C20,9.65685425 18.6568542,11 17,11 Z M6,19 C4.34314575,19 3,17.6568542 3,16 C3,14.3431458 4.34314575,13 6,13 C7.65685425,13 9,14.3431458 9,16 C9,17.6568542 7.65685425,19 6,19 Z" fill="#000000" />
-															</g>
-														</svg>
+													<span class="menu-title">Components</span>
+												</a>
+											</div>
+											<div class="menu-item">
+												<a class="menu-link" href="documentation/getting-started.html" title="Check out the complete documentation" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+													<span class="menu-icon">
+														<!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
+														<span class="svg-icon svg-icon-3">
+															<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+																<path d="M3,16 L5,16 C5.55228475,16 6,15.5522847 6,15 C6,14.4477153 5.55228475,14 5,14 L3,14 L3,12 L5,12 C5.55228475,12 6,11.5522847 6,11 C6,10.4477153 5.55228475,10 5,10 L3,10 L3,8 L5,8 C5.55228475,8 6,7.55228475 6,7 C6,6.44771525 5.55228475,6 5,6 L3,6 L3,4 C3,3.44771525 3.44771525,3 4,3 L10,3 C10.5522847,3 11,3.44771525 11,4 L11,19 C11,19.5522847 10.5522847,20 10,20 L4,20 C3.44771525,20 3,19.5522847 3,19 L3,16 Z" fill="#000000" opacity="0.3" />
+																<path d="M16,3 L19,3 C20.1045695,3 21,3.8954305 21,5 L21,15.2485298 C21,15.7329761 20.8241635,16.200956 20.5051534,16.565539 L17.8762883,19.5699562 C17.6944473,19.7777745 17.378566,19.7988332 17.1707477,19.6169922 C17.1540423,19.602375 17.1383289,19.5866616 17.1237117,19.5699562 L14.4948466,16.565539 C14.1758365,16.200956 14,15.7329761 14,15.2485298 L14,5 C14,3.8954305 14.8954305,3 16,3 Z" fill="#000000" />
+															</svg>
+														</span>
+														<!--end::Svg Icon-->
 													</span>
-													<!--end::Svg Icon-->
-												</span>
-												<span class="menu-title">Layout Builder
-												<span class="badge badge-pro badge-light-danger fw-bold fs-9 px-2 py-1 ms-1">Pro</span></span>
-											</a>
-										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="documentation/getting-started/changelog.html">
-												<span class="menu-icon">
-													<!--begin::Svg Icon | path: icons/duotone/Files/Selected-file.svg-->
-													<span class="svg-icon svg-icon-3">
-														<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-															<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																<polygon points="0 0 24 0 24 24 0 24" />
-																<path d="M4.85714286,1 L11.7364114,1 C12.0910962,1 12.4343066,1.12568431 12.7051108,1.35473959 L17.4686994,5.3839416 C17.8056532,5.66894833 18,6.08787823 18,6.52920201 L18,19.0833333 C18,20.8738751 17.9795521,21 16.1428571,21 L4.85714286,21 C3.02044787,21 3,20.8738751 3,19.0833333 L3,2.91666667 C3,1.12612489 3.02044787,1 4.85714286,1 Z M8,12 C7.44771525,12 7,12.4477153 7,13 C7,13.5522847 7.44771525,14 8,14 L15,14 C15.5522847,14 16,13.5522847 16,13 C16,12.4477153 15.5522847,12 15,12 L8,12 Z M8,16 C7.44771525,16 7,16.4477153 7,17 C7,17.5522847 7.44771525,18 8,18 L11,18 C11.5522847,18 12,17.5522847 12,17 C12,16.4477153 11.5522847,16 11,16 L8,16 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
-																<path d="M6.85714286,3 L14.7364114,3 C15.0910962,3 15.4343066,3.12568431 15.7051108,3.35473959 L20.4686994,7.3839416 C20.8056532,7.66894833 21,8.08787823 21,8.52920201 L21,21.0833333 C21,22.8738751 20.9795521,23 19.1428571,23 L6.85714286,23 C5.02044787,23 5,22.8738751 5,21.0833333 L5,4.91666667 C5,3.12612489 5.02044787,3 6.85714286,3 Z M8,12 C7.44771525,12 7,12.4477153 7,13 C7,13.5522847 7.44771525,14 8,14 L15,14 C15.5522847,14 16,13.5522847 16,13 C16,12.4477153 15.5522847,12 15,12 L8,12 Z M8,16 C7.44771525,16 7,16.4477153 7,17 C7,17.5522847 7.44771525,18 8,18 L11,18 C11.5522847,18 12,17.5522847 12,17 C12,16.4477153 11.5522847,16 11,16 L8,16 Z" fill="#000000" fill-rule="nonzero" />
-															</g>
-														</svg>
+													<span class="menu-title">Documentation</span>
+												</a>
+											</div>
+											<div class="menu-item">
+												<a class="menu-link" href="#" data-kt-page="pro" title="Build your layout, preview and export HTML for server side integration" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+													<span class="menu-icon">
+														<!--begin::Svg Icon | path: icons/duotone/Shopping/Settings.svg-->
+														<span class="svg-icon svg-icon-3">
+															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																	<rect opacity="0.200000003" x="0" y="0" width="24" height="24" />
+																	<path d="M4.5,7 L9.5,7 C10.3284271,7 11,7.67157288 11,8.5 C11,9.32842712 10.3284271,10 9.5,10 L4.5,10 C3.67157288,10 3,9.32842712 3,8.5 C3,7.67157288 3.67157288,7 4.5,7 Z M13.5,15 L18.5,15 C19.3284271,15 20,15.6715729 20,16.5 C20,17.3284271 19.3284271,18 18.5,18 L13.5,18 C12.6715729,18 12,17.3284271 12,16.5 C12,15.6715729 12.6715729,15 13.5,15 Z" fill="#000000" opacity="0.3" />
+																	<path d="M17,11 C15.3431458,11 14,9.65685425 14,8 C14,6.34314575 15.3431458,5 17,5 C18.6568542,5 20,6.34314575 20,8 C20,9.65685425 18.6568542,11 17,11 Z M6,19 C4.34314575,19 3,17.6568542 3,16 C3,14.3431458 4.34314575,13 6,13 C7.65685425,13 9,14.3431458 9,16 C9,17.6568542 7.65685425,19 6,19 Z" fill="#000000" />
+																</g>
+															</svg>
+														</span>
+														<!--end::Svg Icon-->
 													</span>
-													<!--end::Svg Icon-->
-												</span>
-												<span class="menu-title">Changelog</span>
-											</a>
+													<span class="menu-title">Layout Builder
+													<span class="badge badge-pro badge-light-danger fw-bold fs-9 px-2 py-1 ms-1">Pro</span></span>
+												</a>
+											</div>
+											<div class="menu-item">
+												<a class="menu-link" href="documentation/getting-started/changelog.html">
+													<span class="menu-icon">
+														<!--begin::Svg Icon | path: icons/duotone/Files/Selected-file.svg-->
+														<span class="svg-icon svg-icon-3">
+															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																	<polygon points="0 0 24 0 24 24 0 24" />
+																	<path d="M4.85714286,1 L11.7364114,1 C12.0910962,1 12.4343066,1.12568431 12.7051108,1.35473959 L17.4686994,5.3839416 C17.8056532,5.66894833 18,6.08787823 18,6.52920201 L18,19.0833333 C18,20.8738751 17.9795521,21 16.1428571,21 L4.85714286,21 C3.02044787,21 3,20.8738751 3,19.0833333 L3,2.91666667 C3,1.12612489 3.02044787,1 4.85714286,1 Z M8,12 C7.44771525,12 7,12.4477153 7,13 C7,13.5522847 7.44771525,14 8,14 L15,14 C15.5522847,14 16,13.5522847 16,13 C16,12.4477153 15.5522847,12 15,12 L8,12 Z M8,16 C7.44771525,16 7,16.4477153 7,17 C7,17.5522847 7.44771525,18 8,18 L11,18 C11.5522847,18 12,17.5522847 12,17 C12,16.4477153 11.5522847,16 11,16 L8,16 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+																	<path d="M6.85714286,3 L14.7364114,3 C15.0910962,3 15.4343066,3.12568431 15.7051108,3.35473959 L20.4686994,7.3839416 C20.8056532,7.66894833 21,8.08787823 21,8.52920201 L21,21.0833333 C21,22.8738751 20.9795521,23 19.1428571,23 L6.85714286,23 C5.02044787,23 5,22.8738751 5,21.0833333 L5,4.91666667 C5,3.12612489 5.02044787,3 6.85714286,3 Z M8,12 C7.44771525,12 7,12.4477153 7,13 C7,13.5522847 7.44771525,14 8,14 L15,14 C15.5522847,14 16,13.5522847 16,13 C16,12.4477153 15.5522847,12 15,12 L8,12 Z M8,16 C7.44771525,16 7,16.4477153 7,17 C7,17.5522847 7.44771525,18 8,18 L11,18 C11.5522847,18 12,17.5522847 12,17 C12,16.4477153 11.5522847,16 11,16 L8,16 Z" fill="#000000" fill-rule="nonzero" />
+																</g>
+															</svg>
+														</span>
+														<!--end::Svg Icon-->
+													</span>
+													<span class="menu-title">Changelog</span>
+												</a>
+											</div>
 										</div>
 									</div>
 								</div>
+								<!--end::Primary menu-->
 							</div>
-							<!--end::Primary menu-->
 						</div>
 						<!--end::Nav-->
 						<!--begin::Footer-->
@@ -481,7 +444,19 @@ Contact: mfofana@aguimaweb.com
 					</div>
 					<!--end::Primary-->
 					<!--begin::Action-->
-						{% block pageSecondary %}{% endblock %}
+					{% block secondaryMenu %}{% endblock %}
+					<!--begin::Aside Toggle-->
+					<button class="btn btn-sm btn-icon bg-body btn-active-primary position-absolute translate-middle mb-4 start-100 end-0 bottom-0 shadow-sm d-none d-lg-flex" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="aside-minimize">
+						<!--begin::Svg Icon | path: icons/duotune/arrows/arr063.svg-->
+						<span class="svg-icon svg-icon-2 rotate-180">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<rect opacity="0.5" x="6" y="11" width="13" height="2" rx="1" fill="currentColor" />
+								<path d="M8.56569 11.4343L12.75 7.25C13.1642 6.83579 13.1642 6.16421 12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75L5.70711 11.2929C5.31658 11.6834 5.31658 12.3166 5.70711 12.7071L11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25C13.1642 17.8358 13.1642 17.1642 12.75 16.75L8.56569 12.5657C8.25327 12.2533 8.25327 11.7467 8.56569 11.4343Z" fill="currentColor" />
+							</svg>
+						</span>
+						<!--end::Svg Icon-->
+					</button>
+					<!--end::Aside Toggle-->
 					<!--end::Action-->
 				</div>
 				<!--end::Aside-->
