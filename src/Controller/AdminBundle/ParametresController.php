@@ -56,12 +56,15 @@ class ParametresController extends AbstractController
         if ($id) $param = $em->getRepository(Parametres::class)->find($id);
 
         $type = $request->get('type');
+        $parent = $request->get('parent');
+        if ($parent) $parent = $em->getRepository(Parametres::class)->find($parent);
         $photo = $request->files->get('photo');
         $libelle = $request->get('libelle');
         $description = $request->get('description') ?? "";
 
         $param->setLibelle($libelle)
             ->setType($type)
+            ->setParent($parent)
             ->setDescription($description)
             ->updatedUserstamps($this->getUser());
         ;
@@ -79,11 +82,18 @@ class ParametresController extends AbstractController
         
         if ($request->isXmlHttpRequest()) {
             $params = [];
+            if ($parent) $type = $parent->getType();
             $listParams = $em->getRepository(Parametres::class)->findByType($type);
             foreach ($listParams as $value) {
                 $temp['id'] = $value->getId();
                 $temp['photo'] = $photo;
                 if ($value->getImage()) $temp['photo'] = $value->getImage()->getTempFile();
+                $temp['children'] = [];
+                foreach ($value->getChildren() as $child) {
+                    $tp['id'] = $child->getId();
+                    $tp['libelle'] = $child->getLibelle();
+                    array_push($temp['children'], $tp);
+                }
                 $temp['libelle'] = $value->getLibelle();
                 array_push($params, $temp);
             }

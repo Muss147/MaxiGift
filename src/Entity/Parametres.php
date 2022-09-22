@@ -52,6 +52,16 @@ class Parametres extends EntityBase
     private $entreprises;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Articles", mappedBy="categorie", cascade={"persist"})
+     */
+    private $articles;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Articles", mappedBy="type", cascade={"persist"})
+     */
+    private $articlesType;
+
+    /**
      * @ORM\Column(type="text")
      */
     private $description;
@@ -60,6 +70,8 @@ class Parametres extends EntityBase
     {
         $this->children = new ArrayCollection();
         $this->entreprises = new ArrayCollection();
+        $this->articles = new ArrayCollection();
+        $this->articlesType = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -181,6 +193,66 @@ class Parametres extends EntityBase
             // set the owning side to null (unless already changed)
             if ($entreprise->getSecteurActivite() === $this) {
                 $entreprise->setSecteurActivite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Articles>
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Articles $article): self
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles[] = $article;
+            $article->setCategorie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Articles $article): self
+    {
+        if ($this->articles->removeElement($article)) {
+            // set the owning side to null (unless already changed)
+            if ($article->getCategorie() === $this) {
+                $article->setCategorie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Articles>
+     */
+    public function getArticlesType(): Collection
+    {
+        return $this->articlesType;
+    }
+
+    public function addArticlesType(Articles $articlesType): self
+    {
+        if (!$this->articlesType->contains($articlesType)) {
+            $this->articlesType[] = $articlesType;
+            $articlesType->setType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticlesType(Articles $articlesType): self
+    {
+        if ($this->articlesType->removeElement($articlesType)) {
+            // set the owning side to null (unless already changed)
+            if ($articlesType->getType() === $this) {
+                $articlesType->setType(null);
             }
         }
 

@@ -10,6 +10,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EnquetesRepository")
+ *     fields={"slug"},
+ *     message="This slug is already in use."
+ * )
  */
 class Enquetes extends EntityBase
 {
