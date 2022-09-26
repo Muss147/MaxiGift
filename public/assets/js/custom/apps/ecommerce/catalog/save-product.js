@@ -119,12 +119,12 @@ var KTAppEcommerceSaveProduct = function () {
                 const value = e.target.value;
 
                 switch (value) {
-                    case '2': {
+                    case 'Pourcentage': {
                         percentageEl.classList.remove('d-none');
                         fixedEl.classList.add('d-none');
                         break;
                     }
-                    case '3': {
+                    case 'Points Fixe': {
                         percentageEl.classList.add('d-none');
                         fixedEl.classList.remove('d-none');
                         break;
@@ -245,42 +245,49 @@ var KTAppEcommerceSaveProduct = function () {
                     'product_name': {
                         validators: {
                             notEmpty: {
-                                message: 'Product name is required'
+                                message: 'Le nom du produit est requis'
                             }
                         }
                     },
-                    'sku': {
+                    'type': {
                         validators: {
                             notEmpty: {
-                                message: 'SKU is required'
+                                message: 'Le type est requis'
                             }
                         }
                     },
-                    'sku': {
+                    'categorie': {
                         validators: {
                             notEmpty: {
-                                message: 'Product barcode is required'
+                                message: 'La catégorie est requise'
                             }
                         }
                     },
-                    'shelf': {
+                    'marque': {
                         validators: {
                             notEmpty: {
-                                message: 'Shelf quantity is required'
+                                message: 'La marque du produit est requise'
                             }
                         }
                     },
                     'price': {
                         validators: {
                             notEmpty: {
-                                message: 'Product base price is required'
+                                message: 'Le nombre de points est requis'
                             }
                         }
                     },
-                    'tax': {
+                    'sku': {
                         validators: {
                             notEmpty: {
-                                message: 'Product tax class is required'
+                                message: 'Le SKU est requis'
+                            }
+                        }
+                    },
+                    'quantite': {
+                        validators: {
+                            notEmpty: {
+                                message: 'La quantité est requise'
                             }
                         }
                     }
@@ -356,7 +363,6 @@ var KTAppEcommerceSaveProduct = function () {
             initTagify();
             initSlider();
             initFormRepeater();
-            initDropzone();
             initConditionsSelect2();
 
             // Handle forms

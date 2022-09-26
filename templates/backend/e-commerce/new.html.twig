@@ -210,7 +210,7 @@
                     <div class="card-body pt-0">
                         <!--begin::Input group-->
                         <!--begin::Label-->
-                        <label class="form-label">Catégories</label>
+                        <label class="required form-label">Catégorie</label>
                         <!--end::Label-->
                         <!--begin::Select2-->
                         <select name="categorie" class="form-select mb-2" data-control="select2" data-hide-search="true" data-placeholder="Selectionner une catégorie">
@@ -238,7 +238,7 @@
                         <!--end::Button-->
                         <div class="type">
                             {% if product.categorie is not null %}
-                            <label class="form-label">Type</label>
+                            <label class="required form-label">Type</label>
                             <select name="type" class="form-select mb-10" data-control="select2" data-hide-search="true" data-placeholder="Selectionner un type">
                                 <option></option>
                                 {% for type in types %}
@@ -280,10 +280,10 @@
                     <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <!--begin::Select store template-->
-                        <label for="kt_ecommerce_add_product_store_template" class="form-label">Selectionner la marque</label>
+                        <label for="kt_ecommerce_add_product_store_template" class="required form-label">Selectionner la marque</label>
                         <!--end::Select store template-->
                         <!--begin::Select2-->
-                        <select name="marque" class="form-select mb-2" data-control="select2" data-hide-search="true" data-placeholder="Select an option" id="kt_ecommerce_add_product_store_template">
+                        <select name="marque" class="form-select mb-2" data-control="select2" data-hide-search="true" data-placeholder="Selectionner une marque" id="kt_ecommerce_add_product_store_template">
                             <option></option>
                             {% for marque in marques %}
                                 <option value="{{marque.id}}" {% if product.marque == marque %}selected{% endif %}>{{marque.libelle}}</option>
@@ -361,6 +361,7 @@
                                 <!--end::Card header-->
                             </div>
                             <!--end::General options-->
+                            {% if product.sku is not null %}
                             <!--begin::Media-->
                             <div class="card card-flush py-4">
                                 <!--begin::Card header-->
@@ -388,6 +389,9 @@
                                                 </div>
                                                 <!--end::Info-->
                                             </div>
+                                            {% for media in product.medias %}
+                                                
+                                            {% endfor %}
                                         </div>
                                         <!--end::Dropzone-->
                                     </div>
@@ -399,6 +403,7 @@
                                 <!--end::Card header-->
                             </div>
                             <!--end::Media-->
+                            {% endif %}
                             <!--begin::Pricing-->
                             <div class="card card-flush py-4">
                                 <!--begin::Card header-->
@@ -416,7 +421,7 @@
                                         <label class="required form-label">Points de base</label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" name="price" class="form-control mb-2" placeholder="Points du product" value="{{product.points}}" />
+                                        <input type="text" name="price" class="form-control mb-2" placeholder="Points du product" onkeypress="return event.charCode>=48 && event.charCode<=57" inputmode="numeric" value="{{product.points}}" />
                                         <!--end::Input-->
                                         <!--begin::Description-->
                                         <div class="text-muted fs-7">Fixez les points du produit.</div>
@@ -437,7 +442,7 @@
                                                 <label class="btn btn-outline btn-outline-dashed btn-active-light-primary active d-flex text-start p-6" data-kt-button="true">
                                                     <!--begin::Radio-->
                                                     <span class="form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1">
-                                                        <input class="form-check-input" type="radio" name="discount_option" value="1" {% if product.remise == "1" %}checked="checked"{% endif %} />
+                                                        <input class="form-check-input" type="radio" name="discount_option" value="Pas de rabais" {% if product.remise == "Pas de rabais" or product.remise is null %}checked="checked"{% endif %} />
                                                     </span>
                                                     <!--end::Radio-->
                                                     <!--begin::Info-->
@@ -455,7 +460,7 @@
                                                 <label class="btn btn-outline btn-outline-dashed btn-active-light-primary d-flex text-start p-6" data-kt-button="true">
                                                     <!--begin::Radio-->
                                                     <span class="form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1">
-                                                        <input class="form-check-input" type="radio" name="discount_option" value="2" {% if product.remise == "2" %}checked="checked"{% endif %} />
+                                                        <input class="form-check-input" type="radio" name="discount_option" value="Pourcentage" {% if product.remise == "Pourcentage" %}checked="checked"{% endif %} />
                                                     </span>
                                                     <!--end::Radio-->
                                                     <!--begin::Info-->
@@ -473,7 +478,7 @@
                                                 <label class="btn btn-outline btn-outline-dashed btn-active-light-primary d-flex text-start p-6" data-kt-button="true">
                                                     <!--begin::Radio-->
                                                     <span class="form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1">
-                                                        <input class="form-check-input" type="radio" name="discount_option" value="3" {% if product.remise == "3" %}checked="checked"{% endif %} />
+                                                        <input class="form-check-input" type="radio" name="discount_option" value="Points Fixe" {% if product.remise == "Points Fixe" %}checked="checked"{% endif %} />
                                                     </span>
                                                     <!--end::Radio-->
                                                     <!--begin::Info-->
@@ -562,8 +567,8 @@
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <div class="d-flex gap-3">
-                                            <input type="number" name="shelf" class="form-control mb-2" placeholder="Disponible" value="{{product.quantite}}" />
-                                            <input type="number" name="warehouse" class="form-control mb-2" placeholder="En stock" value="{{product.stock}}" />
+                                            <input type="number" name="quantite" class="form-control mb-2" placeholder="Disponible" value="{{product.quantite}}" />
+                                            <input type="number" name="stock" class="form-control mb-2" placeholder="En stock" value="{{product.stock}}" />
                                         </div>
                                         <!--end::Input-->
                                         <!--begin::Description-->
@@ -578,8 +583,8 @@
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <div class="form-check form-check-custom form-check-solid mb-2">
-                                            <input class="form-check-input" type="checkbox" value="1" {% if product.backorders %}checked{% endif %} />
-                                            <label class="form-check-label">Oui</label>
+                                            <input id="backorders" name="backorders" class="form-check-input" type="checkbox" value="1" {% if product.backorders %}checked{% endif %} />
+                                            <label class="form-check-label" for="backorders">Oui</label>
                                         </div>
                                         <!--end::Input-->
                                         <!--begin::Description-->
@@ -678,7 +683,7 @@
                                         <!--begin::Input-->
                                         <div class="form-check form-check-custom form-check-solid mb-2">
                                             <input class="form-check-input" type="checkbox" id="kt_ecommerce_add_product_shipping_checkbox" value="1" {% if product.poids %}checked{% endif %} />
-                                            <label class="form-check-label">Ceci est un produit physique</label>
+                                            <label class="form-check-label" for="kt_ecommerce_add_product_shipping_checkbox">Ceci est un produit physique</label>
                                         </div>
                                         <!--end::Input-->
                                         <!--begin::Description-->
@@ -803,7 +808,6 @@
 <script src="{{asset('assets/js/custom/widgets.js')}}"></script>
 <!--end::Page Custom Javascript-->
 <script type="text/javascript">
-
 $('#kt_form_add_categorie').submit(function(e){
     e.preventDefault();
     var self = $(this);
@@ -831,6 +835,21 @@ $('#kt_form_add_categorie').submit(function(e){
         }
     });
 });
+$('select[name=categorie]').change(function() {
+    var categ = $(this).val();
+    var content = '<label class="required form-label">Type</label>'+
+                    '<select name="type" class="form-select mb-10" data-control="select2" data-hide-search="true" data-placeholder="Selectionner un type">'+
+                        '<option></option>';
+    {% for type in types %}
+        if (categ == "{{type.parent.id}}") content += '<option value="{{type.id}}">{{type.libelle}}</option>';
+    {% endfor %}
+    content += '</select>';
+    
+    console.log(content);
+    $('.type').html(content).find('select').select2({
+        minimumResultsForSearch: -1
+    });
+});
 // Init noUIslider
 const initSlider = () => {
     var slider = document.querySelector("#kt_ecommerce_add_product_discount_slider");
@@ -853,10 +872,12 @@ const initSlider = () => {
     });
 }
 // Init DropzoneJS --- more info:
-const initDropzone = () => {
+{% if product.sku is not null %}
+initDropzone();
+function initDropzone() {
     var myDropzone = new Dropzone("#kt_ecommerce_add_product_media", {
-        url: "https://keenthemes.com/scripts/void.php", // Set the url for your upload script location
-        paramName: "file", // The name that will be used to transfer the file
+        url: "{{path('products.medias', {id: product.id})}}", // Set the url for your upload script location
+        paramName: "media", // The name that will be used to transfer the file
         maxFiles: 10,
         maxFilesize: 10, // MB
         addRemoveLinks: true,
@@ -869,6 +890,6 @@ const initDropzone = () => {
         }
     });
 }
-
+{% endif %}
 </script>
 {% endblock %}

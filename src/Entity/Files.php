@@ -49,6 +49,12 @@ class Files extends EntityBase
      */
     private $size;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Articles", inversedBy="medias", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+    */
+    private $article;
+
     
     public function getId(): ?int
     {
@@ -97,6 +103,18 @@ class Files extends EntityBase
     public function setType(?string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getArticle(): ?Articles
+    {
+        return $this->article;
+    }
+
+    public function setArticle(?Articles $article): self
+    {
+        $this->article = $article;
 
         return $this;
     }

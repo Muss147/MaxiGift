@@ -47,7 +47,7 @@ class ArticlesController extends AbstractController
     }
 
     /**
-     * @Route("/e-commerce/nouveau", name="products.new")
+     * @Route("/e-commerce/nouveau-produit", name="products.new")
      */
     public function addProduct(Request $request, FileUploader $fileUploader): Response
     {
@@ -60,8 +60,9 @@ class ArticlesController extends AbstractController
         $categories = $em->getRepository(Parametres::class)->findByType('Categories');
 
         if ($request->isMethod('POST')) {
-            $type = $request->get('type');
+            dd($request);
             $photo = $request->files->get('photo');
+            $type = $request->get('type');
             $libelle = $request->get('libelle');
             $description = $request->get('description') ?? "";
 
@@ -89,6 +90,29 @@ class ArticlesController extends AbstractController
             'marques' => $marques,
             'categories' => $categories,
         ]);
+    }
+
+    /**
+     * @Route("/e-commerce/produit-{id}/add-medias", name="products.medias")
+     */
+    public function addMedias(Request $request, Articles $article, FileUploader $fileUploader): Response
+    {
+        $em = $this->doctrine->getManager();
+        if ($request->isXmlHttpRequest()) {
+            $file = $request->files->get('media');
+            $media = new Files();
+            $fileName = $fileUploader->upload($file);
+            $media->setTempFile($fileName)
+                ->setType('Medias')
+                ->setArticle($article)
+                ->setAlt($article->getNom())
+                ->updatedUserstamps($this->getUser());
+            $media->updatedTimestamps();
+            
+            $em->persist($media);
+            $em->flush();
+        }
+        return new JsonResponse($media->getDossier(), 200);
     }
 
     /**
