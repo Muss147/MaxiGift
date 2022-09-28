@@ -65,7 +65,7 @@ class Articles extends EntityBase
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $valeur;
+    private $valeur_remise;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -307,18 +307,6 @@ class Articles extends EntityBase
         return $this;
     }
 
-    public function getValeur(): ?string
-    {
-        return $this->valeur;
-    }
-
-    public function setValeur(string $valeur): self
-    {
-        $this->valeur = $valeur;
-
-        return $this;
-    }
-
     public function getPoids(): ?string
     {
         return $this->poids;
@@ -495,6 +483,18 @@ class Articles extends EntityBase
     public function setMarque(?Marques $marque): self
     {
         $this->marque = $marque;
+
+        return $this;
+    }
+
+    public function getValeurRemise(): ?string
+    {
+        return $this->valeur_remise;
+    }
+
+    public function setValeurRemise(string $valeur_remise): self
+    {
+        $this->valeur_remise = $valeur_remise;
 
         return $this;
     }

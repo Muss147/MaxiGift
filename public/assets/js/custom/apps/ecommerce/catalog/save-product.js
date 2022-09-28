@@ -110,7 +110,7 @@ var KTAppEcommerceSaveProduct = function () {
 
     // Handle discount options
     const handleDiscount = () => {
-        const discountOptions = document.querySelectorAll('input[name="discount_option"]');
+        const discountOptions = document.querySelectorAll('input[name="remise"]');
         const percentageEl = document.getElementById('kt_ecommerce_add_product_discount_percentage');
         const fixedEl = document.getElementById('kt_ecommerce_add_product_discount_fixed');
 
@@ -307,6 +307,7 @@ var KTAppEcommerceSaveProduct = function () {
         submitButton.addEventListener('click', e => {
             e.preventDefault();
 
+            
             // Validate form before submit
             if (validator) {
                 validator.validate().then(function (status) {
@@ -322,10 +323,10 @@ var KTAppEcommerceSaveProduct = function () {
                             submitButton.removeAttribute('data-kt-indicator');
 
                             Swal.fire({
-                                text: "Form has been successfully submitted!",
+                                text: "Le produit a été enregistré avec succès !",
                                 icon: "success",
                                 buttonsStyling: false,
-                                confirmButtonText: "Ok, got it!",
+                                confirmButtonText: "Ok, compris!",
                                 customClass: {
                                     confirmButton: "btn btn-primary"
                                 }
@@ -334,17 +335,18 @@ var KTAppEcommerceSaveProduct = function () {
                                     // Enable submit button after loading
                                     submitButton.disabled = false;
 
-                                    // Redirect to customers list page
-                                    window.location = form.getAttribute("data-kt-redirect");
+                                    // window.location = form.getAttribute("data-kt-redirect");
                                 }
                             });
+                            // Redirect to customers list page
+                            form.submit();
                         }, 2000);
                     } else {
                         Swal.fire({
-                            html: "Sorry, looks like there are some errors detected, please try again. <br/><br/>Please note that there may be errors in the <strong>General</strong> or <strong>Advanced</strong> tabs",
+                            html: "Désolé, il semble qu'il y ait des erreurs détectées, veuillez réessayer. <br/><br/>Veuillez noter qu'il peut y avoir des erreurs dans les onglets <strong>Général</strong> or <strong>Avancé</strong>",
                             icon: "error",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "Ok, compris!",
                             customClass: {
                                 confirmButton: "btn btn-primary"
                             }
