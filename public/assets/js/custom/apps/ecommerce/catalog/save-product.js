@@ -17,6 +17,7 @@ var KTAppEcommerceSaveProduct = function () {
         elements.forEach(element => {
             // Get quill element
             let quill = document.querySelector(element);
+            var textarea = document.querySelector('textarea[name=description]');
 
             // Break if element not found
             if (!quill) {
@@ -31,11 +32,15 @@ var KTAppEcommerceSaveProduct = function () {
                             header: [1, 2, false]
                         }],
                         ['bold', 'italic', 'underline'],
-                        ['image', 'code-block']
+                        ['image', 'code-block', 'link'],
+                        [{ list: 'ordered' }, { list: 'bullet' }]
                     ]
                 },
                 placeholder: 'Tapez votre texte ici...',
                 theme: 'snow' // or 'bubble'
+            });
+            quill.on('text-change', function() {
+                textarea.value = quill.root.innerHTML;
             });
         });
     }
@@ -160,9 +165,29 @@ var KTAppEcommerceSaveProduct = function () {
         const target = document.getElementById('kt_ecommerce_add_product_status');
         const select = document.getElementById('kt_ecommerce_add_product_status_select');
         const statusClasses = ['bg-success', 'bg-warning', 'bg-danger'];
+        
+        // Handle datepicker
+        const datepicker = document.getElementById('kt_ecommerce_add_product_status_datepicker');
 
-        $(select).on('change', function (e) {
-            const value = e.target.value;
+        // Init flatpickr --- more info: https://flatpickr.js.org/
+        $('#kt_ecommerce_add_product_status_datepicker').flatpickr({
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+        });
+
+        const showDatepicker = () => {
+            datepicker.parentNode.classList.remove('d-none');
+        }
+
+        const hideDatepicker = () => {
+            datepicker.parentNode.classList.add('d-none');
+        }
+
+        changeStatus();
+        $(select).on('change', function() {changeStatus()});
+
+        function changeStatus() {
+            const value = select.value;
 
             switch (value) {
                 case "Publié": {
@@ -192,24 +217,6 @@ var KTAppEcommerceSaveProduct = function () {
                 default:
                     break;
             }
-        });
-
-
-        // Handle datepicker
-        const datepicker = document.getElementById('kt_ecommerce_add_product_status_datepicker');
-
-        // Init flatpickr --- more info: https://flatpickr.js.org/
-        $('#kt_ecommerce_add_product_status_datepicker').flatpickr({
-            enableTime: true,
-            dateFormat: "Y-m-d H:i",
-        });
-
-        const showDatepicker = () => {
-            datepicker.parentNode.classList.remove('d-none');
-        }
-
-        const hideDatepicker = () => {
-            datepicker.parentNode.classList.add('d-none');
         }
     }
 

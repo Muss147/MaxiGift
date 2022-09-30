@@ -257,7 +257,8 @@
                                 <!--begin::Badges-->
                                 {% if product.status == 'Publié' %}<div class="badge badge-light-success">{{product.status}}</div>
                                 {% elseif product.status == 'Programmé' %}<div class="badge badge-light-primary">{{product.status}}</div>
-                                {% elseif product.status == 'Inactif' %}<div class="badge badge-light-danger">{{product.status}}</div>{% endif %}
+                                {% elseif product.status == 'Inactif' %}<div class="badge badge-light-danger">{{product.status}}</div>
+                                {% else %}<div class="badge badge-light-primary">{{product.status}}</div>{% endif %}
                                 <!--end::Badges-->
                             </td>
                             <!--end::Status=-->

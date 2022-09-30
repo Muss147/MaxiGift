@@ -86,6 +86,7 @@ class ArticlesController extends AbstractController
             $height = $request->get('height');
             $length = $request->get('length');
             $array_tags = [];
+            // dd($request);
 
             foreach ($tags as $item) array_push($array_tags, $item->value);
             foreach ($variantes as $value) {
@@ -144,6 +145,7 @@ class ArticlesController extends AbstractController
     public function addMedias(Request $request, Articles $article, FileUploader $fileUploader): Response
     {
         $em = $this->doctrine->getManager();
+        $medias = $em->getRepository(Files::class)->findAll();
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('media');
             $media = new Files();
@@ -151,14 +153,18 @@ class ArticlesController extends AbstractController
             $media->setTempFile($fileName)
                 ->setType('Medias')
                 ->setArticle($article)
-                ->setAlt($article->getNom())
+                ->setAlt($file->getClientOriginalName())
                 ->updatedUserstamps($this->getUser());
             $media->updatedTimestamps();
+
+            // foreach ($medias as $value) {
+            //     if (in_array($value->getAlt(), $remove_files)) 
+            // }
             
             $em->persist($media);
-            $em->flush();
+            // $em->flush();
         }
-        return new JsonResponse($media->getDossier(), 200);
+        return new JsonResponse($media->getId(), 200);
     }
 
     /**
