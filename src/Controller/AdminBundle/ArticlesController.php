@@ -121,13 +121,12 @@ class ArticlesController extends AbstractController
             if ($cover) {
                 $image = new Files();
                 if ($product->getCover()) $image = $em->getRepository(Files::class)->find($product->getCover());
-                $fileName = $fileUploader->upload($photo);
-                $image->setTempFile($fileName)->setAlt($nom)->setType('Articles');
+                $fileName = $fileUploader->upload($cover);
+                $image->setTempFile($fileName)->setAlt($product_name)->setType('Articles');
                 $em->persist($image);
                 $product->setCover($image);
             }
             $em->persist($product);
-            // dd($product);
             $em->flush();
             return $this->redirectToRoute('products.list');
         }
@@ -145,26 +144,29 @@ class ArticlesController extends AbstractController
     public function addMedias(Request $request, Articles $article, FileUploader $fileUploader): Response
     {
         $em = $this->doctrine->getManager();
-        $medias = $em->getRepository(Files::class)->findAll();
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('media');
-            $media = new Files();
-            $fileName = $fileUploader->upload($file);
-            $media->setTempFile($fileName)
-                ->setType('Medias')
-                ->setArticle($article)
-                ->setAlt($file->getClientOriginalName())
-                ->updatedUserstamps($this->getUser());
-            $media->updatedTimestamps();
-
-            // foreach ($medias as $value) {
-            //     if (in_array($value->getAlt(), $remove_files)) 
-            // }
-            
-            $em->persist($media);
-            // $em->flush();
+            if ($file) {
+                $media = new Files();
+                $fileName = $fileUploader->upload($file);
+                $media->setTempFile($fileName)
+                    ->setType('Medias')
+                    ->setArticle($article)
+                    ->setAlt($file->getClientOriginalName())
+                    ->updatedUserstamps($this->getUser());
+                $media->updatedTimestamps();
+                $em->persist($media);
+            }
+            else {
+                $medias = $em->getRepository(Files::class)->findByType('Medias');
+                $alt = $request->get('file_name');
+                foreach ($medias as $value) {
+                    if ($value->getAlt() == $alt) $em->remove($value);
+                }
+            }
+            $em->flush();
         }
-        return new JsonResponse($media->getId(), 200);
+        return new JsonResponse(true, 200);
     }
 
     /**
