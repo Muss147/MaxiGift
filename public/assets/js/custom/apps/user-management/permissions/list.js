@@ -5,7 +5,6 @@ var KTUsersPermissionsList = function () {
     // Shared variables
     var datatable;
     var table;
-    const formDelete = document.querySelector('#kt_delete_permission_form');
 
     // Init add schedule modal
     var initPermissionsList = () => {
@@ -49,6 +48,7 @@ var KTUsersPermissionsList = function () {
 
                 // Select parent row
                 const parent = e.target.closest('tr');
+                const formDelete = e.target.closest('form');
 
                 // Get permission name
                 const permissionName = parent.querySelectorAll('td')[0].innerText;

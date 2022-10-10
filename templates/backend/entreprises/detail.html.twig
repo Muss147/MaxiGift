@@ -83,7 +83,7 @@
                         <div class="d-flex flex-center flex-column mb-5">
                             <!--begin::Avatar-->
                             <div class="symbol symbol-100px symbol-circle mb-7">
-                                <img src="{{asset('uploads/images/'~ entreprise.logo.tempFile|default('fin006.svg'))}}" alt="{{entreprise.nom}}">
+                                <img src="{{asset('uploads/images/'~ entreprise.logo.tempFile|default('blank-image.svg'))}}" alt="{{entreprise.nom}}">
                             </div>
                             <!--end::Avatar-->
                             <!--begin::Name-->
@@ -391,9 +391,9 @@
                                                 <!--begin::Image input wrapper-->
                                                 <div class="mt-1">
                                                     <!--begin::Image input-->
-                                                    <div class="image-input image-input-outline" data-kt-image-input="true" style="background-image: url({{asset('assets/media/icons/fin006.svg')}})">
+                                                    <div class="image-input image-input-outline" data-kt-image-input="true" style="background-image: url({{asset('assets/media/icons/blank-image.svg')}})">
                                                         <!--begin::Preview existing avatar-->
-                                                        <div class="image-input-wrapper w-125px h-125px" style="background-image: url({{asset('uploads/images/'~ entreprise.logo.tempFile|default('fin006.svg'))}})"></div>
+                                                        <div class="image-input-wrapper w-125px h-125px" style="background-image: url({{asset('uploads/images/'~ entreprise.logo.tempFile|default('blank-image.svg'))}})"></div>
                                                         <!--end::Preview existing avatar-->
                                                         <!--begin::Edit-->
                                                         <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="" data-bs-original-title="Change avatar">

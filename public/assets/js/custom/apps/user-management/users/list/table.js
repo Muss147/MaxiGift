@@ -130,7 +130,6 @@ var KTUsersList = function () {
     var handleDeleteRows = () => {
         // Select all delete buttons
         const deleteButtons = table.querySelectorAll('[data-kt-users-table-filter="delete_row"]');
-        const formDelete = document.querySelector('#kt_delete_admin_form');
 
         deleteButtons.forEach(d => {
             // Delete button on click
@@ -138,6 +137,7 @@ var KTUsersList = function () {
                 e.preventDefault();
 
                 // Select parent row
+                const formDelete = e.target.closest('form');
                 const parent = e.target.closest('tr');
 
                 // Get user name

@@ -126,7 +126,7 @@ class AdminsController extends AbstractController
                 $image = new Files();
                 if ($admin->getAvatar()) $image = $em->getRepository(Files::class)->find($admin->getAvatar()->getId());
                 $fileName = $fileUploader->upload($file);
-                $image->setTempFile($fileName)->setAlt($firstname." ".$lastname);
+                $image->setTempFile($fileName)->setAlt($request->get("fname")." ".$request->get("lname"));
                 $em->persist($image);
                 $admin->setAvatar($image);
             }

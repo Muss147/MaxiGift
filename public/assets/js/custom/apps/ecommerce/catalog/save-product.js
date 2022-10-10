@@ -127,16 +127,22 @@ var KTAppEcommerceSaveProduct = function () {
                     case 'Pourcentage': {
                         percentageEl.classList.remove('d-none');
                         fixedEl.classList.add('d-none');
+                        $('#kt_ecommerce_add_product_discount_percentage input[name=valeur_remise]').prop('disabled', false);
+                        $('#kt_ecommerce_add_product_discount_fixed input[name=valeur_remise]').prop('disabled', true);
                         break;
                     }
                     case 'Points Fixe': {
                         percentageEl.classList.add('d-none');
                         fixedEl.classList.remove('d-none');
+                        $('#kt_ecommerce_add_product_discount_percentage input[name=valeur_remise]').prop('disabled', true);
+                        $('#kt_ecommerce_add_product_discount_fixed input[name=valeur_remise]').prop('disabled', false);
                         break;
                     }
                     default: {
                         percentageEl.classList.add('d-none');
                         fixedEl.classList.add('d-none');
+                        $('#kt_ecommerce_add_product_discount_percentage input[name=valeur_remise]').prop('disabled', true);
+                        $('#kt_ecommerce_add_product_discount_fixed input[name=valeur_remise]').prop('disabled', true);
                         break;
                     }
                 }

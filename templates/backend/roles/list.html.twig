@@ -104,7 +104,7 @@
                                 {% if role.allAdminAccess %}Tous les droits Admin
                                 {% else %}
                                     {% for permis in role.permissions %}
-                                        {% if permis.autorisation.core %}{% set core = true %}{% endif %}
+                                        {% if permis.autorisation and permis.autorisation.core %}{% set core = true %}{% endif %}
                                     {% endfor %}
                                     {% if core is defined %}Quelques droits Admin
                                     {% else %}Aucun droit Admin{% endif %}
@@ -113,7 +113,7 @@
                             {% for permis in role.permissions|filter(p => p.lecture == true or p.creation == true or p.ecriture == true)|slice(0, 4) %}
                             <div class="d-flex align-items-center py-2">
                                 <span class="bullet bg-primary me-3"></span>
-                                {% if permis.lecture %}Lecture{% endif %}{% if permis.creation %}{% if permis.lecture %}, {% endif %}Création{% endif %}{% if permis.ecriture %}{% if permis.lecture or permis.creation %} et {% endif %}Écriture{% endif %} de {{permis.autorisation.libelle}}
+                                {% if permis.lecture %}Lecture{% endif %}{% if permis.creation %}{% if permis.lecture %}, {% endif %}Création{% endif %}{% if permis.ecriture %}{% if permis.lecture or permis.creation %} et {% endif %}Écriture{% endif %} de {{permis.autorisation.libelle|default(null)}}
                             </div>
                             {% endfor %}
                             {% if role.permissions|filter(p => p.lecture == true or p.creation == true or p.ecriture == true)|length > 4 %}

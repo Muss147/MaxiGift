@@ -75,12 +75,13 @@ class ArticlesController extends AbstractController
             $description = $request->get('description') ?? "";
             $price = (int) $request->get('price');
             $remise = $request->get('remise');
-            $valeur_remise = (int) $request->get('valeur_remise');
+            $valeur_remise = (int) $request->get('valeur_remise') ?? null;
             $sku = $request->get('sku');
             $quantite = (int) $request->get('quantite');
             $stock = (int) $request->get('stock');
             $variantes = $request->get('variantes') ?? [];
             $backorders = $request->get('backorders') ?? false;
+            $poidsPhysique = $request->get('poidsPhysique') ?? false;
             $weight = $request->get('weight');
             $width = $request->get('width');
             $height = $request->get('height');
@@ -110,6 +111,7 @@ class ArticlesController extends AbstractController
                 ->setQuantite($quantite)
                 ->setStock($stock)
                 ->setBackorders($backorders)
+                ->setPoidsPhysique($poidsPhysique)
                 ->setPoids($weight)
                 ->setLargeur($width)
                 ->setHauteur($height)

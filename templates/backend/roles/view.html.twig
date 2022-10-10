@@ -103,7 +103,7 @@
                                 {% if role.allAdminAccess %}Tous les droits Admin
                                 {% else %}
                                     {% for permis in role.permissions %}
-                                        {% if permis.autorisation.core %}{% set core = true %}{% endif %}
+                                        {% if permis.autorisation and permis.autorisation.core %}{% set core = true %}{% endif %}
                                     {% endfor %}
                                     {% if core is defined %}Quelques droits Admin
                                     {% else %}Aucun droit Admin{% endif %}
@@ -112,7 +112,7 @@
                             {% for permis in role.permissions|filter(p => p.lecture == true or p.creation == true or p.ecriture == true)|slice(0, 4) %}
                             <div class="d-flex align-items-center py-2">
                                 <span class="bullet bg-primary me-3"></span>
-                                {% if permis.lecture %}Lecture{% endif %}{% if permis.creation %}{% if permis.lecture %}, {% endif %}Création{% endif %}{% if permis.ecriture %}{% if permis.lecture or permis.creation %} et {% endif %}Écriture{% endif %} de {{permis.autorisation.libelle}}
+                                {% if permis.lecture %}Lecture{% endif %}{% if permis.creation %}{% if permis.lecture %}, {% endif %}Création{% endif %}{% if permis.ecriture %}{% if permis.lecture or permis.creation %} et {% endif %}Écriture{% endif %} de {{permis.autorisation.libelle|default(null)}}
                             </div>
                             {% endfor %}
                             {% if role.permissions|filter(p => p.lecture == true or p.creation == true or p.ecriture == true)|length > 4 %}
@@ -219,13 +219,13 @@
                                                         <!--end::Table row-->
                                                         {% set autorisList = [] %}
                                                         {% for permis in role.permissions %}
-                                                        {% set autorisList = autorisList|merge([permis.autorisation.id]) %}
+                                                        {% set autorisList = autorisList|merge([permis.autorisation.id|default(null)]) %}
                                                         <!--begin::Table row-->
                                                         <tr>
                                                             <!--begin::Label-->
                                                             <td class="text-gray-800">
-                                                                {{permis.autorisation.libelle}}
-                                                                <input type="hidden" name="autoris[]" value="{{permis.autorisation.id}}">
+                                                                {{permis.autorisation.libelle|default(null)}}
+                                                                <input type="hidden" name="autoris[]" value="{{permis.autorisation.id|default(null)}}">
                                                             </td>
                                                             <!--end::Label-->
                                                             <!--begin::Input group-->
@@ -374,7 +374,7 @@
                                                 <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
                                                     <a href="{{path('admins.view', {id: admin.id})}}">
                                                         <div class="symbol-label">
-                                                            <img src="{{asset('assets/media/avatars/150-6.jpg')}}" alt="Emma Smith" class="w-100">
+                                                            <img src="{{asset('uploads/images/'~ admin.avatar.tempFile|default('blank.png'))}}" alt="Emma Smith" class="w-100">
                                                         </div>
                                                     </a>
                                                 </div>

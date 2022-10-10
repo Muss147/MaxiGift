@@ -8,7 +8,12 @@
 <link href="{{asset('assets/plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet" type="text/css" />
 <!--end::Page Vendor Stylesheets-->
 
-<style type="text/css')}}">
+<style type="text/css">
+.dz-image img {
+    width: 120px;
+    height: auto;
+    object-fit: cover;
+}
 </style>
 {% endblock %}
 
@@ -518,7 +523,7 @@
                                     </div>
                                     <!--end::Input group-->
                                     <!--begin::Input group-->
-                                    <div class="d-none mb-10 fv-row" id="kt_ecommerce_add_product_discount_percentage">
+                                    <div class="{% if product.remise != "Pourcentage" %}d-none {% endif %}mb-10 fv-row" id="kt_ecommerce_add_product_discount_percentage">
                                         <!--begin::Label-->
                                         <label class="form-label">Définir le pourcentage de remise</label>
                                         <!--end::Label-->
@@ -538,7 +543,7 @@
                                     </div>
                                     <!--end::Input group-->
                                     <!--begin::Input group-->
-                                    <div class="d-none mb-10 fv-row" id="kt_ecommerce_add_product_discount_fixed">
+                                    <div class="{% if product.remise != "Points Fixe" %}d-none {% endif %}mb-10 fv-row" id="kt_ecommerce_add_product_discount_fixed">
                                         <!--begin::Label-->
                                         <label class="form-label">Points réduits fixe</label>
                                         <!--end::Label-->
@@ -709,7 +714,7 @@
                                     <div class="fv-row">
                                         <!--begin::Input-->
                                         <div class="form-check form-check-custom form-check-solid mb-2">
-                                            <input class="form-check-input" type="checkbox" id="kt_ecommerce_add_product_shipping_checkbox" value="1" {% if product.poids %}checked{% endif %} />
+                                            <input class="form-check-input" type="checkbox" name="poidsPhysique" id="kt_ecommerce_add_product_shipping_checkbox" value="1" {% if product.poidsPhysique %}checked{% endif %} />
                                             <label class="form-check-label" for="kt_ecommerce_add_product_shipping_checkbox">Ceci est un produit physique</label>
                                         </div>
                                         <!--end::Input-->
@@ -719,7 +724,7 @@
                                     </div>
                                     <!--end::Input group-->
                                     <!--begin::Shipping form-->
-                                    <div id="kt_ecommerce_add_product_shipping" class="d-none mt-10">
+                                    <div id="kt_ecommerce_add_product_shipping" class="{% if not product.poidsPhysique %}d-none {% endif %}mt-10">
                                         <!--begin::Input group-->
                                         <div class="mb-10 fv-row">
                                             <!--begin::Label-->
@@ -884,7 +889,7 @@ const initSlider = () => {
     var input = document.querySelector('#valeur_remise');
 
     noUiSlider.create(slider, {
-        start: [{{product.valeur|default(10)}}],
+        start: [{{product.valeurRemise|default(10)}}],
         connect: true,
         range: {
             "min": 1,
@@ -934,14 +939,23 @@ function initDropzone() {
             }
         },
         init: function () {
+            const data = [];
             {% for media in product.medias %}
-                var mockFile = { name: "{{media.alt}}", size: "{{media.size}}", tempFile: "{{media.tempFile}}" };
-                $.each(mockFiles, function(index, mockFile) {
-                    var thumbURL = "{{asset('uploads/images/')}}";
-                    this.addFile.call(this, mockFile);
-                    this.options.thumbnail.call(this, mockFile, "{{asset('uploads/images/')}}"+mockFile.tempFile);
+                data.push({
+                    'name': "{{media.alt}}",
+                    'size': "{{media.size}}",
+                    'url': "{{asset('uploads/images/'~ media.tempFile)}}"
                 });
             {% endfor %}
+            let oldDropzone = this;
+            $.each(data, function (key, value) {
+                const mockFile = {name: value.name, size: value.size};
+                oldDropzone.files[key] = value.name;
+                oldDropzone.options.addedfile.call(oldDropzone, mockFile);
+                oldDropzone.options.thumbnail.call(oldDropzone, mockFile, value.url);
+                // mockFile.previewElement.classList.add('dz-success');
+                mockFile.previewElement.classList.add('dz-complete');
+            });
         }
     });
 }

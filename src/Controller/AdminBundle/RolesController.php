@@ -39,7 +39,7 @@ class RolesController extends AbstractController
      */
     public function viewRole(Request $request, Roles $role, Session $session): Response
     {
-        $session->set('menu', 'role');
+        $session->set('menu', 'admin');
         return $this->render('backend/roles/view.html.twig', [
             'role' => $role
         ]);
@@ -50,7 +50,7 @@ class RolesController extends AbstractController
      */
     public function rolesList(Request $request, Session $session): Response
     {
-        $session->set('menu', 'role');
+        $session->set('menu', 'admin');
         $em = $this->doctrine->getManager();
         $listRoles = $em->getRepository(Roles::class)->findBy([], ['libelle' => 'ASC']);
         $autorisations = $em->getRepository(Autorisations::class)->findAll();
@@ -71,8 +71,12 @@ class RolesController extends AbstractController
         $response['description'] = $role->getDescription() ?? "";
         $response['permissions'] = [];
         foreach ($role->getPermissions() as $permis) {
-            $permission['autoris']['id'] = $permis->getAutorisation()->getId();
-            $permission['autoris']['libelle'] = $permis->getAutorisation()->getLibelle();
+            $permission['autoris']['id'] = "";
+            $permission['autoris']['libelle'] = "";
+            if ($permis->getAutorisation()) {
+                $permission['autoris']['id'] = $permis->getAutorisation()->getId();
+                $permission['autoris']['libelle'] = $permis->getAutorisation()->getLibelle();
+            }
             $permission['lecture'] = $permis->isLecture();
             $permission['ecriture'] = $permis->isEcriture();
             $permission['creation'] = $permis->isCreation();
@@ -137,7 +141,7 @@ class RolesController extends AbstractController
      */
     public function autorisations(Request $request, Session $session): Response
     {
-        $session->set('menu', 'autorisations');
+        $session->set('menu', 'admin');
         $em = $this->doctrine->getManager();
         $id = $request->get('id');
         $autorisation = new Autorisations();

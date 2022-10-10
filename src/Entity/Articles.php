@@ -68,6 +68,11 @@ class Articles extends EntityBase
     private $valeur_remise;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $poidsPhysique = false;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $poids;
@@ -495,6 +500,18 @@ class Articles extends EntityBase
     public function setValeurRemise(string $valeur_remise): self
     {
         $this->valeur_remise = $valeur_remise;
+
+        return $this;
+    }
+
+    public function isPoidsPhysique(): ?bool
+    {
+        return $this->poidsPhysique;
+    }
+
+    public function setPoidsPhysique(bool $poidsPhysique): self
+    {
+        $this->poidsPhysique = $poidsPhysique;
 
         return $this;
     }

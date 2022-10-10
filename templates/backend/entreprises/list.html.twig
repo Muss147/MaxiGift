@@ -120,9 +120,9 @@
                                     <label class="form-label fs-5 fw-bold mb-3">Secteur d'Activité:</label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <select class="form-select form-select-solid fw-bolder select2-hidden-accessible" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-kt-customer-table-filter="secteur" data-dropdown-parent="#kt-toolbar-filter" data-select2-id="select2-data-7-i9sr" tabindex="-1" aria-hidden="true">
-                                        <option data-select2-id="select2-data-9-hy3k"></option>
-                                        {% for secteur in secteursActivite %}<option value="{{secteur.id}}">{{secteur.libelle}}</option>{% endfor %}
+                                    <select class="form-select form-select-solid fw-bolder select2-hidden-accessible" data-kt-select2="true" data-placeholder="Secteur d'activité" data-allow-clear="true" data-hide-search="true" data-kt-customer-table-filter="secteur" data-dropdown-parent="#kt-toolbar-filter" data-select2-id="select2-data-7-i9sr" tabindex="-1" aria-hidden="true">
+                                        <option></option>
+                                        {% for secteur in secteursActivite %}<option value="{{secteur.libelle}}">{{secteur.libelle}}</option>{% endfor %}
                                     </select>
                                     <!--end::Input-->
                                 </div>
@@ -130,30 +130,20 @@
                                 <!--begin::Input group-->
                                 <div class="mb-10">
                                     <!--begin::Label-->
-                                    <label class="form-label fs-5 fw-bold mb-3">Type de compte:</label>
+                                    <label class="form-label fs-5 fw-bold mb-3">Ville:</label>
                                     <!--end::Label-->
-                                    <!--begin::Options-->
-                                    <div class="d-flex flex-column flex-wrap fw-bold" data-kt-customer-table-filter="compte_type">
-                                        <!--begin::Option-->
-                                        <label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
-                                            <input class="form-check-input" type="radio" name="compte_type" value="all" checked="checked">
-                                            <span class="form-check-label text-gray-600">Les deux</span>
-                                        </label>
-                                        <!--end::Option-->
-                                        <!--begin::Option-->
-                                        <label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
-                                            <input class="form-check-input" type="radio" name="compte_type" value="Assisté">
-                                            <span class="form-check-label text-gray-600">Assisté</span>
-                                        </label>
-                                        <!--end::Option-->
-                                        <!--begin::Option-->
-                                        <label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
-                                            <input class="form-check-input" type="radio" name="compte_type" value="Libre">
-                                            <span class="form-check-label text-gray-600">Libre</span>
-                                        </label>
-                                        <!--end::Option-->
-                                    </div>
-                                    <!--end::Options-->
+                                    <!--begin::Input-->
+                                    <select class="form-select form-select-solid fw-bolder select2-hidden-accessible" data-kt-select2="true" data-placeholder="Ville" data-allow-clear="true" data-hide-search="true" data-kt-customer-table-filter="ville" data-dropdown-parent="#kt-toolbar-filter" data-select2-id="select2-data-8-i9sr" tabindex="-1" aria-hidden="true">
+                                        <option></option>
+                                        {% set newArray = [] %}
+                                        {% for entreprise in entreprises %}
+                                            {% if entreprise.ville not in newArray %}
+                                                <option value="{{entreprise.ville}}">{{entreprise.ville}}</option>
+                                                {% set newArray = newArray|merge([entreprise.ville]) %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
                                 <!--begin::Actions-->
@@ -213,10 +203,10 @@
                                             <input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_customers_table .form-check-input" value="1">
                                         </div>
                                     </th>
-                                    <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Customer Name: activate to sort column ascending" style="width: 145.469px;">Raison Sociale</th>
+                                    <th class="min-w-150px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Customer Name: activate to sort column ascending" style="width: 145.469px;">Raison Sociale</th>
                                     <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 172.312px;">Secteur d'Activité</th>
                                     <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Company: activate to sort column ascending" style="width: 151.375px;">Ville</th>
-                                    <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Payment Method: activate to sort column ascending" style="width: 145.469px;">Sondages</th>
+                                    <th class="sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Payment Method: activate to sort column ascending" style="">Sondages</th>
                                     <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Created Date: activate to sort column ascending" style="width: 178.359px;">Date de Création</th>
                                     <th class="text-end min-w-70px sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 109.266px;">Actions</th>
                                 </tr>
@@ -236,8 +226,10 @@
                                     <!--end::Checkbox-->
                                     <!--begin::Name=-->
                                     <td>
-                                        <a href="{{path('entreprises.view', {id: entreprise.id})}}" class="text-gray-800 text-hover-primary mb-1">
-                                            <img src="{{asset('uploads/images/'~ entreprise.logo.tempFile|default('fin006.svg'))}}" class="w-35px me-3" alt="{{entreprise.nom}}">
+                                        <a href="{{path('entreprises.view', {id: entreprise.id})}}" class="d-flex align-items-center text-gray-800 text-hover-primary mb-1 symbol symbol-50px">
+                                            <span class="symbol-label me-3">
+                                                <img src="{{asset('uploads/images/'~ entreprise.logo.tempFile|default('blank-image.png'))}}" class="w-35px" alt="{{entreprise.nom}}">
+                                            </span>
                                             {{entreprise.nom}}
                                         </a>
                                     </td>
@@ -359,8 +351,8 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <select class="form-select form-select-solid fw-bolder select2-hidden-accessible" name="secteur" data-kt-select2="true" data-placeholder="Secteur d'activité" data-allow-clear="true" data-kt-user-table-filter="role" data-hide-search="true" data-select2-id="select2-data-7-s4g1" tabindex="-1" aria-hidden="true">
-                                        <option data-select2-id="select2-data-9-16h0"></option>
-                                        {% for secteur in secteursActivite %}<option value="{{secteur.id}}" data-select2-id="select2-data-8-pali">{{secteur.libelle}}</option>{% endfor %}
+                                        <option></option>
+                                        {% for secteur in secteursActivite %}<option value="{{secteur.id}}">{{secteur.libelle}}</option>{% endfor %}
                                     </select>
                                     <!--end::Input-->
                                 </div>

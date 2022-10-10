@@ -5,7 +5,7 @@ var KTCustomersList = function () {
     // Define shared variables
     var datatable;
     var filterSecteur;
-    var filterCompte;
+    var filterVille;
     var table
 
     // Private functions
@@ -49,29 +49,17 @@ var KTCustomersList = function () {
     var handleFilterDatatable = () => {
         // Select filter options
         filterSecteur = $('[data-kt-customer-table-filter="secteur"]');
-        filterCompte = document.querySelectorAll('[data-kt-customer-table-filter="compte_type"] [name="compte_type"]');
+        filterVille = $('[data-kt-customer-table-filter="ville"]');
         const filterButton = document.querySelector('[data-kt-customer-table-filter="filter"]');
 
         // Filter datatable on submit
         filterButton.addEventListener('click', function () {
             // Get filter values
             const secteurValue = filterSecteur.val();
-            let compteValue = '';
-
-            // Get payment value
-            filterCompte.forEach(r => {
-                if (r.checked) {
-                    compteValue = r.value;
-                }
-
-                // Reset payment value if "All" is selected
-                if (compteValue === 'all') {
-                    compteValue = '';
-                }
-            });
+            const villeValue = filterVille.val();
 
             // Build filter string from filter options
-            const filterString = secteurValue + ' ' + compteValue;
+            const filterString = secteurValue + ' ' + villeValue;
 
             // Filter datatable --- official docs reference: https://datatables.net/reference/api/search()
             datatable.search(filterString).draw();
@@ -147,11 +135,11 @@ var KTCustomersList = function () {
 
         // Reset datatable
         resetButton.addEventListener('click', function () {
-            // Reset month
+            // Reset secteur
             filterSecteur.val(null).trigger('change');
 
-            // Reset payment type
-            filterCompte[0].checked = true;
+            // Reset ville
+            filterVille.val(null).trigger('change');
 
             // Reset datatable --- official docs reference: https://datatables.net/reference/api/search()
             datatable.search('').draw();
