@@ -130,6 +130,11 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private $participations;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $codeParainage;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Users", mappedBy="parrain", cascade={"remove"})
      */
     private $filleuls;
@@ -647,6 +652,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCategorieSP(?string $categorieSP): self
     {
         $this->categorieSP = $categorieSP;
+
+        return $this;
+    }
+
+    public function getCodeParainage(): ?string
+    {
+        return $this->codeParainage;
+    }
+
+    public function setCodeParainage(?string $codeParainage): self
+    {
+        $this->codeParainage = $codeParainage;
 
         return $this;
     }

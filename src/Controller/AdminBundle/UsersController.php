@@ -4,6 +4,7 @@ namespace App\Controller\AdminBundle;
 
 use App\Entity\Users;
 use App\Entity\Entreprises;
+use App\Entity\Enquetes;
 use App\Entity\Roles;
 use App\Entity\Files;
 use App\Service\FileUploader;
@@ -52,8 +53,10 @@ class UsersController extends AbstractController
         $session->set('menu', 'user');
         // if ($user == $this->getUser()) $session->set('menu', 'account');
         $em = $this->doctrine->getManager();
+        $enquetes = $em->getRepository(Enquetes::class)->findAll();
         return $this->render('backend/users/view.html.twig', [
             'user' => $user,
+            'enquetes' => $enquetes
         ]);
     }
 

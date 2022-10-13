@@ -72,7 +72,7 @@
                                 <!--begin::Stats-->
                                 <div class="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
                                     <div class="fs-4 fw-bolder text-gray-700">
-                                        <span class="w-75px">243</span>
+                                        <span class="w-75px" data-kt-countup="true" data-kt-countup-value="{{user.infoProfil|length}}">0</span>
                                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
                                         <span class="svg-icon svg-icon-3 svg-icon-success">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -88,7 +88,8 @@
                                 <!--begin::Stats-->
                                 <div class="border border-gray-300 border-dashed rounded py-3 px-3 mx-4 mb-3">
                                     <div class="fs-4 fw-bolder text-gray-700">
-                                        <span class="w-50px">{{user.infoProfil|length}}</span>
+                                        {% set wait = 0 %}
+                                        <span class="w-50px" data-kt-countup="true" data-kt-countup-value="{% for info in user.infoProfil|filter(i => i.status == false) %}{{wait+1}}{% endfor %}">0</span>
                                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr065.svg-->
                                         <span class="svg-icon svg-icon-3 svg-icon-danger">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -104,7 +105,8 @@
                                 <!--begin::Stats-->
                                 <div class="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
                                     <div class="fs-4 fw-bolder text-gray-700">
-                                        <span class="w-50px">{{user.infoProfil|length}}</span>
+                                        {% set valid = 0 %}
+                                        <span class="w-50px" data-kt-countup="true" data-kt-countup-value="{% for info in user.infoProfil|filter(i => i.status == true) %}{{valid+1}}{% endfor %}">0</span>
                                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
                                         <span class="svg-icon svg-icon-3 svg-icon-success">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -168,7 +170,7 @@
                                 <!--begin::Details item-->
                                 <!--begin::Details item-->
                                 <div class="fw-bolder mt-5">Code Parrainage</div>
-                                <div class="text-gray-600"></div>
+                                <div class="text-gray-600">{{user.codeParainage}}</div>
                                 <!--begin::Details item-->
                             </div>
                         </div>
@@ -475,7 +477,7 @@
                                 <!--begin::Card title-->
                                 <div class="card-title flex-column">
                                     <h2 class="mb-1">Info Profil</h2>
-                                    <div class="fs-6 fw-bold text-muted">Pour tous les mois de l'année</div>
+                                    <div class="fs-6 fw-bold text-muted">Liste des enquêtes auquelles l'abonné a participé</div>
                                 </div>
                                 <!--end::Card title-->
                                 <!--begin::Card toolbar-->
@@ -484,10 +486,10 @@
                                     <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
                                         <div class="d-flex justify-content-between w-100 mt-auto mb-2">
                                             <span class="fw-bold fs-6 text-gray-400">Profil Complété à</span>
-                                            <span class="fw-bolder fs-6">50%</span>
+                                            <span class="fw-bolder fs-6">{{(user.infoProfil|length * 100) / enquetes|length}}%</span>
                                         </div>
                                         <div class="h-5px mx-3 w-100 bg-light mb-3">
-                                            <div class="bg-success rounded h-5px" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="bg-success rounded h-5px" role="progressbar" style="width: {{(user.infoProfil|length * 100) / enquetes|length}}%;" aria-valuenow="{{(user.infoProfil|length * 100) / enquetes|length}}" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
                                     <!--end::Progress-->
@@ -497,53 +499,51 @@
                             <!--end::Card header-->
                             <!--begin::Card body-->
                             <div class="card-body p-9 pt-4">
-                                <!--begin::Dates-->
-                                <ul class="nav nav-pills d-flex flex-nowrap hover-scroll-x py-2">
-                                    {% for index in 0..12 %}
-                                    {% set laDate = 'now'|date_modify("-"~ index ~" month") %}
-                                    <!--begin::Date-->
-                                    <li class="nav-item me-1">
-                                        <a class="nav-link btn d-flex flex-column flex-center rounded-pill min-w-40px me-2 py-4 btn-active-primary {% if loop.first %}active{% endif %}" data-bs-toggle="tab" href="#kt_schedule_day_{{index}}">
-                                            <span class="opacity-50 fs-7 fw-bold">{{laDate|date('M')}}</span>
-                                            <span class="fs-6 fw-boldest">{{laDate|date('Y')}}</span>
-                                        </a>
-                                    </li>
-                                    <!--end::Date-->
-                                    {% endfor %}
-                                </ul>
-                                <!--end::Dates-->
                                 <!--begin::Tab Content-->
-                                <div class="tab-content">
-                                    {% for index in 0..12 %}
-                                    <!--begin::Day-->
-                                    <div id="kt_schedule_day_{{index}}" class="tab-pane fade {% if loop.first %}active show{% endif %}">
-                                        {% for profil in user.infoProfil|filter(p => p.updatedAt|date('M') == 'now'|date_modify("-{{index}} month")|date('M')) %}
+                                {% for profil in user.infoProfil %}
+                                <!--begin::Time-->
+                                <div class="d-flex flex-stack position-relative mt-6">
+                                    <!--begin::Bar-->
+                                    <div class="position-absolute h-100 w-4px bg-{% if profil.status %}success{% else %}secondary{% endif %} rounded top-0 start-0"></div>
+                                    <!--end::Bar-->
+                                    <!--begin::Info-->
+                                    <div class="fw-bold ms-5">
                                         <!--begin::Time-->
-                                        <div class="d-flex flex-stack position-relative mt-6">
-                                            <!--begin::Bar-->
-                                            <div class="position-absolute h-100 w-4px bg-{% if profil.status %}success{% else %}secondary{% endif %} rounded top-0 start-0"></div>
-                                            <!--end::Bar-->
-                                            <!--begin::Info-->
-                                            <div class="fw-bold ms-5">
-                                                <!--begin::Time-->
-                                                <div class="fs-7 mb-1">Le {{profil.createdAt|date('d M Y')}} 
-                                                <span class="fs-7 text-muted text-uppercase">à {{profil.createdAt|date('H:m')}}</span></div>
-                                                <!--end::Time-->
-                                                <!--begin::Title-->
-                                                <a href="{{path('enquetes.view', {id: profil.enquete.id})}}" class="fs-5 fw-bolder text-dark text-hover-primary mb-2">{{profil.enquete.nom}}</a>
-                                                <!--end::Title-->
-                                            </div>
-                                            <!--end::Info-->
-                                            <!--begin::Action-->
-                                            <a href="{{path('enquetes.view', {id: profil.enquete.id})}}" class="btn btn-light bnt-active-light-primary btn-sm">Voir</a>
-                                            <!--end::Action-->
-                                        </div>
+                                        <div class="fs-7 mb-1">Le {{profil.createdAt|date('d M Y')}} | à
+                                        <span class="fs-7 text-muted text-uppercase"> {{profil.createdAt|date('H:m')}}</span></div>
                                         <!--end::Time-->
-                                        {% endfor %}
+                                        <!--begin::Title-->
+                                        <a href="{{path('enquetes.view', {id: profil.enquete.id})}}" class="fs-5 fw-bolder text-dark text-hover-primary mb-2">{{profil.enquete.nom}}</a>
+                                        <!--end::Title-->
                                     </div>
-                                    <!--end::Day-->
-                                    {% endfor %}
+                                    <!--end::Info-->
+                                    <!--begin::Action-->
+                                    <a href="{{path('enquetes.view', {id: profil.enquete.id})}}" class="btn btn-light bnt-active-light-primary btn-sm">Voir</a>
+                                    <!--end::Action-->
                                 </div>
+                                <!--end::Time-->
+                                {% endfor %}
+                                <!--begin::Time-->
+                                <div class="d-flex flex-stack position-relative mt-6">
+                                    <!--begin::Bar-->
+                                    <div class="position-absolute h-100 w-4px bg-secondary rounded top-0 start-0"></div>
+                                    <!--end::Bar-->
+                                    <!--begin::Info-->
+                                    <div class="fw-bold ms-5">
+                                        <!--begin::Time-->
+                                        <div class="fs-7 mb-1">Le 12 oct 2022 | à
+                                        <span class="fs-7 text-muted text-uppercase"> 10h23</span></div>
+                                        <!--end::Time-->
+                                        <!--begin::Title-->
+                                        <a href="#" class="fs-5 fw-bolder text-dark text-hover-primary mb-2">First enquete</a>
+                                        <!--end::Title-->
+                                    </div>
+                                    <!--end::Info-->
+                                    <!--begin::Action-->
+                                    <a href="#" class="btn btn-light bnt-active-light-primary btn-sm">Voir</a>
+                                    <!--end::Action-->
+                                </div>
+                                <!--end::Time-->
                                 <!--end::Tab Content-->
                             </div>
                             <!--end::Card body-->
@@ -590,8 +590,8 @@
                                     <!--begin::Details-->
                                     <div class="fw-bold ms-5">
                                         <!--begin::Time-->
-                                        <div class="fs-7 mb-1">Le {{participation.createdAt|date('d M Y')}} 
-                                        <span class="fs-7 text-muted text-uppercase">à {{participation.createdAt|date('H:m')}}</span></div>
+                                        <div class="fs-7 mb-1">Le {{participation.createdAt|date('d M Y')}} | à
+                                        <span class="fs-7 text-muted text-uppercase"> {{participation.createdAt|date('H:m')}}</span></div>
                                         <!--end::Time-->
                                         <a href="{{path('sondages.view', {id: participation.sondage.id})}}" class="fs-5 fw-bolder text-dark text-hover-primary">{{participation.sondage.titre}}</a>
                                         <!--begin::Info-->
@@ -606,6 +606,29 @@
                                 </div>
                                 <!--end::Item-->
                                 {% endfor %}
+                                <!--begin::Item-->
+                                <div class="d-flex align-items-center position-relative mb-7">
+                                    <!--begin::Label-->
+                                    <div class="position-absolute top-0 start-0 rounded h-100 bg-secondary w-4px"></div>
+                                    <!--end::Label-->
+                                    <!--begin::Details-->
+                                    <div class="fw-bold ms-5">
+                                        <!--begin::Time-->
+                                        <div class="fs-7 mb-1">Le 09 aout 2022 | à
+                                        <span class="fs-7 text-muted text-uppercase"> 10h34</span></div>
+                                        <!--end::Time-->
+                                        <a href="" class="fs-5 fw-bolder text-dark text-hover-primary">Mode de vie Internet</a>
+                                        <!--begin::Info-->
+                                        <div class="fs-7 text-muted">Demandé par 
+                                        <a href="">SOLIBRA</a></div>
+                                        <!--end::Info-->
+                                    </div>
+                                    <!--end::Details-->
+                                    <!--begin::Menu-->
+                                        <a href="" class="btn btn-light bnt-active-light-primary btn-sm">Voir</a>
+                                    <!--end::Menu-->
+                                </div>
+                                <!--end::Item-->
                             </div>
                             <!--end::Card body-->
                         </div>

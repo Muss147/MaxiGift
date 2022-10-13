@@ -82,22 +82,26 @@
                         <div class="px-7 py-5" data-kt-user-table-filter="form">
                             <!--begin::Input group-->
                             <div class="mb-10">
-                                <label class="form-label fs-6 fw-bold">Role:</label>
-                                <select class="form-select form-select-solid fw-bolder select2-hidden-accessible" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-kt-user-table-filter="role" data-hide-search="true" data-select2-id="select2-data-7-s4g1" tabindex="-1" aria-hidden="true">
-                                    <option data-select2-id="select2-data-9-16h0"></option>
-                                    {# {% for role in roles %}
-                                    <option value="{{role.libelle}}">{{role.libelle}}</option>
-                                    {% endfor %} #}
+                                <label class="form-label fs-6 fw-bold">Ville:</label>
+                                <select class="form-select form-select-solid fw-bolder select2-hidden-accessible" data-kt-select2="true" data-placeholder="Ville" data-allow-clear="true" data-hide-search="true"  data-kt-user-table-filter="ville" data-select2-id="select2-data-7-s4g1" tabindex="-1" aria-hidden="true">
+                                    <option></option>
+                                    {% set newArray = [] %}
+                                    {% for user in users %}
+                                        {% if user.ville not in newArray %}
+                                            <option value="{{user.ville}}">{{user.ville}}</option>
+                                            {% set newArray = newArray|merge([user.ville]) %}
+                                        {% endif %}
+                                    {% endfor %}
                                 </select>
                             </div>
                             <!--end::Input group-->
                             <!--begin::Input group-->
                             <div class="mb-10">
                                 <label class="form-label fs-6 fw-bold">Status:</label>
-                                <select class="form-select form-select-solid fw-bolder select2-hidden-accessible" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-kt-user-table-filter="two-step" data-hide-search="true" data-select2-id="select2-data-10-bv34" tabindex="-1" aria-hidden="true">
-                                    <option data-select2-id="select2-data-12-6t6v"></option>
-                                    <option value="Enabled">Actif</option>
-                                    <option value="Enabled">Inactif</option>
+                                <select class="form-select form-select-solid fw-bolder select2-hidden-accessible" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-kt-user-table-filter="status" data-hide-search="true" data-select2-id="select2-data-10-bv34" tabindex="-1" aria-hidden="true">
+                                    <option></option>
+                                    <option value="Actif">Actif</option>
+                                    <option value="Inactif">Inactif</option>
                                 </select>
                             </div>
                             <!--end::Input group-->
@@ -274,7 +278,6 @@
 <!--begin::Page Custom Javascript(used by this page)-->
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/table.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/export-users.js')}}"></script>
-<script src="{{asset('assets/js/custom/apps/user-management/users/list/add.js')}}"></script>
 <script src="{{asset('assets/js/widgets.bundle.js')}}"></script>
 <script src="{{asset('assets/js/custom/widgets.js')}}"></script>
 <script src="{{asset('assets/js/custom/intro.js')}}"></script>
