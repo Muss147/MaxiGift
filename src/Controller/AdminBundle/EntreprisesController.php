@@ -67,6 +67,18 @@ class EntreprisesController extends AbstractController
     }
 
     /**
+     * @Route("/entreprises/secteurs", name="entreprises.secteurs")
+     */
+    public function listSecteurs(Request $request, Session $session): Response
+    {
+        $session->set('menu', 'entreprise');
+        $secteurs = $this->doctrine->getRepository(Parametres::class)->findByType("Secteurs d'activité");
+        return $this->render('backend/entreprises/secteur_activite.html.twig', [
+            'parametres' => $secteurs
+        ]);
+    }
+
+    /**
      * @Route("/entreprises-new", name="entreprises.new")
      */
     public function newEntreprises(Request $request, FileUploader $fileUploader): Response

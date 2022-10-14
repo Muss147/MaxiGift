@@ -719,38 +719,112 @@
                                         <!--begin::Table-->
                                         <div id="kt_customer_view_statement_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                             <div class="table-responsive">
-                                                <table id="kt_customer_view_statement_table_1" class="table align-middle table-row-dashed fs-6 text-gray-600 fw-bold gy-4 dataTable no-footer">
-                                                    <!--begin::Table head-->
-                                                    <thead class="border-bottom border-gray-200">
-                                                        <!--begin::Table row-->
-                                                        <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                                            <th class="w-125px sorting" tabindex="0" aria-controls="kt_customer_view_statement_table_1" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 125px;">Date</th>
-                                                            <th class="w-100px sorting" tabindex="0" aria-controls="kt_customer_view_statement_table_1" rowspan="1" colspan="1" aria-label="Order ID: activate to sort column ascending" style="width: 100px;">Order ID</th>
-                                                            <th class="w-300px sorting" tabindex="0" aria-controls="kt_customer_view_statement_table_1" rowspan="1" colspan="1" aria-label="Details: activate to sort column ascending" style="width: 300px;">Titre</th>
-                                                            <th class="w-100px sorting" tabindex="0" aria-controls="kt_customer_view_statement_table_1" rowspan="1" colspan="1" aria-label="Amount: activate to sort column ascending" style="width: 100px;">Montant</th>
-                                                            <th class="w-100px text-end pe-7 sorting_disabled" rowspan="1" colspan="1" aria-label="Invoice" style="width: 100px;">Facture</th>
-                                                        </tr>
-                                                        <!--end::Table row-->
-                                                    </thead>
-                                                    <!--end::Table head-->
-                                                    <!--begin::Table body-->
-                                                    <tbody> 
+                                                <table id="kt_customer_view_statement_table_1" class="table table-row-dashed align-middle gs-0 gy-3 my-0">
+													<!--begin::Table head-->
+													<thead>
+														<tr class="fs-7 fw-bolder text-gray-400 border-bottom-0">
+															<th class="p-0 pb-3 min-w-175px text-start">SONDAGE</th>
+															<th class="p-0 pb-3 min-w-75px text-end">BUDGET</th>
+															<th class="p-0 pb-3 min-w-100px text-end">PROGRESS</th>
+															<th class="p-0 pb-3 min-w-100px text-end pe-12">STATUS</th>
+															<th class="p-0 pb-3 w-150px text-end pe-7">STAT</th>
+															<th class="p-0 pb-3 w-150px text-end">FACTURE</th>
+														</tr>
+													</thead>
+													<!--end::Table head-->
+													<!--begin::Table body-->
+													<tbody>
                                                         {% for sondage in entreprise.sondages %}
-                                                        <tr class="odd">
-                                                            <td data-order="2021-01-01T00:00:00+00:00">{{sondage.createdAt|date('d M Y')}}</td>
-                                                            <td>
-                                                                <a href="#" class="text-gray-600 text-hover-primary">{{sondage.id}}</a>
-                                                            </td>
-                                                            <td><a href="{{path('sondages.create', {id: sondage.id})}}">{{sondage.titre}}</a></td>
-                                                            <td class="text-success">{{sondage.montant}}F cfa</td>
-                                                            <td class="text-end">
-                                                                <button class="btn btn-sm btn-light btn-active-light-primary">Télécharger</button>
-                                                            </td>
-                                                        </tr>
+														<tr>
+															<td>
+																<div class="d-flex align-items-center">
+																	<div class="symbol symbol-50px me-3">
+																		<img src="{{asset('uploads/images/'~ sondage.cover.tempFile|default('blank-image.svg'))}}" class="" alt="{{sondage.titre}}" />
+																	</div>
+																	<div class="d-flex justify-content-start flex-column">
+																		<a href="{{path('sondages.create', {id: sondage.id})}}" class="text-gray-800 fw-bolder text-hover-primary mb-1 fs-6">{{sondage.titre}}</a>
+																		<span class="text-gray-400 fw-bold d-block fs-7">{{sondage.createdAt|date('d M Y')}}</span>
+																	</div>
+																</div>
+															</td>
+															<td class="text-end pe-0">
+																<span class="text-gray-600 fw-bolder fs-6">{{sondage.montant}}F cfa</span>
+															</td>
+															<td class="text-end pe-0">
+																<!--begin::Label-->
+																<span class="badge badge-success fs-base">
+																<!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
+																<span class="svg-icon svg-icon-5 svg-icon-white ms-n1">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																		<rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="currentColor" />
+																		<path d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z" fill="currentColor" />
+																	</svg>
+																</span>
+																<!--end::Svg Icon-->9.2%</span>
+																<!--end::Label-->
+															</td>
+															<td class="text-end pe-12">
+																{% if sondage.status %}<span class="badge py-3 px-4 fs-7 badge-light-success">En cours</span>
+																{% else %}<span class="badge py-3 px-4 fs-7 badge-light-danger">En attente</span>{% endif %}
+															</td>
+															<td class="text-end pe-0">
+																<div id="kt_table_widget_14_chart_1" class="h-50px mt-n8 pe-7" data-kt-chart-color="success"></div>
+															</td>
+															<td class="text-end">
+																<button class="btn btn-sm btn-light btn-active-light-primary">Télécharger</button>
+															</td>
+														</tr>
                                                         {% endfor %}
-                                                    </tbody>
-                                                    <!--end::Table body-->
-                                                </table>
+														<tr>
+															<td>
+																<div class="d-flex align-items-center">
+																	<div class="symbol symbol-50px me-3">
+																		<img src="{{asset('assets/media/stock/600x600/img-23.jpg')}}" class="" alt="" />
+																	</div>
+																	<div class="d-flex justify-content-start flex-column">
+																		<a href="#" class="text-gray-800 fw-bolder text-hover-primary mb-1 fs-6">Avionica</a>
+																		<span class="text-gray-400 fw-bold d-block fs-7">Esther Howard</span>
+																	</div>
+																</div>
+															</td>
+															<td class="text-end pe-0">
+																<span class="text-gray-600 fw-bolder fs-6">$256,910</span>
+															</td>
+															<td class="text-end pe-0">
+																<!--begin::Label-->
+																<span class="badge badge-danger fs-base">
+																<!--begin::Svg Icon | path: icons/duotune/arrows/arr065.svg-->
+																<span class="svg-icon svg-icon-5 svg-icon-white ms-n1">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																		<rect opacity="0.5" x="11" y="18" width="13" height="2" rx="1" transform="rotate(-90 11 18)" fill="currentColor" />
+																		<path d="M11.4343 15.4343L7.25 11.25C6.83579 10.8358 6.16421 10.8358 5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75L11.2929 18.2929C11.6834 18.6834 12.3166 18.6834 12.7071 18.2929L18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25C17.8358 10.8358 17.1642 10.8358 16.75 11.25L12.5657 15.4343C12.2533 15.7467 11.7467 15.7467 11.4343 15.4343Z" fill="currentColor" />
+																	</svg>
+																</span>
+																<!--end::Svg Icon-->0.4%</span>
+																<!--end::Label-->
+															</td>
+															<td class="text-end pe-12">
+																<span class="badge py-3 px-4 fs-7 badge-light-warning">On Hold</span>
+															</td>
+															<td class="text-end pe-0">
+																<div id="kt_table_widget_14_chart_2" class="h-50px mt-n8 pe-7" data-kt-chart-color="danger"></div>
+															</td>
+															<td class="text-end">
+																<a href="#" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px">
+																	<!--begin::Svg Icon | path: icons/duotune/arrows/arr001.svg-->
+																	<span class="svg-icon svg-icon-5 svg-icon-gray-700">
+																		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																			<path d="M14.4 11H3C2.4 11 2 11.4 2 12C2 12.6 2.4 13 3 13H14.4V11Z" fill="currentColor" />
+																			<path opacity="0.3" d="M14.4 20V4L21.7 11.3C22.1 11.7 22.1 12.3 21.7 12.7L14.4 20Z" fill="currentColor" />
+																		</svg>
+																	</span>
+																	<!--end::Svg Icon-->
+																</a>
+															</td>
+														</tr>
+													</tbody>
+													<!--end::Table body-->
+												</table>
                                             </div>
                                         </div>
                                         <!--end::Table-->
@@ -765,31 +839,58 @@
                                                 <table id="kt_customer_view_statement_table_{{index+2}}" class="table align-middle table-row-dashed fs-6 text-gray-600 fw-bold gy-4 dataTable no-footer">
                                                     <!--begin::Table head-->
                                                     <thead class="border-bottom border-gray-200">
-                                                        <!--begin::Table row-->
-                                                        <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                                            <th class="w-125px sorting" tabindex="0" aria-controls="kt_customer_view_statement_table_1" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 125px;">Date</th>
-                                                            <th class="w-100px sorting" tabindex="0" aria-controls="kt_customer_view_statement_table_1" rowspan="1" colspan="1" aria-label="Order ID: activate to sort column ascending" style="width: 100px;">Order ID</th>
-                                                            <th class="w-300px sorting" tabindex="0" aria-controls="kt_customer_view_statement_table_1" rowspan="1" colspan="1" aria-label="Details: activate to sort column ascending" style="width: 300px;">Titre</th>
-                                                            <th class="w-100px sorting" tabindex="0" aria-controls="kt_customer_view_statement_table_1" rowspan="1" colspan="1" aria-label="Amount: activate to sort column ascending" style="width: 100px;">Montant</th>
-                                                            <th class="w-100px text-end pe-7 sorting_disabled" rowspan="1" colspan="1" aria-label="Invoice" style="width: 100px;">Facture</th>
-                                                        </tr>
-                                                        <!--end::Table row-->
+														<tr class="fs-7 fw-bolder text-gray-400 border-bottom-0">
+															<th class="p-0 pb-3 min-w-175px text-start">SONDAGE</th>
+															<th class="p-0 pb-3 min-w-75px text-end">BUDGET</th>
+															<th class="p-0 pb-3 min-w-100px text-end">PROGRESS</th>
+															<th class="p-0 pb-3 min-w-100px text-end pe-12">STATUS</th>
+															<th class="p-0 pb-3 w-150px text-end pe-7">STAT</th>
+															<th class="p-0 pb-3 w-150px text-end">FACTURE</th>
+														</tr>
                                                     </thead>
                                                     <!--end::Table head-->
                                                     <!--begin::Table body-->
                                                     <tbody> 
                                                         {% for sondage in entreprise.sondages|filter(s => s.updatedAt|date('M') == 'now'|date_modify("-"~ index ~" month")|date('M')) %}
-                                                        <tr class="odd">
-                                                            <td data-order="2021-01-01T00:00:00+00:00">{{sondage.createdAt|date('d M Y')}}</td>
-                                                            <td>
-                                                                <a href="#" class="text-gray-600 text-hover-primary">{{sondage.id}}</a>
-                                                            </td>
-                                                            <td>{{sondage.titre}}</td>
-                                                            <td class="text-success">{{sondage.montant}}F cfa</td>
-                                                            <td class="text-end">
-                                                                <button class="btn btn-sm btn-light btn-active-light-primary">Télécharger</button>
-                                                            </td>
-                                                        </tr>
+														<tr>
+															<td>
+																<div class="d-flex align-items-center">
+																	<div class="symbol symbol-50px me-3">
+																		<img src="{{asset('uploads/images/'~ sondage.cover.tempFile|default('blank-image.svg'))}}" class="" alt="{{sondage.titre}}" />
+																	</div>
+																	<div class="d-flex justify-content-start flex-column">
+																		<a href="{{path('sondages.create', {id: sondage.id})}}" class="text-gray-800 fw-bolder text-hover-primary mb-1 fs-6">{{sondage.titre}}</a>
+																		<span class="text-gray-400 fw-bold d-block fs-7">{{sondage.createdAt|date('d M Y')}}</span>
+																	</div>
+																</div>
+															</td>
+															<td class="text-end pe-0">
+																<span class="text-gray-600 fw-bolder fs-6">{{sondage.montant}}F cfa</span>
+															</td>
+															<td class="text-end pe-0">
+																<!--begin::Label-->
+																<span class="badge badge-success fs-base">
+																<!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
+																<span class="svg-icon svg-icon-5 svg-icon-white ms-n1">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																		<rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="currentColor" />
+																		<path d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z" fill="currentColor" />
+																	</svg>
+																</span>
+																<!--end::Svg Icon-->9.2%</span>
+																<!--end::Label-->
+															</td>
+															<td class="text-end pe-12">
+																{% if sondage.status %}<span class="badge py-3 px-4 fs-7 badge-light-success">En cours</span>
+																{% else %}<span class="badge py-3 px-4 fs-7 badge-light-danger">En attente</span>{% endif %}
+															</td>
+															<td class="text-end pe-0">
+																<div id="kt_table_widget_14_chart_1" class="h-50px mt-n8 pe-7" data-kt-chart-color="success"></div>
+															</td>
+															<td class="text-end">
+																<button class="btn btn-sm btn-light btn-active-light-primary">Télécharger</button>
+															</td>
+														</tr>
                                                         {% endfor %}
                                                     </tbody>
                                                     <!--end::Table body-->

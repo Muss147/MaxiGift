@@ -164,7 +164,7 @@
                     <div class="col-lg-3 col-md-4 col-sm-6">
                         <div class="card shadow-sm mb-3">
                             <div class="card-header border-0 collapsible rotate ribbon ribbon-end ribbon-clip pe-5">
-                                <h3 class="card-title"><a href="{{path('sondages.create', {id: sondage.id})}}">{{sondage.titre}}</a></h3>
+                                <h3 class="card-title"><a href="{{path('sondages.create', {id: sondage.id})}}" class="text-gray-600 text-hover-primary">{{sondage.titre}}</a></h3>
                                 <h3 class="card-title">{{sondage.points}} points</h3>
                                 <h3 class="card-title">{{sondage.questions|length}} questions</h3>
                                 <h3 class="card-title">Modifié le {{sondage.updatedAt|date('d M Y')}}</h3>
@@ -211,46 +211,6 @@
                         </div>
                     </div>
                     {% endfor %}
-                    <div class="col-lg-3 col-md-4 col-sm-6">
-                        <div class="card shadow-sm mb-3">
-                            <div class="card-header border-0 collapsible rotate ribbon ribbon-end ribbon-clip">
-                                <div class="ribbon-label bg-danger">
-                                    Hors Ligne
-                                    <span class="ribbon-inner bg-danger"></span>
-                                </div>
-                                <h3 class="card-title">Title</h3>
-                            </div>
-                            <div id="kt_docs_card_collapsible" class="collapse show">
-                                <div class="card-body p-0">
-                                    <a href=""><img src="{{asset('uploads/images/blank-image.svg')}}" class="w-100" style="object-fit: contain; height: 100px"></a>
-                                </div>
-                                <div class="card-footer d-flex justify-content-between">
-                                    <span class="text-gray-400 fw-bolder">11 réponses</span>
-                                    <span>120 points</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-sm-6">
-                        <div class="card shadow-sm mb-3">
-                            <div class="card-header border-0 collapsible rotate ribbon ribbon-end ribbon-clip">
-                                <div class="ribbon-label bg-success">
-                                    En Ligne
-                                    <span class="ribbon-inner bg-success"></span>
-                                </div>
-                                <h3 class="card-title">Title</h3>
-                            </div>
-                            <div id="kt_docs_card_collapsible" class="collapse show">
-                                <div class="card-body p-0">
-                                    <a href=""><img src="{{asset('uploads/images/blank-image.svg')}}" class="w-100" style="object-fit: contain; height: 100px"></a>
-                                </div>
-                                <div class="card-footer d-flex justify-content-between">
-                                    <span class="text-gray-400 fw-bolder">1 réponses</span>
-                                    <span>20 points</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

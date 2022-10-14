@@ -849,14 +849,16 @@ input, textarea {
                                             Veuillez patienter... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                         </span>
                                     </button>
-                                    <button type="submit" id="kt_enquete_edit_publish" class="btn btn-{% if sondage.status %}danger{% else %}success{% endif %}" data-kt-stepper-action="submit">
+                                    {% if not sondage.status %}
+                                    <button type="submit" id="kt_enquete_edit_publish" class="btn btn-success" data-kt-stepper-action="submit">
                                         <span class="indicator-label">
-                                            Enregistrer et {% if sondage.status %}Depublier{% else %}Publier{% endif %}
+                                            Enregistrer et Publier
                                         </span>
                                         <span class="indicator-progress">
                                             Veuillez patienter... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                         </span>
                                     </button>
+                                    {% endif %}
 
                                     <button type="button" class="btn btn-primary" data-kt-stepper-action="next">
                                         Continuer

@@ -583,7 +583,7 @@
                             <div class="card-body d-flex flex-column">
                                 {% for participation in user.participations %}
                                 <!--begin::Item-->
-                                <div class="d-flex align-items-center position-relative mb-7">
+                                <div class="d-flex align-items-center flex-stack position-relative mb-7">
                                     <!--begin::Label-->
                                     <div class="position-absolute top-0 start-0 rounded h-100 bg-secondary w-4px"></div>
                                     <!--end::Label-->
@@ -607,7 +607,7 @@
                                 <!--end::Item-->
                                 {% endfor %}
                                 <!--begin::Item-->
-                                <div class="d-flex align-items-center position-relative mb-7">
+                                <div class="d-flex align-items-center flex-stack position-relative mb-7">
                                     <!--begin::Label-->
                                     <div class="position-absolute top-0 start-0 rounded h-100 bg-secondary w-4px"></div>
                                     <!--end::Label-->
@@ -658,7 +658,7 @@
                                         <thead class="border-bottom border-gray-200 fs-7 fw-bolder">
                                             <!--begin::Table row-->
                                             <tr class="text-start text-muted text-uppercase gs-0">
-                                                <th class="min-w-100px">Id</th>
+                                                <th class="min-w-100px">Photo</th>
                                                 <th>Nom & Prénom</th>
                                                 <th>Date Naissance</th>
                                                 <th class="min-w-125px">Points</th>
@@ -693,10 +693,14 @@
                                             {% for filleul in user.filleuls %}
                                             <tr>
                                                 <!--begin::Invoice=-->
-                                                <td>{{filleul.id}}</td>
+                                                <td>
+                                                    <div class="symbol symbol-35px" data-bs-toggle="tooltip" title="" data-bs-original-title="{{filleul.firstname}} {{filleul.lastname}}">
+                                                        <img alt="{{filleul.firstname}} {{filleul.lastname}}" src="{{asset('uploads/images/'~ filleul.avatar.tempFile|default('blank.svg'))}}">
+                                                    </div>
+                                                </td>
                                                 <!--end::Invoice=-->
                                                 <!--begin::Status=-->
-                                                <td>{{filleul.firstname}} {{filleul.lastname}}</td>
+                                                <td><a href="{{path('users.view', {id: filleul.id})}}" class="text-gray-600 text-hover-primary">{{filleul.firstname}} {{filleul.lastname}}</a></td>
                                                 <!--end::Status=-->
                                                 <!--begin::Amount=-->
                                                 <td>{{filleul.birth|date('d M Y')}}</td>
@@ -711,6 +715,29 @@
                                                 <!--end::Action=-->
                                             </tr>
                                             {% endfor %}
+                                            <tr>
+                                                <!--begin::Invoice=-->
+                                                <td>
+                                                    <div class="symbol symbol-35px" data-bs-toggle="tooltip" title="" data-bs-original-title="Michael Eberon">
+                                                        <img alt="Pic" src="{{asset('assets/media/avatars/150-11.jpg')}}">
+                                                    </div>
+                                                </td>
+                                                <!--end::Invoice=-->
+                                                <!--begin::Status=-->
+                                                <td><a href="" class="text-gray-600 text-hover-primary">Martin Beranger</a></td>
+                                                <!--end::Status=-->
+                                                <!--begin::Amount=-->
+                                                <td>12 aout 1998</td>
+                                                <!--end::Amount=-->
+                                                <!--begin::Date=-->
+                                                <td>120</td>
+                                                <!--end::Date=-->
+                                                <!--begin::Action=-->
+                                                <td>
+                                                    <div class="badge badge-light-success">Filleuls</div>
+                                                </td>
+                                                <!--end::Action=-->
+                                            </tr>
                                         </tbody>
                                         <!--end::Table body-->
                                     </table>
@@ -752,9 +779,9 @@
                                             <tr class="fs-7 fw-bolder text-gray-500 border-bottom-0">
                                                 <th class="p-0 w-50px pb-1">ARTICLE</th>
                                                 <th class="ps-0 min-w-140px"></th>
-                                                <th class="text-center min-w-140px">DATE</th>
                                                 <th class="text-center min-w-140px">STATUT</th>
-                                                <th class="text-end min-w-140px p-0 pb-1">TOTAL POINTS</th>
+                                                <th class="text-center min-w-140px">TOTAL POINTS</th>
+                                                <th class="text-end min-w-140px">DATE</th>
                                             </tr>
                                         </thead>
                                         <!--end::Table head-->
@@ -763,77 +790,64 @@
                                             {% for commande in user.commandes %}
                                             <tr>
                                                 <td>
-                                                    <img src="{{asset('uploads/images/'~ commande.articles|first.cover.tempFile|default('blank-image.svg'))}}" class="w-50px" alt="{{commande.articles|first.nom}}">
+                                                    <div class="symbol-group symbol-hover flex-nowrap">
+                                                        {% for article in commande.articles|slice(0, 2) %}
+                                                            {% set random = random(['primary', 'secondary', 'success', 'warning', 'danger', 'dark']) %}
+                                                            <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="" data-bs-original-title="Susan Redwood">
+                                                                {% if article.cover %}<img alt="{{article.nom}}" src="{{asset('uploads/images/'~ article.cover.tempFile)}}">
+                                                                {% else %}<span class="symbol-label bg-{{random}} text-inverse-{{random}} fw-bolder">{{article.nom|slice(0, 1)|upper}}</span>{% endif %}
+                                                            </div>
+                                                            {% if commande.articles|length > 2 %}
+                                                            <a href="#" class="symbol symbol-35px symbol-circle" data-bs-toggle="modal" data-bs-target="#kt_modal_view_article">
+                                                                <span class="symbol-label bg-light text-gray-400 fs-8 fw-bolder">+{{(ommande.articles|length) - 2}}</span>
+                                                            </a>
+                                                            {% endif %}
+                                                        {% endfor %}
+													</div>
                                                 </td>
                                                 <td class="ps-0">
                                                     <a href="{{path('commandes.view', {id: articles|first.id})}}" class="text-gray-800 fw-bolder text-hover-primary mb-1 fs-6 text-start pe-0">{{commande.articles|first.nom}}</a>
                                                     <span class="text-gray-400 fw-bold fs-7 d-block text-start ps-0">N° cmde: #XDG-{{commande.id}}</span>
-                                                </td>
-                                                <td>
-                                                    <span class="text-gray-800 d-block fs-6 ps-0 text-center">{{commande.createdAt|date('d M Y')}}</span>
                                                 </td>
                                                 <td class="text-center">
                                                     {% if commande.status == 'Livré' %}<div class="badge badge-light-success">Livré</div>
                                                     {% elseif commande.status == 'Refusé' %}<div class="badge badge-light-danger">Refusé</div>
                                                     {% else %}<div class="badge badge-light-warning">En cours</div>{% endif %}
                                                 </td>
+                                                <td class="text-center">
+                                                    <span class="text-gray-800 fw-bolder d-block fs-6 ps-0">{{commande.total}}</span>
+                                                </td>
                                                 <td>
-                                                    <span class="text-gray-800 fw-bolder d-block fs-6 ps-0 text-end">{{commande.total}}</span>
+                                                    <span class="text-gray-800 d-block fs-6 ps-0 text-end">{{commande.createdAt|date('d M Y')}}</span>
                                                 </td>
                                             </tr>
                                             {% endfor %}
                                             <tr>
                                                 <td>
-                                                    <img src="/jet-html-free/assets/media/stock/ecommerce/215.gif" class="w-50px" alt="">
+                                                    <div class="symbol-group symbol-hover flex-nowrap">
+														<div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="" data-bs-original-title="Susan Redwood">
+															<span class="symbol-label bg-primary text-inverse-primary fw-bolder">S</span>
+														</div>
+														<div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="" data-bs-original-title="Michael Eberon">
+															<img alt="Pic" src="{{asset('assets/media/avatars/150-11.jpg')}}">
+														</div>
+														<a href="#" class="symbol symbol-35px symbol-circle" data-bs-toggle="modal" data-bs-target="#kt_modal_view_article">
+															<span class="symbol-label bg-light text-gray-400 fs-8 fw-bolder">+2</span>
+														</a>
+													</div>
                                                 </td>
                                                 <td class="ps-0">
-                                                    <a href="/jet-html-free/?page=apps/ecommerce/sales/details" class="text-gray-800 fw-bolder text-hover-primary mb-1 fs-6 text-start pe-0">Red Laga</a>
+                                                    <a href="" class="text-gray-800 fw-bolder text-hover-primary mb-1 fs-6 text-start pe-0">RiseUP</a>
                                                     <span class="text-gray-400 fw-bold fs-7 d-block text-start ps-0">Item: #XDG-2347</span>
-                                                </td>
-                                                <td>
-                                                    <span class="text-gray-800 d-block fs-6 ps-0 text-center">12 May 2022</span>
                                                 </td>
                                                 <td class="text-center">
                                                     <div class="badge badge-light-success">Livré</div>
                                                 </td>
-                                                <td>
-                                                    <span class="text-gray-800 fw-bolder d-block fs-6 ps-0 text-end">$45.00</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="/jet-html-free/assets/media/stock/ecommerce/209.gif" class="w-50px" alt="">
-                                                </td>
-                                                <td class="ps-0">
-                                                    <a href="/jet-html-free/?page=apps/ecommerce/sales/details" class="text-gray-800 fw-bolder text-hover-primary mb-1 fs-6 text-start pe-0">RiseUP</a>
-                                                    <span class="text-gray-400 fw-bold fs-7 d-block text-start ps-0">Item: #XDG-2347</span>
-                                                </td>
-                                                <td>
-                                                    <span class="text-gray-800 d-block fs-6 ps-0 text-center">12 May 2022</span>
-                                                </td>
                                                 <td class="text-center">
-                                                    <div class="badge badge-light-success">Livré</div>
+                                                    <span class="text-gray-800 fw-bolder d-block fs-6 ps-0">$168.00</span>
                                                 </td>
                                                 <td>
-                                                    <span class="text-gray-800 fw-bolder d-block fs-6 ps-0 text-end">$168.00</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="/jet-html-free/assets/media/stock/ecommerce/214.gif" class="w-50px" alt="">
-                                                </td>
-                                                <td class="ps-0">
-                                                    <a href="/jet-html-free/?page=apps/ecommerce/sales/details" class="text-gray-800 fw-bolder text-hover-primary mb-1 fs-6 text-start pe-0">Yellow Stone</a>
-                                                    <span class="text-gray-400 fw-bold fs-7 d-block text-start ps-0">Item: #XDG-2347</span>
-                                                </td>
-                                                <td>
-                                                    <span class="text-gray-800 d-block fs-6 ps-0 text-center">12 May 2022</span>
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="badge badge-light-success">Livré</div>
-                                                </td>
-                                                <td>
-                                                    <span class="text-gray-800 fw-bolder d-block fs-6 ps-0 text-end">$72.00</span>
+                                                    <span class="text-gray-800 d-block fs-6 ps-0 text-end">12 May 2022</span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -1032,6 +1046,160 @@
             <!--end::Modal dialog-->
         </div>
         <!--end::Modal - Update password-->
+
+		<!--begin::Modal - View Users-->
+		<div class="modal fade" id="kt_modal_view_article" tabindex="-1" aria-hidden="true">
+			<!--begin::Modal dialog-->
+			<div class="modal-dialog mw-650px">
+				<!--begin::Modal content-->
+				<div class="modal-content">
+					<!--begin::Modal header-->
+					<div class="modal-header pb-0 border-0 justify-content-end">
+						<!--begin::Close-->
+						<div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+							<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+							<span class="svg-icon svg-icon-1">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+									<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+									<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+								</svg>
+							</span>
+							<!--end::Svg Icon-->
+						</div>
+						<!--end::Close-->
+					</div>
+					<!--begin::Modal header-->
+					<!--begin::Modal body-->
+					<div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+						<!--begin::Heading-->
+						<div class="text-center mb-13">
+							<!--begin::Title-->
+							<h1 class="mb-3">Parcourir les articles</h1>
+							<!--end::Title-->
+							<!--begin::Description-->
+							<div class="text-muted fw-bold fs-5">Si vous avez besoin de plus d'informations, veuillez consulter les 
+							<a href="{{path('products.list')}}" class="link-primary fw-bolder">Répertoire des articles</a>.</div>
+							<!--end::Description-->
+						</div>
+						<!--end::Heading-->
+						<!--begin::Users-->
+						<div class="mb-15">
+							<!--begin::List-->
+							<div class="mh-375px scroll-y me-n7 pe-7">
+								<!--begin::Article-->
+								<div class="d-flex flex-stack py-5 border-bottom border-gray-300 border-bottom-dashed">
+									<!--begin::Details-->
+									<div class="d-flex align-items-center">
+										<!--begin::Avatar-->
+										<div class="symbol symbol-35px symbol-circle">
+											<img alt="Pic" src="/jet-html-free/assets/media/avatars/300-6.jpg" />
+										</div>
+										<!--end::Avatar-->
+										<!--begin::Details-->
+										<div class="ms-6">
+											<!--begin::Name-->
+											<a href="#" class="d-flex align-items-center fs-5 fw-bolder text-dark text-hover-primary">Emma Smith 
+											<span class="badge badge-light fs-8 fw-bold ms-2">Art Director</span></a>
+											<!--end::Name-->
+											<!--begin::Email-->
+											<div class="fw-bold text-muted">smith@kpmg.com</div>
+											<!--end::Email-->
+										</div>
+										<!--end::Details-->
+									</div>
+									<!--end::Details-->
+									<!--begin::Stats-->
+									<div class="d-flex">
+										<!--begin::Sales-->
+										<div class="text-end">
+											<div class="fs-5 fw-bolder text-dark">$23,000</div>
+											<div class="fs-7 text-muted">Sales</div>
+										</div>
+										<!--end::Sales-->
+									</div>
+									<!--end::Stats-->
+								</div>
+								<!--end::Article-->
+								<!--begin::User-->
+								<div class="d-flex flex-stack py-5 border-bottom border-gray-300 border-bottom-dashed">
+									<!--begin::Details-->
+									<div class="d-flex align-items-center">
+										<!--begin::Avatar-->
+										<div class="symbol symbol-35px symbol-circle">
+											<span class="symbol-label bg-light-danger text-danger fw-bold">M</span>
+										</div>
+										<!--end::Avatar-->
+										<!--begin::Details-->
+										<div class="ms-6">
+											<!--begin::Name-->
+											<a href="#" class="d-flex align-items-center fs-5 fw-bolder text-dark text-hover-primary">Melody Macy 
+											<span class="badge badge-light fs-8 fw-bold ms-2">Marketing Analytic</span></a>
+											<!--end::Name-->
+											<!--begin::Email-->
+											<div class="fw-bold text-muted">melody@altbox.com</div>
+											<!--end::Email-->
+										</div>
+										<!--end::Details-->
+									</div>
+									<!--end::Details-->
+									<!--begin::Stats-->
+									<div class="d-flex">
+										<!--begin::Sales-->
+										<div class="text-end">
+											<div class="fs-5 fw-bolder text-dark">$50,500</div>
+											<div class="fs-7 text-muted">Sales</div>
+										</div>
+										<!--end::Sales-->
+									</div>
+									<!--end::Stats-->
+								</div>
+								<!--end::User-->
+								<!--begin::User-->
+								<div class="d-flex flex-stack py-5 border-bottom border-gray-300 border-bottom-dashed">
+									<!--begin::Details-->
+									<div class="d-flex align-items-center">
+										<!--begin::Avatar-->
+										<div class="symbol symbol-35px symbol-circle">
+											<img alt="Pic" src="/jet-html-free/assets/media/avatars/300-1.jpg" />
+										</div>
+										<!--end::Avatar-->
+										<!--begin::Details-->
+										<div class="ms-6">
+											<!--begin::Name-->
+											<a href="#" class="d-flex align-items-center fs-5 fw-bolder text-dark text-hover-primary">Max Smith 
+											<span class="badge badge-light fs-8 fw-bold ms-2">Software Enginer</span></a>
+											<!--end::Name-->
+											<!--begin::Email-->
+											<div class="fw-bold text-muted">max@kt.com</div>
+											<!--end::Email-->
+										</div>
+										<!--end::Details-->
+									</div>
+									<!--end::Details-->
+									<!--begin::Stats-->
+									<div class="d-flex">
+										<!--begin::Sales-->
+										<div class="text-end">
+											<div class="fs-5 fw-bolder text-dark">$75,900</div>
+											<div class="fs-7 text-muted">Sales</div>
+										</div>
+										<!--end::Sales-->
+									</div>
+									<!--end::Stats-->
+								</div>
+								<!--end::User-->
+							</div>
+							<!--end::List-->
+						</div>
+						<!--end::Users-->
+					</div>
+					<!--end::Modal body-->
+				</div>
+				<!--end::Modal content-->
+			</div>
+			<!--end::Modal dialog-->
+		</div>
+		<!--end::Modal - View Users-->
         <!--end::Modals-->
     </div>
     <!--end::Container-->

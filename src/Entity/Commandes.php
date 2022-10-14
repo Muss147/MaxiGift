@@ -27,6 +27,11 @@ class Commandes extends EntityBase
     /**
      * @ORM\Column(type="string", length=255)
      */
+    private $transId;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $status = "En cours";
 
     /**
@@ -106,6 +111,18 @@ class Commandes extends EntityBase
     public function setUser(?Users $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTransId(): ?string
+    {
+        return $this->transId;
+    }
+
+    public function setTransId(string $transId): self
+    {
+        $this->transId = $transId;
 
         return $this;
     }
